@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+<<<<<<< HEAD
 def show_att(request):
     
     context = {
@@ -12,3 +13,6 @@ def show_att(request):
 
 # def search_instance(request):
 #     return render(request, "search_instance.html", )
+=======
+# Create your views here.
+>>>>>>> 4617c855a1e1e1c6b50c4f5b087baee10cf875b9
