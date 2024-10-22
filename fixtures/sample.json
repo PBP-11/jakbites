@@ -1,0 +1,1710 @@
+[
+    {
+        "model": "main.restaurant",
+        "pk": 1,
+        "fields": {
+            "name": "Ya'mbok, Jatimelati",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 1,
+        "fields": {
+            "name": "Punch Yambok",
+            "description": "",
+            "category": "Ayam & bebek",
+            "price": 26000,
+            "restaurant": 1
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 2,
+        "fields": {
+            "name": "Michelle Bakery, Cimanggis",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 2,
+        "fields": {
+            "name": "Choco Cheese Loaf",
+            "description": "",
+            "category": "Roti",
+            "price": 40000,
+            "restaurant": 2
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 3,
+        "fields": {
+            "name": "Kaka Udon",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 3,
+        "fields": {
+            "name": "Chicken Katsu Curry Rice",
+            "description": "Nasi + Ayam Katsu dengan Saus Kari Jepang + Salad",
+            "category": "Bakmie/Cepat saji/Jepang",
+            "price": 30000,
+            "restaurant": 3
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 4,
+        "fields": {
+            "name": "McDonald's, Panjang",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 4,
+        "fields": {
+            "name": "Double Cheese Burger",
+            "description": "",
+            "category": "Sweets/Jajanan/Cepat saji",
+            "price": 36000,
+            "restaurant": 4
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 5,
+        "fields": {
+            "name": "Tokyo Town Cafe",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 5,
+        "fields": {
+            "name": "Kabuki Taro Latte ( Ice )",
+            "description": "Special Taro Powder + Milk + Ice",
+            "category": "Kopi/Minuman/Jepang",
+            "price": 23000,
+            "restaurant": 5
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 6,
+        "fields": {
+            "name": "Lawson, Cempaka Mas",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 6,
+        "fields": {
+            "name": "Cheese Dumpling",
+            "description": "",
+            "category": "Jepang/Jajanan/Aneka nasi/Minuman",
+            "price": 9000,
+            "restaurant": 6
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 7,
+        "fields": {
+            "name": "FamilyMart, Sequis Tower",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 7,
+        "fields": {
+            "name": "Ice Grass Jelly Classic Milk Tea",
+            "description": "",
+            "category": "Kopi/Jajanan/Aneka nasi/Minuman/Ayam & bebek",
+            "price": 16000,
+            "restaurant": 7
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 8,
+        "fields": {
+            "name": "Kopi Nako Ciracas",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 8,
+        "fields": {
+            "name": "Es Kopi Sayang",
+            "description": "Kopi + Susu + Honey",
+            "category": "Aneka nasi/Kopi/Minuman",
+            "price": 25000,
+            "restaurant": 8
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 9,
+        "fields": {
+            "name": "Hey Kafe, Cipondoh",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 9,
+        "fields": {
+            "name": "Ice Cendol",
+            "description": "Ice + Gula Merah + Susu + Cendol",
+            "category": "Minuman",
+            "price": 19000,
+            "restaurant": 9
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 10,
+        "fields": {
+            "name": "XIBOBA, Ramayana Parung",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 10,
+        "fields": {
+            "name": "Brown Sugar Boba Milk Tea",
+            "description": "Teh susu asli Taiwan dipadukan dengan gula aren murni, tapioca pearl dan homemade macchiato brûlée",
+            "category": "Minuman",
+            "price": 21000,
+            "restaurant": 10
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 11,
+        "fields": {
+            "name": "Cake Pandeglang Cake",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 11,
+        "fields": {
+            "name": "BF Bulat Ukir Tayo Uk15cm",
+            "description": "Mohon ditulis untuk ucapan nya",
+            "category": "Roti",
+            "price": 95000,
+            "restaurant": 11
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 12,
+        "fields": {
+            "name": "Lawson, Akses UI",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 12,
+        "fields": {
+            "name": "You C1000 Lemon Water Pet 500Ml",
+            "description": "",
+            "category": "Jajanan/Aneka nasi/Minuman/Jepang",
+            "price": 11000,
+            "restaurant": 12
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 13,
+        "fields": {
+            "name": "Ramen Giant, Bogor",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 13,
+        "fields": {
+            "name": "Tebasaki Ramen",
+            "description": "Ramen dgn toping sayap ayam rempah Pilihan Kuah : Original chicken ( OC ) - Kare ( K ) - Oriental ( O ) - Tomyam ( T ) - Suju ( SJ ) Level Pedas : ( 1 - 5 )",
+            "category": "Jepang/Cepat saji/Aneka nasi",
+            "price": 25400,
+            "restaurant": 13
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 14,
+        "fields": {
+            "name": "Fore Coffee, Jatiwaringin",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 14,
+        "fields": {
+            "name": "Americano (Iced)",
+            "description": "Espresso shots dalam segelas air",
+            "category": "Kopi/Minuman/Cepat saji",
+            "price": 19000,
+            "restaurant": 14
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 15,
+        "fields": {
+            "name": "McDonald's, Pekayon",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 15,
+        "fields": {
+            "name": "PaHeBat Cheeseburger, Medium",
+            "description": "",
+            "category": "Cepat saji/Sweets/Jajanan",
+            "price": 39000,
+            "restaurant": 15
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 16,
+        "fields": {
+            "name": "Chateraise, Senayan City",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 16,
+        "fields": {
+            "name": "Longevity Ring M",
+            "description": "",
+            "category": "Jajanan/Kopi",
+            "price": 600000,
+            "restaurant": 16
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 17,
+        "fields": {
+            "name": "Markobar, Duren Sawit",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 17,
+        "fields": {
+            "name": "Lipat Pocky strawbery Full Toping",
+            "description": "Martabak Manis  Dengan Toping Pocky strawbery",
+            "category": "Martabak",
+            "price": 55000,
+            "restaurant": 17
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 18,
+        "fields": {
+            "name": "Dapur Cokelat, Depok",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 18,
+        "fields": {
+            "name": "Pudding Cheese Cake",
+            "description": "Ukuran 10 x 10cm",
+            "category": "Sweets",
+            "price": 100000,
+            "restaurant": 18
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 19,
+        "fields": {
+            "name": "Keikpop, Harapan Indah",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 19,
+        "fields": {
+            "name": "Icakewon Class",
+            "description": "Mousse Cheesecake Oreo,Park Sae Roi yang mudah emosi mungkin belum pernah coba Icakewon Class yang terbuat dari cream cheese lembut dan biskuit Oreo. Nah kalau kamu mulai emosi, langsung coba pesan cake ini ya! (20x10)",
+            "category": "Sweets/Roti",
+            "price": 65000,
+            "restaurant": 19
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 20,
+        "fields": {
+            "name": "Hedon Cafe, Sukatani",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 20,
+        "fields": {
+            "name": "sate sinchan",
+            "description": "pake daging ayam yang lembut",
+            "category": "Ayam & bebek/Jajanan/Minuman",
+            "price": 12000,
+            "restaurant": 20
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 21,
+        "fields": {
+            "name": "Oreo Sw Vanilla 137G",
+            "description": "",
+            "category": "Aneka nasi/Minuman/Jepang/Jajanan",
+            "price": 8000,
+            "restaurant": 6
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 21,
+        "fields": {
+            "name": "McDonald's, Tambak",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 22,
+        "fields": {
+            "name": "McSpicy",
+            "description": "",
+            "category": "Cepat saji/Sweets/Jajanan",
+            "price": 38000,
+            "restaurant": 21
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 22,
+        "fields": {
+            "name": "Kemek Nyok",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 23,
+        "fields": {
+            "name": "Shrimp Roll Bento (Udang)",
+            "description": "Nasi + Udang + Kentang + Variant Sauce + Variant Sambel",
+            "category": "Barat/Jajanan/Ayam & bebek",
+            "price": 19000,
+            "restaurant": 22
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 23,
+        "fields": {
+            "name": "Cafe OTSS",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 24,
+        "fields": {
+            "name": "CHOCO MEET VANILLA",
+            "description": "Toast, Crunchy Chocolate, Creamy Vanilla",
+            "category": "Cepat saji/Kopi/Aneka nasi",
+            "price": 45000,
+            "restaurant": 23
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 24,
+        "fields": {
+            "name": "McDonald's, Jatiwarna",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 25,
+        "fields": {
+            "name": "Fish Snack Wrap",
+            "description": "",
+            "category": "Cepat saji/Sweets/Jajanan",
+            "price": 16500,
+            "restaurant": 24
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 25,
+        "fields": {
+            "name": "LEPAS KOPI",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 26,
+        "fields": {
+            "name": "Pisang Bakar Coklat Keju",
+            "description": "",
+            "category": "Aneka nasi/Jajanan/Kopi",
+            "price": 20000,
+            "restaurant": 25
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 26,
+        "fields": {
+            "name": "Bunga Bakery, Depok",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 27,
+        "fields": {
+            "name": "Roti Abon Sapi",
+            "description": "",
+            "category": "Roti",
+            "price": 11500,
+            "restaurant": 26
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 28,
+        "fields": {
+            "name": "Smoked Beef Cheese Sandwich+Ice Java Mocha Latte",
+            "description": "Pembelian Smoked Beef Cheese Sandwich+Ice Java Mocha Latte Diskon 3.000",
+            "category": "Aneka nasi/Minuman/Jepang/Jajanan",
+            "price": 42000,
+            "restaurant": 6
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 27,
+        "fields": {
+            "name": "Menantea, Pemda Cibinong",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 29,
+        "fields": {
+            "name": "Potato and Chicken with Honey Mustard",
+            "description": "Gurihnya kentang dan ayam yang dipadukan dengan saus mustard yang manis dan creamy",
+            "category": "Minuman",
+            "price": 31000,
+            "restaurant": 27
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 30,
+        "fields": {
+            "name": "Family Time Berempat Happy Meal Beef Burger",
+            "description": "",
+            "category": "Cepat saji/Sweets/Jajanan",
+            "price": 130000,
+            "restaurant": 4
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 28,
+        "fields": {
+            "name": "Cimory Condet, Balekambang",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 31,
+        "fields": {
+            "name": "Susu Cimory Fresh Milk 950 ML Cofee Late",
+            "description": "Susu Cimory Fresh Milk 950 ML Rasa Coffe Late",
+            "category": "Minuman/Jajanan/Sweets",
+            "price": 25000,
+            "restaurant": 28
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 29,
+        "fields": {
+            "name": "Lawson, Sunter Kirana",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 32,
+        "fields": {
+            "name": "SAUSAGE ROLL",
+            "description": "Sosis cocktail yang digulung  dengan pasta ikan ( surimi )",
+            "category": "Jajanan/Aneka nasi/Minuman/Jepang",
+            "price": 9000,
+            "restaurant": 29
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 30,
+        "fields": {
+            "name": "SUMOYAKI, PADEMANGAN",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 33,
+        "fields": {
+            "name": "COMBO 2 TISAI",
+            "description": "2 Tisai Isi 5 Pcs Total 10 Pcs Takoball",
+            "category": "Jajanan/Jepang/Martabak",
+            "price": 32000,
+            "restaurant": 30
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 31,
+        "fields": {
+            "name": "Burger Bros, Bintaro",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 34,
+        "fields": {
+            "name": "Tiramisu Cheesecake",
+            "description": "Tiramisu cheesecake. Moist cheesecake combined with the creamy of Tiramisu on top.",
+            "category": "Ayam & bebek/Jajanan/Barat/Cepat saji",
+            "price": 46000,
+            "restaurant": 31
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 32,
+        "fields": {
+            "name": "Faasos, Blok M",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 35,
+        "fields": {
+            "name": "Cheesy Beef Overload Wrap",
+            "description": "A combination of juicy beef kebabs and beef patty with DOUBLE cheese for all the cheese lovers out there",
+            "category": "Cepat saji/India/Jajanan/Timur Tengah/Aneka nasi",
+            "price": 59990,
+            "restaurant": 32
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 33,
+        "fields": {
+            "name": "Mokat, Megamendung",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 36,
+        "fields": {
+            "name": "Choco Boba Crunch",
+            "description": "Minuman",
+            "category": "Minuman",
+            "price": 23000,
+            "restaurant": 33
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 34,
+        "fields": {
+            "name": "Kebab Bosman, Ciputat",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 37,
+        "fields": {
+            "name": "Special Canai Kebab + Rujak Cireng Mini",
+            "description": "Nikmati camilan canai kebab yang mengenyangkan dan gurihnya rujak cireng mini",
+            "category": "Jajanan",
+            "price": 27000,
+            "restaurant": 34
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 38,
+        "fields": {
+            "name": "6pc Frozen Martabak Telur",
+            "description": "Pack frozen 6pc Snack tradisional / Jajanan pasar Martabak Telur Lawson",
+            "category": "Aneka nasi/Minuman/Jepang/Jajanan",
+            "price": 48000,
+            "restaurant": 6
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 35,
+        "fields": {
+            "name": "Gelato House Cafe ",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 39,
+        "fields": {
+            "name": "Mojito Lychee",
+            "description": "Fresh Mojito, Lemon, Lychee",
+            "category": "Minuman/Sweets/Cepat saji",
+            "price": 30000,
+            "restaurant": 35
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 40,
+        "fields": {
+            "name": "Pomegranate Fizz",
+            "description": "",
+            "category": "Cepat saji/Sweets/Jajanan",
+            "price": 17000,
+            "restaurant": 15
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 41,
+        "fields": {
+            "name": "White Choco Strawberry Pastry Pie",
+            "description": "",
+            "category": "Sweets/Jajanan/Cepat saji",
+            "price": 15500,
+            "restaurant": 4
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 36,
+        "fields": {
+            "name": "Keikpop, Pajajaran Bogor",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 42,
+        "fields": {
+            "name": "Split Cake",
+            "description": "Lezatnya Chocolate Cake dengan Oreo Cheese Mousse & Vanilla Cake dengan Strawberry Mousse bikin yeorobun berasa dapet hadiah 45,6 miliar₩. Ngebayangin nggak tuh setebal apa uangnya?",
+            "category": "Roti/Sweets",
+            "price": 75000,
+            "restaurant": 36
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 43,
+        "fields": {
+            "name": "Bf Ukir Doraemon Uk15cm",
+            "description": "Mohon D Tulis Untuk Ucapan Nya",
+            "category": "Roti",
+            "price": 95000,
+            "restaurant": 11
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 37,
+        "fields": {
+            "name": "Keikpop, Mangga Besar",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 44,
+        "fields": {
+            "name": "Twincenzo",
+            "description": "Cinnamon Strawberry Cheesecake dan Cappuccino Cheesecake Twincenzo, bikin yeorobun serasa bos mafia yang tinggal di Apartemen dengan harta yang melimpah",
+            "category": "Sweets/Roti",
+            "price": 75000,
+            "restaurant": 37
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 38,
+        "fields": {
+            "name": "MAB Toppoki, Jengki",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 45,
+        "fields": {
+            "name": "Rhabokki Odeng",
+            "description": "Makanan Khas korea diracik dengan sauce citarasa korea  ditambahkan mie yang juga khas korea dan ditabur dengan wijen dan daun bawang dan telor  disajkan dengan porsi sedang dan pedas maksimal sangat cocok di santap dengan drakor pilihan.",
+            "category": "Jepang/Jajanan",
+            "price": 25500,
+            "restaurant": 38
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 46,
+        "fields": {
+            "name": "Biscuit Choco",
+            "description": "",
+            "category": "Sweets",
+            "price": 33000,
+            "restaurant": 18
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 39,
+        "fields": {
+            "name": "Warung Corndog, Sukaraja",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 47,
+        "fields": {
+            "name": "Corn Dog Mozarella Cappucinno",
+            "description": "Keju Mozarella yang berbalut adonan roti dengan tambahan toping glaze",
+            "category": "Cepat saji/Korea/Jajanan",
+            "price": 15000,
+            "restaurant": 39
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 48,
+        "fields": {
+            "name": "Beng-Beng Coklat 22G",
+            "description": "",
+            "category": "Aneka nasi/Minuman/Jepang/Jajanan",
+            "price": 3500,
+            "restaurant": 6
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 40,
+        "fields": {
+            "name": "Martabak Acc",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 49,
+        "fields": {
+            "name": "Martabak Keju Kacang Coklat Wijen Susu",
+            "description": "Keju + Kacang + Coklat + Wijen + Susu",
+            "category": "Martabak/Roti/Sweets",
+            "price": 55000,
+            "restaurant": 40
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 41,
+        "fields": {
+            "name": "Kancha, Duri Kosambi",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 50,
+        "fields": {
+            "name": "Sparkling Tropical Fruit Regular",
+            "description": "Segarnya Es Teh Dengan Sensasi Soda Yang Dipadu Rasa Jeruk Calamancy, Rasa Mangga Dan Lemon Syrup.",
+            "category": "Minuman",
+            "price": 19000,
+            "restaurant": 41
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 42,
+        "fields": {
+            "name": "Dapur Cokelat, Cibubur",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 51,
+        "fields": {
+            "name": "Caramel Chocolate",
+            "description": "Ukuran 10x20cm",
+            "category": "Sweets",
+            "price": 203000,
+            "restaurant": 42
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 43,
+        "fields": {
+            "name": "Burger Naura",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 52,
+        "fields": {
+            "name": "Paket Kluarga",
+            "description": "Burger Isi 6pcs",
+            "category": "Jajanan/Cepat saji/Bakso & soto",
+            "price": 40000,
+            "restaurant": 43
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 44,
+        "fields": {
+            "name": "Geprek Bensu, Karawang",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 53,
+        "fields": {
+            "name": "Alacarte Geprek Bensu Sambal Original",
+            "description": "Ayam Geprek level 0-10",
+            "category": "Ayam & bebek",
+            "price": 19250,
+            "restaurant": 44
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 54,
+        "fields": {
+            "name": "Bf Kotak Coklat Tempel Uk15cm",
+            "description": "Mohon D Tulis Untuk Ucapan Nya",
+            "category": "Roti",
+            "price": 100000,
+            "restaurant": 11
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 55,
+        "fields": {
+            "name": "Signature Dalgona Boba",
+            "description": "Dalgona Coffee base dipadukan dengan Signature base dan Susu Murni, Tapioca Pearl dan Homemade Macchiato Cream",
+            "category": "Minuman",
+            "price": 22000,
+            "restaurant": 10
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 45,
+        "fields": {
+            "name": "Mixue, Harapan Indah",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 56,
+        "fields": {
+            "name": "Lemon Earl Grey Tea",
+            "description": "",
+            "category": "Minuman/Jajanan",
+            "price": 14000,
+            "restaurant": 45
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 57,
+        "fields": {
+            "name": "Original Ena Chike+Ichi Ocha Teh Melati/Frestea Jasmin Pet 350ml",
+            "description": "Original Ena Chike+Nasi Japonica+Ichi Ocha The Melati/Frestea Jasmin Pet 350ml Hanya Rp 25.000,-",
+            "category": "Jajanan/Aneka nasi/Minuman/Jepang",
+            "price": 28500,
+            "restaurant": 29
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 46,
+        "fields": {
+            "name": "Lawson, UIN Kertamukti",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 58,
+        "fields": {
+            "name": "Siomay Rolled",
+            "description": "",
+            "category": "Aneka nasi/Minuman/Jepang/Jajanan",
+            "price": 8000,
+            "restaurant": 46
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 47,
+        "fields": {
+            "name": "Takana Coffee, Rawamangun",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 59,
+        "fields": {
+            "name": "Peach Tea",
+            "description": "Teh, Peach",
+            "category": "Minuman/Roti/Kopi",
+            "price": 20000,
+            "restaurant": 47
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 48,
+        "fields": {
+            "name": "Kebab Bosman, Gandul",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 60,
+        "fields": {
+            "name": "Black Kebab Jumbo",
+            "description": "Rekomendasi bagimu \"makan 1 kurang, makan 2 kelebihan\"",
+            "category": "Jajanan/Barat",
+            "price": 28000,
+            "restaurant": 48
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 49,
+        "fields": {
+            "name": "Resto Ayam Najeb",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 61,
+        "fields": {
+            "name": "Sate Ampela",
+            "description": "",
+            "category": "Ayam & bebek/Cepat saji/Sate",
+            "price": 4000,
+            "restaurant": 49
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 62,
+        "fields": {
+            "name": "Fanta Float",
+            "description": "",
+            "category": "Sweets/Jajanan/Cepat saji",
+            "price": 13000,
+            "restaurant": 4
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 50,
+        "fields": {
+            "name": "Emados Shawarma, Condet",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 63,
+        "fields": {
+            "name": "Setengah Ayam Guling Nasi Mandhi",
+            "description": "2Pc Nasi Mandhi + 2Pc Ayam Guling + Salad + Garlic Mayo Small Dan Sambal Small (For 2 Orang)",
+            "category": "Ayam & bebek/Timur Tengah",
+            "price": 70180,
+            "restaurant": 50
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 64,
+        "fields": {
+            "name": "Pizza Pie",
+            "description": "",
+            "category": "Cepat saji/Sweets/Jajanan",
+            "price": 15000,
+            "restaurant": 4
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 65,
+        "fields": {
+            "name": "Sinde Lrtn Pet 500Ml",
+            "description": "",
+            "category": "Aneka nasi/Minuman/Jepang/Jajanan",
+            "price": 10000,
+            "restaurant": 46
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 51,
+        "fields": {
+            "name": "Starbucks, Sudirman Bogor",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 66,
+        "fields": {
+            "name": "LUNCH ( Selected food + Iced Shaken Lemonade/Americano/ Latte, tall size)",
+            "description": "A. Peanut Butter Panini\nB. Classic Tuna Tostie\nC. Beef Filone Sandwich\nD. Plant-Based Sloppy Joe",
+            "category": "Kopi/Roti/Minuman",
+            "price": 98000,
+            "restaurant": 51
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 67,
+        "fields": {
+            "name": "Lilin Angka 2",
+            "description": "",
+            "category": "Roti",
+            "price": 3800,
+            "restaurant": 11
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 52,
+        "fields": {
+            "name": "Lawson, Percetakan Negara",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 68,
+        "fields": {
+            "name": "Chic Choc 55G",
+            "description": "",
+            "category": "Jepang/Jajanan/Aneka nasi/Minuman",
+            "price": 9500,
+            "restaurant": 52
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 53,
+        "fields": {
+            "name": "GoSteak, Tj Priok",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 69,
+        "fields": {
+            "name": "Gongso Ayam",
+            "description": "Daging Ayam yang diracik dengan saus gongso khas GoSteak",
+            "category": "Aneka nasi/Bakmie/Barat",
+            "price": 27500,
+            "restaurant": 53
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 54,
+        "fields": {
+            "name": "Pancong Pijay",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 70,
+        "fields": {
+            "name": "Ropang Greentea Susu",
+            "description": "",
+            "category": "Minuman/Roti/Kopi",
+            "price": 13000,
+            "restaurant": 54
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 55,
+        "fields": {
+            "name": "KOPINYA KIMBOO",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 71,
+        "fields": {
+            "name": "Lychee Yakult",
+            "description": "",
+            "category": "Minuman/Kopi",
+            "price": 15500,
+            "restaurant": 55
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 56,
+        "fields": {
+            "name": "Lawless, Capsule Cibubur",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 72,
+        "fields": {
+            "name": "Pickels",
+            "description": "",
+            "category": "Barat",
+            "price": 21000,
+            "restaurant": 56
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 57,
+        "fields": {
+            "name": "Moeda Coffee",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 73,
+        "fields": {
+            "name": "Vanilla Latte Ice",
+            "description": "Paduan Espresso Dengan Saus Vanilla Dan Fresh Milk",
+            "category": "Kopi/Minuman/Sweets",
+            "price": 30000,
+            "restaurant": 57
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 58,
+        "fields": {
+            "name": "Bakso Titoti, Parung",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 74,
+        "fields": {
+            "name": "Mie Ayam Pangsit + Urat Besar",
+            "description": "",
+            "category": "Bakso & soto/Minuman",
+            "price": 39000,
+            "restaurant": 58
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 75,
+        "fields": {
+            "name": "McFlurry Choco",
+            "description": "",
+            "category": "Cepat saji/Sweets/Jajanan",
+            "price": 12500,
+            "restaurant": 21
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 76,
+        "fields": {
+            "name": "Cokelat Wijen Susu",
+            "description": "Wijen + Susu",
+            "category": "Martabak/Roti/Sweets",
+            "price": 42000,
+            "restaurant": 40
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 77,
+        "fields": {
+            "name": "Crunchy Signature Kakao",
+            "description": "Cadburry chocolate milk dipadukan dengan chocolate sauce, cream cheese dan crunchy chocolate crumbs",
+            "category": "Minuman",
+            "price": 21000,
+            "restaurant": 10
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 78,
+        "fields": {
+            "name": "Creamy Cendol Frappe",
+            "description": "A frappe blend of cendol",
+            "category": "Jajanan/Barat/Cepat saji/Ayam & bebek",
+            "price": 36990,
+            "restaurant": 31
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 59,
+        "fields": {
+            "name": "Pita Cappucino Cincau",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 79,
+        "fields": {
+            "name": "ES BOBA VANILLA BLUE",
+            "description": "",
+            "category": "Cepat saji/Jajanan/Minuman",
+            "price": 10000,
+            "restaurant": 59
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 60,
+        "fields": {
+            "name": "Mad Bagel, BSD",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 80,
+        "fields": {
+            "name": "Chicken Mozarella",
+            "description": "Everything on bagel, smoked chicken, mozarella, tomat, dan daun rosemary",
+            "category": "Barat/Roti",
+            "price": 66000,
+            "restaurant": 60
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 61,
+        "fields": {
+            "name": "Toko Pizza, Limo",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 81,
+        "fields": {
+            "name": "Extra Mushroom Champignon",
+            "description": "Jamur jenis Champignon produksi petani lokal kebanggaan Indonesia",
+            "category": "Pizza & pasta",
+            "price": 13000,
+            "restaurant": 61
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 82,
+        "fields": {
+            "name": "PaMer 5 Mix Medium",
+            "description": "",
+            "category": "Cepat saji/Sweets/Jajanan",
+            "price": 111000,
+            "restaurant": 15
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 62,
+        "fields": {
+            "name": "Genkaya, Pabuaran",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 83,
+        "fields": {
+            "name": "Dumpling Mix",
+            "description": "Dum Keju, Dum Ayam Dan Crab Nugget.",
+            "category": "Korea/Minuman/Jajanan",
+            "price": 15000,
+            "restaurant": 62
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 84,
+        "fields": {
+            "name": "Cheese Stick",
+            "description": "",
+            "category": "Roti",
+            "price": 31500,
+            "restaurant": 26
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 63,
+        "fields": {
+            "name": "Traffic Bun, Benhil",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 85,
+        "fields": {
+            "name": "Double Sei Diego Burger + Traffic French Fries + Cola",
+            "description": "Double Sei Diego Burger + Traffic French Fries + Cola",
+            "category": "Barat",
+            "price": 92000,
+            "restaurant": 63
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 86,
+        "fields": {
+            "name": "2x Pizza Pie",
+            "description": "",
+            "category": "Sweets/Jajanan/Cepat saji",
+            "price": 26000,
+            "restaurant": 4
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 64,
+        "fields": {
+            "name": "Faasos, Bintaro",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 87,
+        "fields": {
+            "name": "Mixed Kebab Meal",
+            "description": "Mixed Kebab Wrap, Mango Yakult, Fries",
+            "category": "India/Jajanan/Timur Tengah",
+            "price": 84970,
+            "restaurant": 64
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 65,
+        "fields": {
+            "name": "Emados Shawarma, Depok",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 88,
+        "fields": {
+            "name": "Setengah Ayam Guling Nasi Mandhi",
+            "description": "2Pc Nasi Mandhi + 2Pc Ayam Guling + Salad + Garlic Mayo Small Dan Sambal Small (For 2 Orang)",
+            "category": "Ayam & bebek/Timur Tengah",
+            "price": 70180,
+            "restaurant": 65
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 89,
+        "fields": {
+            "name": "Ice Matcha Latte",
+            "description": "Perpaduan matcha dan susu khas Lawson yang menghadirkan nuansa Jepang bagimu",
+            "category": "Aneka nasi/Minuman/Jepang/Jajanan",
+            "price": 18000,
+            "restaurant": 46
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 66,
+        "fields": {
+            "name": "Abuba Steak, Cikarang",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 90,
+        "fields": {
+            "name": "The Passion",
+            "description": "",
+            "category": "Barat",
+            "price": 33000,
+            "restaurant": 66
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 67,
+        "fields": {
+            "name": "martabak mapingkot",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 91,
+        "fields": {
+            "name": "double coklat susu",
+            "description": "cepat saji",
+            "category": "Martabak",
+            "price": 26950,
+            "restaurant": 67
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 68,
+        "fields": {
+            "name": "330 Kopi, Ciledug",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 92,
+        "fields": {
+            "name": "Paket Beff Blackpaper",
+            "description": "Beff Blackpaper + Leci/Lemon Tea",
+            "category": "Kopi/Minuman/Roti",
+            "price": 37000,
+            "restaurant": 68
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 69,
+        "fields": {
+            "name": "Bunga Bakery, Cibinong",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 93,
+        "fields": {
+            "name": "Red Velvet 11",
+            "description": "",
+            "category": "Roti",
+            "price": 56500,
+            "restaurant": 69
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 70,
+        "fields": {
+            "name": "Mixue, Benhil",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 94,
+        "fields": {
+            "name": "Milk Tea with 2 Topping (Medium)",
+            "description": "Milk Tea Dengan Topping Red Bean Dan Brown Sugar Jelly Yang Lembut",
+            "category": "Minuman/Sweets",
+            "price": 21000,
+            "restaurant": 70
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 71,
+        "fields": {
+            "name": "Lawson, Syahdan",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 95,
+        "fields": {
+            "name": "Hot Kopi Susu Arabica Gayo",
+            "description": "Hot Kopi Susu Arabica Gayo",
+            "category": "Minuman/Jepang/Jajanan/Aneka nasi",
+            "price": 18000,
+            "restaurant": 71
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 72,
+        "fields": {
+            "name": "JACK DONUT",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 96,
+        "fields": {
+            "name": "Oreo",
+            "description": "",
+            "category": "Roti/Jajanan",
+            "price": 4000,
+            "restaurant": 72
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 73,
+        "fields": {
+            "name": "farm.girl, SCBD",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 97,
+        "fields": {
+            "name": "Extra Kalamata Olives",
+            "description": "",
+            "category": "Sweets/Kopi/Barat",
+            "price": 36000,
+            "restaurant": 73
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 74,
+        "fields": {
+            "name": "Kims Topokki, Bintara",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 98,
+        "fields": {
+            "name": "Rabokki Original",
+            "description": "Sebuah Sajian Mie Dengan Bumbu Gochujang Ditambah Topping Topokki",
+            "category": "Korea",
+            "price": 20000,
+            "restaurant": 74
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 75,
+        "fields": {
+            "name": "GUREE, Senopati",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 99,
+        "fields": {
+            "name": "Sambal Matah",
+            "description": "",
+            "category": "Aneka nasi/Ayam & bebek/Barat",
+            "price": 7000,
+            "restaurant": 75
+        }
+    },
+    {
+        "model": "main.restaurant",
+        "pk": 76,
+        "fields": {
+            "name": "Dapur Cokelat, Ciracas",
+            "location": "jakarta"
+        }
+    },
+    {
+        "model": "main.food",
+        "pk": 100,
+        "fields": {
+            "name": "Grape Pebbles",
+            "description": "",
+            "category": "Minuman/Sweets/Roti",
+            "price": 30000,
+            "restaurant": 76
+        }
+    }
+]
