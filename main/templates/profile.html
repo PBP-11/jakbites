@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <!-- Navbar -->
+    <div class="flex justify-between items-center py-4">
+        <div class="text-xl font-bold text-black">
+            <a href="#">JakBites</a>
+        </div>
+        <div class="space-x-6 text-black">
+            <a href="#" class="hover:text-gray-700">About Us</a>
+            <a href="#" class="hover:text-gray-700">Product</a>
+            <a href="#" class="hover:text-gray-700">Shop</a>
+            <a href="#" class="hover:text-gray-700">Features</a>
+        </div>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="bg-gray-500 rounded-lg p-8 mt-6 shadow-lg text-center text-white">
+        <h1 class="text-4xl font-bold mb-4">User Profile</h1>
+        <p class="text-lg mb-6">Manage your account information and settings here.</p>
+
+        <!-- Profile Details -->
+        <div class="bg-gray-700 rounded-md p-6">
+            {% if user.is_authenticated %}
+                <p class="text-xl mb-2"><strong>Username:</strong> {{ user.username }}</p>
+                <p class="text-xl mb-4"><strong>Email:</strong> {{ user.email }}</p>
+
+                <!-- Change Password Button -->
+                <div class="flex justify-center space-x-4 mt-4">
+                    <a href="{% url 'change_password' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        Change Password
+                    </a>
+                    <a href="{% url 'logout' %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
+                        Logout
+                    </a>
+                </div>
+            {% else %}
+                <p class="text-xl">No user is logged in. This is a temporary page.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
