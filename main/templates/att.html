@@ -7,17 +7,21 @@
 
 <div class="px-[60px] py-10 w-full space-y-10]">
     <!-- Main Hero Section -->
-    <div class = "flex items-center">
-        <div class="w-[60%] mb-[70px]">
-            <h1 class="text-7xl font-bold font-[Poppins] mb-10">Lorem ipsum dolor sit amet.</h1>
+    <div class = "flex justify-between items-center ">
+        <div class="w-full mb-[70px]">
+            <h1 class="text-8xl font-bold font-[Poppins] mb-10">Lorem ipsum dolor sit amet.</h1>
             <p class="text-gray-800 text-xl font-[Lora] mb-8">Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio?</p>
             <div class="flex gap-5 mt-[60px]">
-                <a href="link" class="bg-black text-white rounded-full px-6 py-3 text-lg">Order Delivery</a>
-                <a href="link" class="border border-black rounded-full px-6 py-3 text-lg">See all features</a>
+                <div class="flex items-center rounded-full bg-white w-[80%]">
+                    <input type="text" placeholder="Search..." class="flex-grow rounded-full outline-none px-8 py-3" />
+                    <button class="rounded-full p-2 flex items-center justify-center">
+                        <img src="{% static 'image/search.png' %}" class="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 transition-transform duration-200 ease-in-out transform hover:scale-110" alt="Search" />
+                    </button>
+                </div>                
             </div>
         </div>
         <div>
-            <img src="{% static 'image/monas.png' %}" class = "h-[600px]">
+            <img src="{% static 'image/monas.png' %}" class = "w-[50%]">
         </div>
     </div>
     
@@ -30,9 +34,9 @@
                 <span class="text-gray-400">?</span>
             </div>
             <div class="flex justify-between items-center">
-                <p class="text-xl font-semibold">Lorem, ipsum.</p>
+                <p class="text-xl font-[Poppins] font-semibold">Lorem, ipsum.</p>
             </div>
-            <p class="text-gray-600 mt-3">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum, incidunt!</p>
+            <p class="text-gray-600 font-[Lora] mt-3">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum, incidunt!</p>
         </div>
 
         <!-- Card 2 -->
@@ -42,9 +46,9 @@
                 <span class="text-gray-400">?</span>
             </div>
             <div class="flex justify-between items-center">
-                <p class="text-xl font-semibold">Lorem, ipsum.</p>
+                <p class="text-xl font-[Poppins] font-semibold">Lorem, ipsum.</p>
             </div>
-            <p class="text-gray-600 mt-3">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum, incidunt!</p>
+            <p class="text-gray-600 font-[Lora] mt-3">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum, incidunt!</p>
         </div>
 
         <!-- Card 3 -->
@@ -54,9 +58,9 @@
                 <span class="text-gray-400">?</span>
             </div>
             <div class="flex justify-between items-center">
-                <p class="text-xl font-semibold">Lorem, ipsum.</p>
+                <p class="text-xl font-[Poppins] font-semibold">Lorem, ipsum.</p>
             </div>
-            <p class="text-gray-600 mt-3">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum, incidunt!</p>
+            <p class="text-gray-600 font-[Lora] mt-3">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum, incidunt!</p>
         </div>
     </div>
 </div>

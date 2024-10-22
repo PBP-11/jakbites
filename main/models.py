@@ -1,12 +1,11 @@
 from django.db import models
-<<<<<<< HEAD
 
 # class MoodEntry(models.Model):
 #     mood = models.CharField(max_length=255)
 #     time = models.DateField(auto_now_add=True)
 #     feelings = models.TextField()
 #     mood_intensity = models.IntegerField()
-=======
+
 from django.contrib.auth.models import User
 
 # semua class secara default sudah memiliki attribute 'id' sebagai primary key
@@ -41,4 +40,4 @@ class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE) # inherit attribut: username, email, password
     favorite_restaurants = models.ManyToManyField(Restaurant) # dapat juga di akses di Restaurant
     favorite_foods = models.ManyToManyField(Food) # dapat juga di akses di Food
->>>>>>> 4617c855a1e1e1c6b50c4f5b087baee10cf875b9
+
