@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 class Restaurant(models.Model):
     name = models.CharField(max_length=150)
     location = models.CharField(max_length=150)
-
+    
 class Food(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField()

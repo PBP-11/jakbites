@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+{% include 'navbar.html' %}
+
+    <h1>Search Results</h1>
+    
+    {% if results %}
+        <ul>
+            {% for food in results %}
+                <li>
+                    <strong>Name:</strong> {{ food.name }} <br>
+                    <strong>Category:</strong> {{ food.category }} <br>
+                    <strong>Price:</strong> {{ food.price }} <br>
+                    <strong>Restaurant:</strong> {{ food.restaurant}}  <!-- Adjust if you need more details from the restaurant -->
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
