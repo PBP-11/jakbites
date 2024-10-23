@@ -1,4 +1,11 @@
 from django.db import models
+
+# class MoodEntry(models.Model):
+#     mood = models.CharField(max_length=255)
+#     time = models.DateField(auto_now_add=True)
+#     feelings = models.TextField()
+#     mood_intensity = models.IntegerField()
+
 from django.contrib.auth.models import User
 
 # semua class secara default sudah memiliki attribute 'id' sebagai primary key
@@ -6,7 +13,7 @@ from django.contrib.auth.models import User
 class Restaurant(models.Model):
     name = models.CharField(max_length=150)
     location = models.CharField(max_length=150)
-
+    
 class Food(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField()
