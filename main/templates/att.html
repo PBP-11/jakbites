@@ -7,8 +7,8 @@
 
 <div class="px-10 py-10 w-full space-y-10]">
     <!-- Main Hero Section -->
-    <div class = "flex justify-between items-center ">
-        <div class="w-full mb-[70px]">
+    <div class = "flex justify-between items-center mb-8">
+        <div class="w-[50%] mb-[70px]">
             <h1 class="text-8xl font-bold font-[Poppins] mb-10">Lorem ipsum dolor sit amet.</h1>
             <p class="text-gray-800 text-xl font-[Lora] mb-8">Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio?</p>
             <div class="gap-5 mt-[60px]">
@@ -20,18 +20,18 @@
                             <img src="{% static 'image/search.png' %}" class="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 transition-transform duration-200 ease-in-out transform hover:scale-110" alt="Search">
                             </button>
                         </div>
-                        <div>
-                            <select>
-                                <option>
-                                    Search All
-                                </option>
-                                <option>
-                                    Restaurant Only
-                                </option>
-                                <option>
-                                    Food Only
-                                </option>
-                            </select>
+                        <div class="relative inline-block group">
+                            <button id='filterOn' class="rounded-full">
+                                <img src="{% static 'image/filter.png' %}" class="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 transition-transform duration-200 ease-in-out transform hover:scale-110">
+                            </button>
+                        
+                            <div id="filterSelectContainer" class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-opacity transition-transform duration-200 ease-in-out transform scale-95 z-10">
+                                <select id="filterSelect" class="block w-full px-4 py-2 text-gray-800 bg-white border-none focus:outline-none">
+                                    <option>Search All</option>
+                                    <option>Restaurant Only</option>
+                                    <option>Food Only</option>
+                                </select>
+                            </div>
                         </div>
                     </form>
                 {%if error_message %}   
@@ -41,8 +41,8 @@
                 {% endif %}                           
             </div>
         </div>
-        <div>
-            <img src="{% static 'image/monas.png' %}" class = "w-full">
+        <div class = "w-[50%]">
+            <img src="{% static 'image/monas.png' %}">
         </div>
     </div>
     
@@ -113,7 +113,6 @@
             console.log(error)
         }
     }
-
 
 </script>
 {% endblock %}

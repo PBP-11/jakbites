@@ -1,3 +1,5 @@
+{% load static %}
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -6,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 <div class = "flex justify-between px-7 py-5 items-center text-L">
     <div>
-        <h1>JakBites</h1>
+        <img src = "{% static 'image/logo1.png' %}" class = "w-[50px] md:w-[60x] lg:w-[80px]">
     </div>
     <div class = "flex gap-5 font-[Poppins]">
         <a href = "link">About Us</a>
