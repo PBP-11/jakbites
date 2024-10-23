@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <div class="container mx-auto p-6">
@@ -15,29 +16,69 @@
         </div>
     </div>
 
-    <!-- Profile Content -->
-    <div class="bg-gray-500 rounded-lg p-8 mt-6 shadow-lg text-center text-white">
-        <h1 class="text-4xl font-bold mb-4">User Profile</h1>
-        <p class="text-lg mb-6">Manage your account information and settings here.</p>
-
-        <!-- Profile Details -->
-        <div class="bg-gray-700 rounded-md p-6">
-            {% if user.is_authenticated %}
-                <p class="text-xl mb-2"><strong>Username:</strong> {{ user.username }}</p>
-                <p class="text-xl mb-4"><strong>Email:</strong> {{ user.email }}</p>
-
-                <!-- Change Password Button -->
-                <div class="flex justify-center space-x-4 mt-4">
-                    <a href="{% url 'change_password' %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
-                        Change Password
-                    </a>
-                    <a href="{% url 'logout' %}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
-                        Logout
-                    </a>
-                </div>
+    <!-- Profile Section -->
+    <div class="flex mt-6 space-x-4">
+        <!-- Profile Picture and Settings -->
+        <div class="w-1/3 bg-gray-200 rounded-lg p-4 text-center shadow-lg">
+            <!-- Profile Picture -->
+            {% if user.client.profile_picture %}
+                <img src="{{ user.client.profile_picture.url }}" alt="Profile Picture" class="w-32 h-32 rounded-full mx-auto mb-4">
             {% else %}
-                <p class="text-xl">No user is logged in. This is a temporary page.</p>
+                <!-- Default Image -->
+                <img src="{% static 'images/default-profile.png' %}" alt="Default Profile" class="w-32 h-32 rounded-full mx-auto mb-4">
             {% endif %}
+
+            <!-- Upload Profile Picture -->
+            <form method="POST" enctype="multipart/form-data" action="{% url 'upload_profile_picture' %}">
+                {% csrf_token %}
+                <label class="block mb-2 text-sm font-medium">Upload Foto</label>
+                <input type="file" name="profile_picture" accept="image/*" class="block w-full text-sm text-gray-500 border border-gray-300 rounded mb-4 cursor-pointer">
+                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-700">Unggah Foto</button>
+            </form>
+            
+
+            <!-- Change Password Button -->
+            <button class="bg-blue-500 text-white py-2 px-4 rounded mb-2 w-full">Ubah Kata Sandi</button>
+        </div>
+
+        <!-- User Information -->
+        <div class="w-2/3 bg-white rounded-lg p-4 shadow-lg">
+            <h2 class="text-2xl font-semibold mb-4">Ubah Biodata Diri</h2>
+            <div class="mb-4">
+                <p><strong>Nama:</strong> {{ user.username }} <a href="#" class="text-blue-500">Ubah</a></p>
+            </div>
+            <div class="mb-4">
+                <p><strong>Deskripsi:</strong> {{ user.client.description|default:"Tidak ada deskripsi." }} <a href="#" class="text-blue-500">Ubah</a></p>
+            </div>
+
+            <h2 class="text-2xl font-semibold mb-4 mt-6">Favorit</h2>
+            <!-- Favorite Restaurants -->
+            <div class="mb-4">
+                <h3 class="text-xl font-medium">Favorite Restaurants</h3>
+                {% if user.client.favorite_restaurants.all %}
+                    <ul class="list-disc list-inside text-gray-700">
+                        {% for restaurant in user.client.favorite_restaurants.all %}
+                            <li>{{ restaurant.name }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-gray-600">Belum ada restoran favorit.</p>
+                {% endif %}
+            </div>
+
+            <!-- Favorite Foods -->
+            <div class="mb-4">
+                <h3 class="text-xl font-medium">Favorite Foods</h3>
+                {% if user.client.favorite_foods.all %}
+                    <ul class="list-disc list-inside text-gray-700">
+                        {% for food in user.client.favorite_foods.all %}
+                            <li>{{ food.name }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-gray-600">Belum ada makanan favorit.</p>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
