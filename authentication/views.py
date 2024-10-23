@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.shortcuts import render, redirect
-# from main.forms import MoodEntryForm
+from authentication.forms import *
 # from main.models import MoodEntry
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -32,7 +32,7 @@ def login_user(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            response = HttpResponseRedirect(reverse("main:show_main"))
+            response = HttpResponseRedirect(reverse("main:show_att"))
             # response.set_cookie('last_login', str(datetime.datetime.now()))
             return response
         else:
@@ -42,3 +42,19 @@ def login_user(request):
         form = AuthenticationForm(request)
     context = {'form': form}
     return render(request, 'login.html', context)
+
+@login_required(login_url='authentication/login')
+def show_admin_page(request):
+    return render(request, "admin.html")
+
+def create_restaurant(request):
+    form = RestaurantForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        mood_entry = form.save(commit=False)
+        mood_entry.user = request.user
+        mood_entry.save()
+        return redirect("authentication:show_admin_page")
+
+    context = {'form': form}
+    return render(request, "create_mood_entry.html", context)

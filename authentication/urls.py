@@ -6,4 +6,5 @@ app_name = 'authentication'
 urlpatterns = [
     path('register/', register, name='register'),
     path('login/', login_user, name='login'),
+    path('admin/', show_admin_page, name='show_admin_page'),
 ]
