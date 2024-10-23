@@ -1,1 +1,165 @@
-<h1>admin page</h1>
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .modal {
+        display: none;
+        align-items: center; /* Center vertically */
+        justify-content: center; /* Center horizontally */
+    }
+    body {
+        font-family: 'Lora', serif;
+    }
+    h1, h2, button, li {
+        font-family: 'Poppins', sans-serif;
+    }
+    input, select, textarea {
+        border: 1px solid black;
+        padding: 0.5rem;
+        width: 100%;
+    }
+    label {
+        text-align: left;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    .full-screen-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+</style>
+
+<div class="full-screen-center">
+    <div class="container mx-auto p-6 bg-white text-black font-lora leading-normal text-base tracking-normal">
+        <h1 class="text-4xl font-extrabold mb-8 text-center text-black font-poppins">Admin Dashboard</h1>
+
+        <div class="flex justify-center space-x-4 mb-8">
+            <!-- Button to open the modal for adding restaurant -->
+            <button type="button" id="open-restaurant-modal-btn" class="bg-white border border-black text-black font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 font-poppins">Add Restaurant</button>
+
+            <!-- Button to open the modal for adding food -->
+            <button type="button" id="open-food-modal-btn" class="bg-white border border-black text-black font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 font-poppins">Add Food</button>
+        </div>
+
+        <!-- Modal for adding restaurant -->
+        <div id="restaurant-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-50 flex">
+            <div class="modal-content bg-white rounded-lg shadow-lg p-8 w-11/12 md:w-1/2 flex flex-col relative border border-black">
+                <span class="close text-gray-500 hover:text-gray-700 cursor-pointer text-2xl font-bold absolute top-4 right-4" id="close-restaurant-modal">&times;</span>
+                <h2 class="text-3xl font-bold mb-6 text-center text-black font-poppins">Add Restaurant</h2>
+                <form id="restaurant-form" method="post" class="space-y-4 flex-grow flex flex-col">
+                    {% csrf_token %}
+                    <table class="w-full">
+                        {{ restaurant_form.as_table }}
+                    </table>
+                    <button type="button" id="add-restaurant-btn" class="bg-white border border-black text-black font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 w-full mt-auto font-poppins">Add Restaurant</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal for adding food -->
+        <div id="food-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-50 flex">
+            <div class="modal-content bg-white rounded-lg shadow-lg p-8 w-11/12 md:w-1/2 flex flex-col relative border border-black">
+                <span class="close text-gray-500 hover:text-gray-700 cursor-pointer text-2xl font-bold absolute top-4 right-4" id="close-food-modal">&times;</span>
+                <h2 class="text-3xl font-bold mb-6 text-center text-black font-poppins">Add Food</h2>
+                <form id="food-form" method="post" class="space-y-4 flex-grow flex flex-col">
+                    {% csrf_token %}
+                    <table class="w-full">
+                        {{ food_form.as_table }}
+                    </table>
+                    <button type="button" id="add-food-btn" class="bg-white border border-black text-black font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 w-full mt-auto font-poppins">Add Food</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="mt-12">
+            <h2 class="text-3xl font-bold mb-6 text-black font-poppins">Restaurants</h2>
+            <ul id="restaurant-list" class="list-disc pl-5 space-y-2">
+                {% for restaurant in restaurants %}
+                <li class="bg-white p-4 rounded-lg shadow-md border border-black font-poppins">{{ restaurant.name }} - {{ restaurant.location }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="mt-12">
+            <h2 class="text-3xl font-bold mb-6 text-black font-poppins">Foods</h2>
+            <ul id="food-list" class="list-disc pl-5 space-y-2">
+                {% for food in foods %}
+                <li class="bg-white p-4 rounded-lg shadow-md border border-black font-poppins">{{ food.name }} - {{ food.description }} - {{ food.category }} - {{ food.restaurant.name }} - {{ food.price }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('open-restaurant-modal-btn').addEventListener('click', function() {
+        document.getElementById('restaurant-modal').style.display = 'flex';
+    });
+    
+    document.getElementById('close-restaurant-modal').addEventListener('click', function() {
+        document.getElementById('restaurant-modal').style.display = 'none';
+    });
+    
+    document.getElementById('open-food-modal-btn').addEventListener('click', function() {
+        document.getElementById('food-modal').style.display = 'flex';
+    });
+    
+    document.getElementById('close-food-modal').addEventListener('click', function() {
+        document.getElementById('food-modal').style.display = 'none';
+    });
+    
+    document.getElementById('add-restaurant-btn').addEventListener('click', function() {
+        var form = document.getElementById('restaurant-form');
+        var formData = new FormData(form);
+        fetch("{% url 'authentication:add_restaurant' %}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                var restaurantList = document.getElementById('restaurant-list');
+                var newRestaurant = document.createElement('li');
+                newRestaurant.className = 'bg-white p-4 rounded-lg shadow-md border border-black font-poppins';
+                newRestaurant.textContent = data.restaurant.name + ' - ' + data.restaurant.location;
+                restaurantList.appendChild(newRestaurant);
+                form.reset();
+                document.getElementById('restaurant-modal').style.display = 'none';
+            } else {
+                alert('Failed to add restaurant');
+            }
+        });
+    });
+    
+    document.getElementById('add-food-btn').addEventListener('click', function() {
+        var form = document.getElementById('food-form');
+        var formData = new FormData(form);
+        fetch("{% url 'authentication:add_food' %}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                var foodList = document.getElementById('food-list');
+                var newFood = document.createElement('li');
+                newFood.className = 'bg-white p-4 rounded-lg shadow-md border border-black font-poppins';
+                newFood.textContent = data.food.name + ' - ' + data.food.description + ' - ' + data.food.category + ' - ' + data.food.restaurant.name + ' - ' + data.food.price;
+                foodList.appendChild(newFood);
+                form.reset();
+                document.getElementById('food-modal').style.display = 'none';
+            } else {
+                alert('Failed to add food: ' + JSON.stringify(data.errors));
+            }
+        });
+    });
+</script>
+{% endblock content %}

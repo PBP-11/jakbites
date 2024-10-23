@@ -18,10 +18,10 @@
     </div>
     <div class = "flex gap-5 items-center">
         <div>
-            <a href = "link">Login</a>
+            <a href="{% url 'authentication:login' %}">Login</a>
         </div>
-        <div class = "rounded-full bg-[#BDBDBD] px-5 py-2">
-            <a href = "link">Register</a>
+        <div class="rounded-full bg-[#BDBDBD] px-5 py-2">
+            <a href="{% url 'authentication:register' %}">Register</a>
         </div>
     </div>
 </div>

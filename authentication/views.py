@@ -12,17 +12,19 @@ import datetime
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.html import strip_tags
+from django.http import JsonResponse
 
 def register(request):
-    form = UserCreationForm()
-
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = ClientRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            user = form.save()
             messages.success(request, 'Your account has been successfully created!')
-            return redirect('authentication:login')
-    context = {'form':form}
+            login(request, user)
+            return redirect('main:show_att')
+    else:
+        form = ClientRegistrationForm()
+    context = {'form': form}
     return render(request, 'register.html', context)
 
 def login_user(request):
@@ -32,9 +34,14 @@ def login_user(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            response = HttpResponseRedirect(reverse("main:show_att"))
-            # response.set_cookie('last_login', str(datetime.datetime.now()))
-            return response
+            
+            # Check if the user is an admin or client
+            if Admin.objects.filter(user=user).exists():
+                return HttpResponseRedirect(reverse("authentication:show_admin_page"))
+            elif Client.objects.filter(user=user).exists():
+                return HttpResponseRedirect(reverse("main:show_att"))
+            else:
+                return HttpResponseRedirect(reverse("main:show_att"))
         else:
             messages.error(request, "Invalid username or password. Please try again.")
 
@@ -45,16 +52,71 @@ def login_user(request):
 
 @login_required(login_url='authentication/login')
 def show_admin_page(request):
-    return render(request, "admin.html")
+    restaurant_form = RestaurantForm()
+    food_form = FoodForm()
+    
+    restaurants = Restaurant.objects.all()
+    foods = Food.objects.all()
+    
+    context = {
+        'restaurant_form': restaurant_form,
+        'food_form': food_form,
+        'restaurants': restaurants,
+        'foods': foods,
+    }
+    return render(request, 'admin.html', context)
 
-def create_restaurant(request):
-    form = RestaurantForm(request.POST or None)
+@csrf_exempt
+@login_required(login_url='authentication/login')
+def add_restaurant(request):
+    if request.method == 'POST':
+        restaurant_form = RestaurantForm(request.POST)
+        if restaurant_form.is_valid():
+            restaurant = restaurant_form.save()
+            return JsonResponse({'success': True, 'restaurant': {'name': restaurant.name, 'location': restaurant.location}})
+        else:
+            return JsonResponse({'success': False, 'errors': restaurant_form.errors})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
-    if form.is_valid() and request.method == "POST":
-        mood_entry = form.save(commit=False)
-        mood_entry.user = request.user
-        mood_entry.save()
-        return redirect("authentication:show_admin_page")
+@csrf_exempt
+@login_required(login_url='authentication/login')
+def add_food(request):
+    if request.method == 'POST':
+        food_form = FoodForm(request.POST)
+        if food_form.is_valid():
+            restaurant_name = food_form.cleaned_data['restaurant_name']
+            try:
+                restaurant = Restaurant.objects.get(name=restaurant_name)
+            except Restaurant.DoesNotExist:
+                return JsonResponse({'success': False, 'errors': {'restaurant_name': ['Restaurant not found']}})
+            
+            food = food_form.save(commit=False)
+            food.restaurant = restaurant
+            food.save()
+            return JsonResponse({
+                'success': True,
+                'food': {
+                    'name': food.name,
+                    'description': food.description,
+                    'category': food.category,
+                    'restaurant': {
+                        'name': food.restaurant.name
+                    },
+                    'price': food.price
+                }
+            })
+        else:
+            return JsonResponse({'success': False, 'errors': food_form.errors})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
-    context = {'form': form}
-    return render(request, "create_mood_entry.html", context)
+# def create_restaurant(request):
+#     form = RestaurantForm(request.POST or None)
+
+#     if form.is_valid() and request.method == "POST":
+#         mood_entry = form.save(commit=False)
+#         mood_entry.user = request.user
+#         mood_entry.save()
+#         return redirect("authentication:show_admin_page")
+
+#     context = {'form': form}
+#     return render(request, "create_mood_entry.html", context)
