@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from main import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.product_list, name='product_list'),  # Arahkan ke halaman produk
+    path('product/<int:product_id>/', views.product_detail, name='product_detail'),
 ]
