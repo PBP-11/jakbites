@@ -12,17 +12,17 @@
             <h1 class="text-8xl font-bold font-[Poppins] mb-10">Lorem ipsum dolor sit amet.</h1>
             <p class="text-gray-800 text-xl font-[Lora] mb-8">Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio?</p>
             <div class="gap-5 mt-[60px]">
-                    <form method="GET" action="{% url 'main:search_instance' %}" class = "w-[80%]">
+                    <form method="GET" action="{% url 'main:search_instance' %}" class = "flex w-full">
                         {% csrf_token %}
-                        <div class = "relative">
+                        <div class = "relative w-[80%]">
                             <input id = "inputanQuery" type="text" name="query" placeholder="Search..." class="rounded-full outline-none px-8 py-3 w-full block" required oninput="search()">
                             <button type="submit" class="absolute rounded-full top-2 sm:top-3 md:top-2 xl:top-2 right-2">
                             <img src="{% static 'image/search.png' %}" class="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 transition-transform duration-200 ease-in-out transform hover:scale-110" alt="Search">
                             </button>
                         </div>
-                        <div class="relative inline-block group">
-                            <button id='filterOn' class="rounded-full">
-                                <img src="{% static 'image/filter.png' %}" class="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 transition-transform duration-200 ease-in-out transform hover:scale-110">
+                        <div class="relative inline-block group ml-2 items-center mt-2">
+                            <button id='filterOn' class="rounded-full bg-white w-8 h-8 md:w-6 md:h-6 lg:w-8 lg:h-8">
+                                <img src="{% static 'image/filter.png' %}" class="md:ml-[8px] w-4 h-4 md:w-3 md:h-3 lg:w-4 lg:h-4 transition-transform duration-200 ease-in-out transform hover:scale-110">
                             </button>
                         
                             <div id="filterSelectContainer" class="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-opacity transition-transform duration-200 ease-in-out transform scale-95 z-10">
