@@ -35,20 +35,37 @@
                 <input type="file" name="profile_picture" accept="image/*" class="block w-full text-sm text-gray-500 border border-gray-300 rounded mb-4 cursor-pointer">
                 <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-700">Unggah Foto</button>
             </form>
-            
 
-            <!-- Change Password Button -->
-            <button class="bg-blue-500 text-white py-2 px-4 rounded mb-2 w-full">Ubah Kata Sandi</button>
+            <!-- Form Ubah Nama -->
+            <div class="mb-4">
+                <label for="change-name" class="block text-sm font-medium">Nama:</label>
+                <input type="text" id="change-name" value="{{ user.username }}" class="border rounded px-2 py-1 w-full mb-2">
+                <button id="btn-change-name" class="bg-blue-500 text-white px-4 py-2 rounded w-full">Ubah</button>
+            </div>
+
+            <!-- Form Ubah Deskripsi -->
+            <div class="mb-4">
+                <label for="change-description" class="block text-sm font-medium">Deskripsi:</label>
+                <textarea id="change-description" class="border rounded px-2 py-1 w-full mb-2">{{ user.client.description }}</textarea>
+                <button id="btn-change-description" class="bg-blue-500 text-white px-4 py-2 rounded w-full">Ubah</button>
+            </div>
+
+            <!-- Form Ubah Kata Sandi -->
+            <div class="mb-4">
+                <label for="change-password" class="block text-sm font-medium">Kata Sandi Baru:</label>
+                <input type="password" id="change-password" class="border rounded px-2 py-1 w-full mb-2">
+                <button id="btn-change-password" class="bg-blue-500 text-white px-4 py-2 rounded w-full">Ubah</button>
+            </div>
         </div>
 
         <!-- User Information -->
         <div class="w-2/3 bg-white rounded-lg p-4 shadow-lg">
             <h2 class="text-2xl font-semibold mb-4">Ubah Biodata Diri</h2>
             <div class="mb-4">
-                <p><strong>Nama:</strong> {{ user.username }} <a href="#" class="text-blue-500">Ubah</a></p>
+                <p><strong>Nama:</strong> {{ user.username }}</p>
             </div>
             <div class="mb-4">
-                <p><strong>Deskripsi:</strong> {{ user.client.description|default:"Tidak ada deskripsi." }} <a href="#" class="text-blue-500">Ubah</a></p>
+                <p><strong>Deskripsi:</strong> {{ user.client.description|default:"Tidak ada deskripsi." }}</p>
             </div>
 
             <h2 class="text-2xl font-semibold mb-4 mt-6">Favorit</h2>
@@ -82,4 +99,61 @@
         </div>
     </div>
 </div>
+
+<!-- Script AJAX -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Ubah Nama
+        $('#btn-change-name').click(function() {
+            const newName = $('#change-name').val();
+            $.ajax({
+                url: "{% url 'change_name' %}",
+                method: "POST",
+                data: {
+                    'new_name': newName,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    alert(response.message);
+                    location.reload();
+                }
+            });
+        });
+
+        // Ubah Deskripsi
+        $('#btn-change-description').click(function() {
+            const newDescription = $('#change-description').val();
+            $.ajax({
+                url: "{% url 'change_description' %}",
+                method: "POST",
+                data: {
+                    'new_description': newDescription,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    alert(response.message);
+                    location.reload();
+                }
+            });
+        });
+
+        // Ubah Kata Sandi
+        $('#btn-change-password').click(function() {
+            const newPassword = $('#change-password').val();
+            $.ajax({
+                url: "{% url 'change_password' %}",
+                method: "POST",
+                data: {
+                    'new_password': newPassword,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    alert(response.message);
+                    location.reload();
+                }
+            });
+        });
+    });
+</script>
 {% endblock content %}

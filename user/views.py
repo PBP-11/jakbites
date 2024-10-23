@@ -1,7 +1,10 @@
+from django.shortcuts import render
+
+# Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-from .models import *
+from main.models import *
 from django.contrib import messages
 from django.http import JsonResponse
 
