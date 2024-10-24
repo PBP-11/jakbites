@@ -33,8 +33,8 @@ class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # inherit attribut: username, email, password
     favorite_restaurants = models.ManyToManyField(Restaurant)  # dapat juga di akses di Restaurant
     favorite_foods = models.ManyToManyField(Food)  # dapat juga di akses di Food
-    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)  # menambahkan gambar profil
-    description = models.TextField(null=True, blank=True)  # menambahkan deskripsi profil
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.user.username

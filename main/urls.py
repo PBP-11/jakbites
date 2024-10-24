@@ -1,10 +1,7 @@
-from django.urls import path
-from . import views
+from django.contrib import admin
+from django.urls import path, include
 
 urlpatterns = [
-    path('profile/', views.profile_view, name='profile'),
-    path('profile/upload-profile-picture/', views.upload_profile_picture, name='upload_profile_picture'),  # Tambahkan ini
-    path('profile/change-name/', views.change_name, name='change_name'),
-    path('profile/change-description/', views.change_description, name='change_description'),
-    path('profile/change-password/', views.change_password, name='change_password'),
+    path('admin/', admin.site.urls),
+    path('user/', include('user.urls')),  # Pastikan ini ada
 ]
