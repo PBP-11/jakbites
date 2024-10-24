@@ -74,25 +74,36 @@ def add_restaurant(request):
     return JsonResponse({'success': False, 'errors': form.errors})
 
 @csrf_exempt
-@require_POST
+@login_required(login_url='authentication/login')
 def add_food(request):
-    data = json.loads(request.body)
-    restaurant_name = data.get('restaurant')
-    try:
-        restaurant = Restaurant.objects.get(name=restaurant_name)
-    except Restaurant.DoesNotExist:
-        return JsonResponse({'success': False, 'errors': {'restaurant_name': ['Restaurant not found']}})
-    
-    form = FoodForm(data)
-    form.data._mutable = True  # Make QueryDict mutable
-    form.data['restaurant'] = restaurant.id  # Assign restaurant ID
-    form.data._mutable = False  # Make QueryDict immutable again
-    if form.is_valid():
-        food = form.save(commit=False)
-        food.restaurant = restaurant
-        food.save()
-        return JsonResponse({'success': True, 'food': {'id': food.id, 'name': food.name, 'description': food.description, 'category': food.category, 'restaurant': {'name': food.restaurant.name}, 'price': food.price}})
-    return JsonResponse({'success': False, 'errors': form.errors})
+    if request.method == 'POST':
+        food_form = FoodForm(request.POST)
+        if food_form.is_valid():
+            restaurant_name = food_form.cleaned_data['restaurant_name']
+            try:
+                restaurant = Restaurant.objects.get(name=restaurant_name)
+            except Restaurant.DoesNotExist:
+                return JsonResponse({'success': False, 'errors': {'restaurant_name': ['Restaurant not found']}})
+            
+            food = food_form.save(commit=False)
+            food.restaurant = restaurant
+            food.save()
+            return JsonResponse({
+                'success': True,
+                'food': {
+                    'id': food.id,
+                    'name': food.name,
+                    'description': food.description,
+                    'category': food.category,
+                    'restaurant': {
+                        'name': food.restaurant.name
+                    },
+                    'price': food.price
+                }
+            })
+        else:
+            return JsonResponse({'success': False, 'errors': food_form.errors})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 def search(request):
     search_type = request.GET.get('type')
@@ -110,10 +121,26 @@ def get_restaurant(request):
     restaurant = Restaurant.objects.get(id=restaurant_id)
     return JsonResponse({'success': True, 'restaurant': {'name': restaurant.name, 'location': restaurant.location}})
 
+@login_required(login_url='authentication/login')
 def get_food(request):
     food_id = request.GET.get('id')
-    food = Food.objects.get(id=food_id)
-    return JsonResponse({'success': True, 'food': {'name': food.name, 'description': food.description, 'category': food.category, 'restaurant': {'id': food.restaurant.id}, 'price': food.price}})
+    try:
+        food = Food.objects.get(id=food_id)
+        data = {
+            'success': True,
+            'food': {
+                'name': food.name,
+                'description': food.description,
+                'category': food.category,
+                'restaurant': {
+                    'name': food.restaurant.name
+                },
+                'price': food.price
+            }
+        }
+        return JsonResponse(data)
+    except Food.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Food not found'})
 
 @csrf_exempt
 @require_POST

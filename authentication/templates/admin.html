@@ -195,7 +195,7 @@
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRFToken': '{{ csrf_token }}',
+                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
             },
         })
         .then(response => response.json())
@@ -319,7 +319,7 @@
                         form.querySelector('[name="name"]').value = data.food.name;
                         form.querySelector('[name="description"]').value = data.food.description;
                         form.querySelector('[name="category"]').value = data.food.category;
-                        form.querySelector('[name="restaurant"]').value = data.food.restaurant.id;
+                        form.querySelector('[name="restaurant_name"]').value = data.food.restaurant.name;
                         form.querySelector('[name="price"]').value = data.food.price;
                         form.action = "{% url 'authentication:edit_food' %}?id=" + foodId;
                         document.getElementById('food-modal').style.display = 'flex';
