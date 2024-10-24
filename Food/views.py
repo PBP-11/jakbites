@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from .models import Food, ReviewFood
 from .forms import ReviewForm
 from django.contrib.auth.models import User
-# from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 import logging
 
 logger = logging.getLogger(__name__)
@@ -12,7 +12,7 @@ def product_list(request):
     products = Food.objects.all()
     return render(request, 'product_list.html', {'products': products})
 
-# @login_required
+@login_required
 def product_detail(request, product_id):
     product = get_object_or_404(Food, id=product_id)
     reviews = ReviewFood.objects.filter(food=product)
@@ -26,11 +26,11 @@ def product_detail(request, product_id):
         if review_form.is_valid():
             review = review_form.save(commit=False)
             review.food = product
-            # review.user = request.user  
+            review.user = request.user  
 
-            # Tambahkan user placeholder untuk testing
-            user_placeholder, created = User.objects.get_or_create(username='test_user')
-            review.user = user_placeholder
+            # # Tambahkan user placeholder untuk testing
+            # user_placeholder, created = User.objects.get_or_create(username='test_user')
+            # review.user = user_placeholder
 
             # Pastikan teks review disimpan
             review_text = review_form.cleaned_data.get('review')
