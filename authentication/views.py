@@ -1,3 +1,4 @@
+import json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
@@ -107,6 +108,54 @@ def add_food(request):
             })
         else:
             return JsonResponse({'success': False, 'errors': food_form.errors})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+@login_required(login_url='authentication/login')
+def search(request):
+    search_type = request.GET.get('type')
+    query = request.GET.get('query')
+    
+    if search_type == 'restaurant':
+        results = Restaurant.objects.filter(name__icontains=query)
+        data = [{'name': restaurant.name, 'location': restaurant.location} for restaurant in results]
+    elif search_type == 'food':
+        results = Food.objects.filter(name__icontains=query)
+        data = [{'name': food.name, 'description': food.description, 'category': food.category, 'price': food.price, 'restaurant': {'name': food.restaurant.name}} for food in results]
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid search type'})
+    
+    return JsonResponse({'success': True, 'results': data})
+
+@csrf_exempt
+@login_required(login_url='authentication/login')
+def delete_restaurant(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            restaurant_id = data.get('id')
+            restaurant = Restaurant.objects.get(id=restaurant_id)
+            restaurant.delete()
+            return JsonResponse({'success': True})
+        except Restaurant.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Restaurant not found'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+@csrf_exempt
+@login_required(login_url='authentication/login')
+def delete_food(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            food_id = data.get('id')
+            food = Food.objects.get(id=food_id)
+            food.delete()
+            return JsonResponse({'success': True})
+        except Food.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Food not found'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 # def create_restaurant(request):

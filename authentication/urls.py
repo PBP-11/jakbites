@@ -9,4 +9,7 @@ urlpatterns = [
     path('admin/', show_admin_page, name='show_admin_page'),
     path('admin/add_restaurant/', add_restaurant, name='add_restaurant'),
     path('admin/add_food/', add_food, name='add_food'),
+    path('admin/search/', search, name='search'),
+    path('admin/delete_restaurant/', delete_restaurant, name='delete_restaurant'),
+    path('admin/delete_food/', delete_food, name='delete_food'),
 ]
