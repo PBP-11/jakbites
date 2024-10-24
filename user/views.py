@@ -14,6 +14,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from django.views.decorators.http import require_POST
 import json
+from django.contrib.auth.decorators import login_required
+
 
 
 
@@ -95,18 +97,27 @@ def change_description(request):
         else:
             return JsonResponse({'error': 'Description cannot be empty.'}, status=400)
 
-
+@csrf_exempt  
+@login_required
 def change_password(request):
     if request.method == 'POST':
+        current_password = request.POST.get('current_password')
         new_password = request.POST.get('new_password')
-        if new_password:
-            user = request.user
-            user.set_password(new_password)
-            user.save()
-            update_session_auth_hash(request, user)  
-            return JsonResponse({'message': 'Kata sandi berhasil diubah.'})
-        else:
-            return JsonResponse({'message': 'Kata sandi tidak boleh kosong.'}, status=400)
+
+        # Check if the current password is correct
+        if not request.user.check_password(current_password):
+            return JsonResponse({'success': False, 'message': 'Current password is incorrect.'})
+
+        # Set the new password
+        request.user.set_password(new_password)
+        request.user.save()
+
+        # Keep the user logged in after the password change
+        update_session_auth_hash(request, request.user)
+
+        return JsonResponse({'success': True, 'message': 'Password changed successfully!'})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'})
         
 @csrf_exempt  
 @require_POST
