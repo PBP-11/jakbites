@@ -144,28 +144,6 @@ def get_food(request):
 
 @csrf_exempt
 @require_POST
-def edit_restaurant(request):
-    restaurant_id = request.GET.get('id')
-    restaurant = Restaurant.objects.get(id=restaurant_id)
-    form = RestaurantForm(request.POST, instance=restaurant)
-    if form.is_valid():
-        form.save()
-        return JsonResponse({'success': True})
-    return JsonResponse({'success': False, 'errors': form.errors})
-
-@csrf_exempt
-@require_POST
-def edit_food(request):
-    food_id = request.GET.get('id')
-    food = Food.objects.get(id=food_id)
-    form = FoodForm(request.POST, instance=food)
-    if form.is_valid():
-        form.save()
-        return JsonResponse({'success': True})
-    return JsonResponse({'success': False, 'errors': form.errors})
-
-@csrf_exempt
-@require_POST
 def delete_restaurant(request):
     data = json.loads(request.body)
     restaurant_id = data.get('id')

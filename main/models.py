@@ -1,11 +1,4 @@
 from django.db import models
-
-# class MoodEntry(models.Model):
-#     mood = models.CharField(max_length=255)
-#     time = models.DateField(auto_now_add=True)
-#     feelings = models.TextField()
-#     mood_intensity = models.IntegerField()
-
 from django.contrib.auth.models import User
 
 # semua class secara default sudah memiliki attribute 'id' sebagai primary key

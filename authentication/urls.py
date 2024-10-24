@@ -14,6 +14,4 @@ urlpatterns = [
     path('admin/delete_food/', delete_food, name='delete_food'),
     path('admin/get_restaurant/', get_restaurant, name='get_restaurant'),
     path('admin/get_food/', get_food, name='get_food'),
-    path('admin/edit_restaurant/', edit_restaurant, name='edit_restaurant'),
-    path('admin/edit_food/', edit_food, name='edit_food'),
 ]
