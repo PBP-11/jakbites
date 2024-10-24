@@ -54,6 +54,11 @@ def search_instance(request):
 
     return JsonResponse(serialized_results, safe=False)  # Return the serialized results as JSON
 
+def filter_type(request):
+    type = request.GET.get('filter_option', 'all')
+    
+    return JsonResponse({'filter_option': filter_option})
+
 # def search_instance(request):
 #     query = request.GET.get('query')
 #     if query:
