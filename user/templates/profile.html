@@ -2,6 +2,9 @@
 {% load static %}
 
 {% block content %}
+<!-- Include Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 <div class="container mx-auto p-6">
     <!-- Navbar -->
     <div class="flex justify-between items-center py-4">
@@ -17,143 +20,272 @@
     </div>
 
     <!-- Profile Section -->
-    <div class="flex mt-6 space-x-4">
-        <!-- Profile Picture and Settings -->
-        <div class="w-1/3 bg-gray-200 rounded-lg p-4 text-center shadow-lg">
+    <div class="flex space-x-8 mt-6">
+        <!-- Left Section: User Info -->
+        <div class="w-1/2 bg-white p-6 rounded-lg shadow-lg">
             <!-- Profile Picture -->
-            {% if user.client.profile_picture %}
-                <img src="{{ user.client.profile_picture.url }}" alt="Profile Picture" class="w-32 h-32 rounded-full mx-auto mb-4">
-            {% else %}
-                <!-- Default Image -->
-                <img src="{% static 'images/default-profile.png' %}" alt="Default Profile" class="w-32 h-32 rounded-full mx-auto mb-4">
-            {% endif %}
-
-            <!-- Upload Profile Picture -->
-            <form method="POST" enctype="multipart/form-data" action="{% url 'upload_profile_picture' %}">
-                {% csrf_token %}
-                <label class="block mb-2 text-sm font-medium">Upload Foto</label>
-                <input type="file" name="profile_picture" accept="image/*" class="block w-full text-sm text-gray-500 border border-gray-300 rounded mb-4 cursor-pointer">
-                <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded w-full hover:bg-blue-700">Unggah Foto</button>
-            </form>
-
-            <!-- Form Ubah Nama -->
-            <div class="mb-4">
-                <label for="change-name" class="block text-sm font-medium">Nama:</label>
-                <input type="text" id="change-name" value="{{ user.username }}" class="border rounded px-2 py-1 w-full mb-2">
-                <button id="btn-change-name" class="bg-blue-500 text-white px-4 py-2 rounded w-full">Ubah</button>
+            <div class="text-center mb-4">
+                {% if user.client.profile_picture %}
+                    <img src="{{ user.client.profile_picture.url }}" alt="Profile Picture" class="w-32 h-32 rounded-full mx-auto">
+                {% else %}
+                    <img src="{% static 'images/default-profile.png' %}" alt="Default Profile" class="w-32 h-32 rounded-full mx-auto">
+                {% endif %}
+                <form method="POST" enctype="multipart/form-data" action="{% url 'upload_profile_picture' %}" class="mt-4">
+                    {% csrf_token %}
+                    <input type="file" name="profile_picture" accept="image/*" class="block w-full text-sm text-gray-500 border border-gray-300 rounded mb-2 cursor-pointer">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Update Picture</button>
+                </form>
             </div>
 
-            <!-- Form Ubah Deskripsi -->
-            <div class="mb-4">
-                <label for="change-description" class="block text-sm font-medium">Deskripsi:</label>
-                <textarea id="change-description" class="border rounded px-2 py-1 w-full mb-2">{{ user.client.description }}</textarea>
-                <button id="btn-change-description" class="bg-blue-500 text-white px-4 py-2 rounded w-full">Ubah</button>
+            <!-- Username -->
+            <div class="flex items-center justify-between mb-4">
+                <p class="text-lg font-semibold">Username: <span id="display-name">{{ user.username }}</span></p>
+                <button id="edit-username-btn" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">
+                    Edit
+                </button>
             </div>
 
-            <!-- Form Ubah Kata Sandi -->
-            <div class="mb-4">
-                <label for="change-password" class="block text-sm font-medium">Kata Sandi Baru:</label>
-                <input type="password" id="change-password" class="border rounded px-2 py-1 w-full mb-2">
-                <button id="btn-change-password" class="bg-blue-500 text-white px-4 py-2 rounded w-full">Ubah</button>
+            <!-- Description -->
+            <div class="flex items-center justify-between mb-4">
+                <p class="text-lg font-semibold">Description: <span id="display-description">{{ user.client.description|default:"No description available." }}</span></p>
+                <button id="edit-description-btn" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">
+                    Edit
+                </button>
             </div>
         </div>
 
-        <!-- User Information -->
-        <div class="w-2/3 bg-white rounded-lg p-4 shadow-lg">
-            <h2 class="text-2xl font-semibold mb-4">Ubah Biodata Diri</h2>
-            <div class="mb-4">
-                <p><strong>Nama:</strong> {{ user.username }}</p>
-            </div>
-            <div class="mb-4">
-                <p><strong>Deskripsi:</strong> {{ user.client.description|default:"Tidak ada deskripsi." }}</p>
-            </div>
+        <!-- Right Section: Favorites -->
+        <div class="w-1/2 bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold mb-4">Favorites</h2>
 
-            <h2 class="text-2xl font-semibold mb-4 mt-6">Favorit</h2>
             <!-- Favorite Restaurants -->
-            <div class="mb-4">
+            <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-medium">Favorite Restaurants</h3>
-                {% if favorite_restaurants %}
-                    <ul class="list-disc list-inside text-gray-700">
-                        {% for restaurant in favorite_restaurants %}
-                            <li>{{ restaurant.name }}</li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p class="text-gray-600">Belum ada restoran favorit.</p>
-                {% endif %}
+                <button id="edit-resto-fav-btn" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">
+                    Edit
+                </button>
             </div>
-            
+            {% if favorite_restaurants %}
+                <ul class="list-disc list-inside text-gray-700">
+                    {% for restaurant in favorite_restaurants %}
+                        <li>{{ restaurant.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-gray-600">No favorite restaurants.</p>
+            {% endif %}
+
             <!-- Favorite Foods -->
-            <div class="mb-4">
+            <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-medium">Favorite Foods</h3>
-                {% if favorite_foods %}
-                    <ul class="list-disc list-inside text-gray-700">
-                        {% for food in favorite_foods %}
-                            <li>{{ food.name }}</li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p class="text-gray-600">Belum ada makanan favorit.</p>
-                {% endif %}
+                <button id="edit-food-fav-btn" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">
+                    Edit
+                </button>
             </div>
+            {% if favorite_foods %}
+                <ul class="list-disc list-inside text-gray-700">
+                    {% for food in favorite_foods %}
+                        <li>{{ food.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-gray-600">No favorite foods.</p>
+            {% endif %}
         </div>
     </div>
 </div>
 
-<!-- Script AJAX -->
+<!-- Popup Modal for Editing Info -->
+<div id="edit-info-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+        <h2 class="text-xl font-semibold mb-4" id="edit-info-title">Edit Info</h2>
+        <form id="edit-info-form">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label id="edit-info-label" class="block text-sm font-medium"></label>
+                <input type="text" id="edit-info-input" class="border rounded px-2 py-1 w-full">
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button type="button" id="close-info-modal" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+                    Cancel
+                </button>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Popup Modal for Editing Favorite Restaurants -->
+<div id="edit-resto-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-1/3 max-h-[80vh] overflow-y-auto">
+        <h2 class="text-xl font-semibold mb-4">Edit Favorite Restaurants</h2>
+        <input type="text" id="search-resto" placeholder="Search restaurants..." class="mb-4 p-2 border rounded w-full">
+        <div id="resto-list" class="mb-4">
+            <!-- List of restaurants will be rendered here -->
+        </div>
+        <div class="flex justify-end space-x-4">
+            <button type="button" id="close-resto-modal" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+            <button id="save-resto-btn" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Update Favorites</button>
+        </div>
+    </div>
+</div>
+
+<!-- Popup Modal for Editing Favorite Foods -->
+<div id="edit-food-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-1/3 max-h-[80vh] overflow-y-auto">
+        <h2 class="text-xl font-semibold mb-4">Edit Favorite Foods</h2>
+        <input type="text" id="search-food" placeholder="Search foods..." class="mb-4 p-2 border rounded w-full">
+        <div id="food-list" class="mb-4">
+            <!-- List of foods will be rendered here -->
+        </div>
+        <div class="flex justify-end space-x-4">
+            <button type="button" id="close-food-modal" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+            <button id="save-food-btn" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Update Favorites</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Script AJAX and Popup Functionality -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Ubah Nama
-        $('#btn-change-name').click(function() {
-            const newName = $('#change-name').val();
-            $.ajax({
-                url: "{% url 'change_name' %}",
-                method: "POST",
-                data: {
-                    'new_name': newName,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function(response) {
-                    alert(response.message);
-                    location.reload();
-                }
-            });
+        // Open restaurant modal
+        $('#edit-resto-fav-btn').on('click', function() {
+            $('#edit-resto-modal').removeClass('hidden');
+            loadItems(
+                JSON.parse('{{ all_restaurants_json|escapejs }}'),
+                JSON.parse('{{ favorite_restaurants_json|escapejs }}'),
+                '#resto-list'
+            );
         });
 
-        // Ubah Deskripsi
-        $('#btn-change-description').click(function() {
-            const newDescription = $('#change-description').val();
-            $.ajax({
-                url: "{% url 'change_description' %}",
-                method: "POST",
-                data: {
-                    'new_description': newDescription,
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function(response) {
-                    alert(response.message);
-                    location.reload();
-                }
-            });
+        // Open food modal
+        $('#edit-food-fav-btn').on('click', function() {
+            $('#edit-food-modal').removeClass('hidden');
+            loadItems(
+                JSON.parse('{{ all_foods_json|escapejs }}'),
+                JSON.parse('{{ favorite_foods_json|escapejs }}'),
+                '#food-list'
+            );
         });
 
-        // Ubah Kata Sandi
-        $('#btn-change-password').click(function() {
-            const newPassword = $('#change-password').val();
+        // Load items into modal with checkboxes
+        function loadItems(allItems, currentFavs, listId) {
+            let currentFavIds = new Set(currentFavs.map(item => item.pk));
+            let listHtml = '<ul class="list-disc list-inside text-gray-700">';
+
+            allItems.forEach(function(item) {
+                let isChecked = currentFavIds.has(item.pk) ? 'checked' : '';
+                listHtml += `
+                    <li class="mb-2">
+                        <input type="checkbox" class="fav-item mr-2" data-id="${item.pk}" ${isChecked}>
+                        <span>${item.fields.name}</span>
+                    </li>`;
+            });
+
+            listHtml += '</ul>';
+            $(listId).html(listHtml);
+        }
+
+        // Close modals
+        $('#close-resto-modal, #close-food-modal').on('click', function() {
+            $(this).closest('.fixed').addClass('hidden');
+        });
+
+        // Save events
+        $('#save-resto-btn').on('click', function() {
+            saveFavorites('restaurant', '#resto-list');
+        });
+
+        $('#save-food-btn').on('click', function() {
+            saveFavorites('food', '#food-list');
+        });
+
+        // Save favorite items
+        function saveFavorites(type, listId) {
+            let selectedItems = [];
+            $(listId + ' .fav-item:checked').each(function() {
+                selectedItems.push($(this).data('id'));
+            });
+
+            let url = type === 'restaurant' ? "{% url 'toggle_resto_fav' %}" : "{% url 'toggle_food_fav' %}";
+
             $.ajax({
-                url: "{% url 'change_password' %}",
-                method: "POST",
+                url: url,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'selected_items': selectedItems
+                }),
+                success: function(response) {
+                    alert('Favorites updated!');
+                    $(listId).closest('.fixed').addClass('hidden');
+                    location.reload();
+                },
+                error: function(xhr) {
+                    alert('Error updating favorites!');
+                }
+            });
+        }
+    });
+
+
+
+    $(document).ready(function() {
+        let editType = '';
+
+        // Open modal for editing username
+        $('#edit-username-btn').on('click', function() {
+            editType = 'username';
+            $('#edit-info-title').text('Edit Username');
+            $('#edit-info-label').text('Username:');
+            $('#edit-info-input').val($('#display-name').text());
+            $('#edit-info-modal').removeClass('hidden');
+        });
+
+        // Open modal for editing description
+        $('#edit-description-btn').on('click', function() {
+            editType = 'description';
+            $('#edit-info-title').text('Edit Description');
+            $('#edit-info-label').text('Description:');
+            $('#edit-info-input').val($('#display-description').text());
+            $('#edit-info-modal').removeClass('hidden');
+        });
+
+        // Close the info modal
+        $('#close-info-modal').on('click', function() {
+            $('#edit-info-modal').addClass('hidden');
+        });
+
+        // Handle form submission for username/description
+        $('#edit-info-form').on('submit', function(e) {
+            e.preventDefault();
+            const newValue = $('#edit-info-input').val();
+
+            let url = editType === 'username' ? "{% url 'change_name' %}" : "{% url 'change_description' %}";
+
+            $.ajax({
+                url: url,
+                method: 'POST',
                 data: {
-                    'new_password': newPassword,
+                    'new_value': newValue,
                     'csrfmiddlewaretoken': '{{ csrf_token }}'
                 },
                 success: function(response) {
-                    alert(response.message);
-                    location.reload();
+                    if (editType === 'username') {
+                        $('#display-name').text(newValue);
+                    } else {
+                        $('#display-description').text(newValue);
+                    }
+                    $('#edit-info-modal').addClass('hidden');
+                    alert('Info updated successfully!');
                 }
             });
         });
     });
 </script>
+
 {% endblock content %}
