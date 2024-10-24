@@ -72,9 +72,9 @@
             <!-- Favorite Restaurants -->
             <div class="mb-4">
                 <h3 class="text-xl font-medium">Favorite Restaurants</h3>
-                {% if user.client.favorite_restaurants.all %}
+                {% if favorite_restaurants %}
                     <ul class="list-disc list-inside text-gray-700">
-                        {% for restaurant in user.client.favorite_restaurants.all %}
+                        {% for restaurant in favorite_restaurants %}
                             <li>{{ restaurant.name }}</li>
                         {% endfor %}
                     </ul>
@@ -82,13 +82,13 @@
                     <p class="text-gray-600">Belum ada restoran favorit.</p>
                 {% endif %}
             </div>
-
+            
             <!-- Favorite Foods -->
             <div class="mb-4">
                 <h3 class="text-xl font-medium">Favorite Foods</h3>
-                {% if user.client.favorite_foods.all %}
+                {% if favorite_foods %}
                     <ul class="list-disc list-inside text-gray-700">
-                        {% for food in user.client.favorite_foods.all %}
+                        {% for food in favorite_foods %}
                             <li>{{ food.name }}</li>
                         {% endfor %}
                     </ul>

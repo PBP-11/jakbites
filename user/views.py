@@ -14,28 +14,7 @@ from django.http import HttpResponseRedirect
 
 # Remove login_required for now
 def profile_view(request):
-    # user = request.user  # Get the authenticated user
-
-    # # Check if the user is authenticated
-    # if user.is_authenticated:
-    #     try:
-    #         # Retrieve the Client object associated with the user
-    #         client = Client.objects.get(user=user)
-    #     except Client.DoesNotExist:
-    #         client = None
-
-    # else:
-    #     user = None
-    #     client = None
-
-    # # Pass both the user and client objects to the template
-    # context = {
-    #     'user': user,
-    #     'client': client,
-    # }
-    # return render(request, 'profile.html', context)
     # Hardcode untuk mengganti user ke 'test1'
-    print("zzz")
     try:
         user = User.objects.get(username='test1')
         login(request, user)  # Paksa login sebagai 'test1'
@@ -45,10 +24,16 @@ def profile_view(request):
     # Ambil objek Client terkait dengan user yang sudah di-hardcode
     client = Client.objects.filter(user=user).first()
 
-    # Pass user dan client ke template
+    # Hardcode favorite restaurants dan foods
+    favorite_restaurants = Restaurant.objects.filter(id__in=[74])  # Ganti dengan ID restaurant favorit yang ingin kamu tampilkan
+    favorite_foods = Food.objects.filter(id__in=[96])  # Ganti dengan ID food favorit yang ingin kamu tampilkan
+
+    # Pass user, client, favorite restaurants, dan foods ke template
     context = {
         'user': user,
         'client': client,
+        'favorite_restaurants': favorite_restaurants,
+        'favorite_foods': favorite_foods,
     }
     return render(request, 'profile.html', context)
 
