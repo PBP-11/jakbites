@@ -34,17 +34,21 @@ def search_instance(request):
     # Perform a case-insensitive search using 'icontains' for partial matches
     results = Food.objects.filter(
         Q(name__icontains=query) |  # Search in Food name
-        Q(category__icontains=query) |  # Search in Food category
+        Q(category__icontains=query) |  # Search in related Restaurant name
         Q(restaurant__name__icontains=query)  # Search in related Restaurant name
-    )
+    ).select_related('restaurant')  # Optimize the query by using select_related
 
-    # Serialize the results with restaurant names
+    # Serialize the results with restaurant details
     serialized_results = [
         {
-            'name': food.name,
+            'food_name': food.name,
             'category': food.category,
             'price': food.price,
-            'restaurant': food.restaurant.name  # Get the restaurant name directly
+            'description': food.description,
+            'restaurant': {
+                'restaurant_name': food.restaurant.name,
+                'location': food.restaurant.location,
+            }
         } for food in results
     ]
 
