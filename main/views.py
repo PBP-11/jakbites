@@ -15,6 +15,7 @@ from django.views.decorators.http import require_POST
 from django.utils.html import strip_tags
 from django.db.models import Q
 from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 
 # @login_required(login_url='/login')
@@ -54,46 +55,52 @@ def search_instance(request):
 
     return JsonResponse(serialized_results, safe=False)  # Return the serialized results as JSON
 
+
 def search_on_full(request):
     query = request.GET.get('query', '')  # Get the query from the GET request
     filter_value = request.GET.get('filter', 'all')  # Get the filter value
     sort_value = request.GET.get('sort', 'none')  # Get the sort value
 
-    if not query:  # If the query is empty, return an empty result
-        return JsonResponse([])  # Return an empty JSON array if no query
-
     # Start with a basic query using the search term
     results = Food.objects.all()
 
-    # Apply filtering based on the selected filter option
+    # Apply filtering
     if filter_value == 'food':
         results = results.filter(Q(name__icontains=query))
     elif filter_value == 'restaurant':
         results = results.filter(Q(restaurant__name__icontains=query))
-    else:  # 'all' option
+    else:
         results = results.filter(
-            Q(name__icontains=query) |  # Search in Food name
-            Q(restaurant__name__icontains=query)  # Search in related Restaurant name
+            Q(name__icontains=query) | Q(restaurant__name__icontains=query)
         ).select_related('restaurant')
 
-    # Apply sorting based on the selected option
+    # Apply sorting
     if sort_value == 'price_asc':
-        results = results.order_by('price')  # Sort by price ascending
+        results = results.order_by('price')
     elif sort_value == 'price_desc':
-        results = results.order_by('-price')  # Sort by price descending
+        results = results.order_by('-price')
     elif sort_value == 'alpha_asc':
-        results = results.order_by('name')  # Sort by name A-Z
+        results = results.order_by('name')
     elif sort_value == 'alpha_desc':
-        results = results.order_by('-name')  # Sort by name Z-A
+        results = results.order_by('-name')
 
-    # Prepare the context for rendering the template
+    # Check if the request is an AJAX request
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string('results_partial.html', {'results': results})
+        return JsonResponse({'html': html})
+
+    # For normal page loads, render the full page
     context = {
         'results': results,
         'filtered': filter_value,
-        'sort': sort_value
+        'sort': sort_value,
     }
+    return render(request, 'results.html', context)
 
-    return render(request, "results.html", context)
+
+def about_us(request):
+    return render(request, 'about_us.html')
+
 #     type = request.GET.get('filter_option', 'all')
     
 #     return JsonResponse({'filter_option': filter_option})
