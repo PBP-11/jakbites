@@ -29,8 +29,6 @@ def show_att(request):
 
 def search_instance(request):
     query = request.GET.get('query', '')  # Get the query from the GET request
-    if len(query) < 1:
-        return JsonResponse([])  # Return an empty JSON array if the query is empty
 
     # Perform a case-insensitive search using 'icontains' for partial matches
     results = Food.objects.filter(
@@ -86,7 +84,7 @@ def search_on_full(request):
 
     # Check if the request is an AJAX request
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        html = render_to_string('results_partial.html', {'results': results})
+        html = render_to_string('result_kepotong.html', {'results': results})
         return JsonResponse({'html': html})
 
     # For normal page loads, render the full page
@@ -94,6 +92,7 @@ def search_on_full(request):
         'results': results,
         'filtered': filter_value,
         'sort': sort_value,
+        'query': query
     }
     return render(request, 'results.html', context)
 

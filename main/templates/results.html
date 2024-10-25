@@ -16,7 +16,7 @@
                 <div class = "flex justify-between items-center gap-x-4 text-[#292929]">
                     {% csrf_token %}
                     <div class = "flex relative w-[80%]">
-                        <input required name="query" class="shadow-lg py-2 focus:ring-0 border-none rounded-full px-4 w-full block" type="text" placeholder="Search" value="{{ query }}">
+                        <input required name="query" class="shadow-lg py-2 focus:ring-0 border-none rounded-full px-4 w-full block" type="text" placeholder="Search" value="{{ query|default:'' }}">
                         <button type="submit" class="absolute rounded-full top-1 sm:top-1 md:top-1 xl:top-1 right-2">
                         <img src="{% static 'image/search.png' %}" class="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 transition-transform duration-200 ease-in-out transform hover:scale-110" alt="Search">
                     </div>
@@ -24,7 +24,7 @@
                     <div class = "flex gap-x-8">
                             <div class = "flex items-center gap-1">
                                 <img class = "w-5 h-5" src = "{% static 'image/filter.png' %}">
-                                <select name="filter" id="filterSelect" class="appearance-none focus:ring-0 px-2 rounded-full py-2 font-[Poppins] bg-white border-none shadow-lg pr-8">
+                                <select name="filter" id="filterSelect" class="appearance-none focus:ring-0 px-2 rounded-full py-2 font-[Poppins] bg-white border-none shadow-lg pr-8" onchange="updateResults()">
                                     <option value="all" {% if filtered == 'all' %}selected{% endif %}>Search All</option>
                                     <option value="restaurant" {% if filtered == 'restaurant' %}selected{% endif %}>Restaurant Only</option>
                                     <option value="food" {% if filtered == 'food' %}selected{% endif %}>Food Only</option>
@@ -51,7 +51,7 @@
                 </div>
             </form>
         </div>
-        <div class="mt-6 mx-8">
+        <div id = "hasildata" class="mt-6 mx-8">
             {% if results %}
             <div class="grid grid-cols-4 gap-x-8 gap-y-8">
                 {% for result in results %}
@@ -82,22 +82,34 @@
 
     <script>
         function updateResults() {
-            // Get the selected sorting value
+            //tambahin csrf ulang
+            const csrfToken = '{{ csrf_token }}';
             const sortValue = document.querySelector('select[name="sort"]').value;
-    
-            // Construct the URL for the async request (including the sort value)
-            const url = `/search_page/?sort=${sortValue}`;
-    
-            // Fetch the results asynchronously
-            fetch(url)
-                .then(response => response.text())  // Get the HTML response
-                .then(data => {
-                    // Update the results container with the new HTML
-                    document.querySelector('.results-container').innerHTML = data;
-                })
-                .catch(error => {
-                    console.error('Error updating results:', error);
-                });
+            const query = document.querySelector('input[name="query"]').value;
+            const filterValue = document.querySelector('select[name="filter"]').value;
+        
+            const url = `/search_page/?query=${encodeURIComponent(query)}&filter=${encodeURIComponent(filterValue)}&sort=${encodeURIComponent(sortValue)}&csrfmiddlewaretoken=${encodeURIComponent(csrfToken)}`;
+
+            fetch(url, {
+                //pake get lebi gmpg dan data ga sensitif
+                method: 'GET', 
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',  
+                    'Content-Type': 'application/json',  
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); 
+            })
+            .then(data => {
+                document.getElementById('hasildata').innerHTML = data.html; // Update results
+            })
+            .catch(error => {
+                console.error('Error updating results:', error);
+            });
         }
     </script>
     
