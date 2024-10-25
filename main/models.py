@@ -1,11 +1,4 @@
 from django.db import models
-
-# class MoodEntry(models.Model):
-#     mood = models.CharField(max_length=255)
-#     time = models.DateField(auto_now_add=True)
-#     feelings = models.TextField()
-#     mood_intensity = models.IntegerField()
-
 from django.contrib.auth.models import User
 
 # semua class secara default sudah memiliki attribute 'id' sebagai primary key
@@ -34,14 +27,14 @@ class ReviewFood(models.Model):
     review = models.TextField()
 
 class Admin(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE) # inherit attribut: username, email, password
+    user = models.OneToOneField(User, on_delete=models.CASCADE) 
 
 class Client(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # inherit attribut: username, email, password
-    favorite_restaurants = models.ManyToManyField(Restaurant)  # dapat juga di akses di Restaurant
-    favorite_foods = models.ManyToManyField(Food)  # dapat juga di akses di Food
-    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)  # menambahkan gambar profil
-    description = models.TextField(null=True, blank=True)  # menambahkan deskripsi profil
+    user = models.OneToOneField(User, on_delete=models.CASCADE)  
+    favorite_restaurants = models.ManyToManyField(Restaurant)  
+    favorite_foods = models.ManyToManyField(Food) 
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.user.username
