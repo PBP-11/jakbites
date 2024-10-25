@@ -169,4 +169,3 @@ def about_us(request):
 
 # def search_instance(request):
 #     return render(request, "search_instance.html", )
-

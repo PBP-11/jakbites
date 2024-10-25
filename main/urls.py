@@ -9,5 +9,4 @@ urlpatterns = [
     path('search_page/', search_on_full, name = 'search_on_full'),
     path('about_us/', about_us, name = 'about_us')
     # path('login/', user_login, name = "user_login")
-    
 ]

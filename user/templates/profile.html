@@ -1,0 +1,383 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Include Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+    .font-poppins {
+        font-family: 'Poppins', sans-serif;
+    }
+</style>
+
+<div class="container mx-auto p-6">
+    <!-- Navbar -->
+    <div class="flex justify-between items-center py-4">
+        <div class="text-xl font-bold text-black">
+            <a href="#">JakBites</a>
+        </div>
+        <div class="space-x-6 text-black">
+            <a href="#" class="hover:text-gray-700">About Us</a>
+            <a href="#" class="hover:text-gray-700">Product</a>
+            <a href="#" class="hover:text-gray-700">Shop</a>
+            <a href="#" class="hover:text-gray-700">Features</a>
+        </div>
+    </div>
+
+    <!-- Profile Section -->
+    <div class="flex space-x-8 mt-6">
+        <!-- Left Section: User Info -->
+        <div class="w-1/2 bg-white p-6 rounded-lg shadow-lg">
+            <!-- Profile Picture -->
+            <div class="text-center mb-4">
+                {% if user.client.profile_picture %}
+                    <img src="{{ user.client.profile_picture.url }}" alt="Profile Picture" class="w-32 h-32 rounded-full mx-auto">
+                {% else %}
+                    <img src="{% static 'images/default-profile.png' %}" alt="Default Profile" class="w-32 h-32 rounded-full mx-auto">
+                {% endif %}
+                <form method="POST" enctype="multipart/form-data" action="{% url 'user:upload_profile_picture' %}" class="mt-4">
+                    {% csrf_token %}
+                    <input type="file" name="profile_picture" accept="image/*" class="block w-full text-sm text-gray-500 border border-gray-300 rounded mb-2 cursor-pointer">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 font-poppins">Update Picture</button>
+                </form>
+            </div>
+
+            <!-- Username -->
+            <div class="flex items-center justify-between mb-4 font-poppins">
+                <p class="text-lg font-semibold">Username: <span id="display-name">{{ user.username }}</span></p>
+                <button id="edit-username-btn" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">
+                    Edit
+                </button>
+            </div>
+
+            <!-- Description -->
+            <div class="flex items-center justify-between mb-4 font-poppins">
+                <p class="text-lg font-semibold">Description: <span id="display-description">{{ user.client.description|default:"No description available." }}</span></p>
+                <button id="edit-description-btn" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">
+                    Edit
+                </button>
+            </div>
+
+            <div class="flex items-center justify-center mb-4">
+                <button id="change-password-btn" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 font-poppins">
+                    Change Password
+                </button>
+            </div>
+        </div>
+
+
+
+        <!-- Right Section: Favorites -->
+        <div class="w-1/2 bg-white p-6 rounded-lg shadow-lg">
+            <!-- Favorite Restaurants -->
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-medium font-poppins">Favorite Restaurants</h3>
+                <button id="edit-resto-fav-btn" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">
+                    Edit
+                </button>
+            </div>
+            {% if favorite_restaurants %}
+                <ul class="list-disc list-inside text-gray-700">
+                    {% for restaurant in favorite_restaurants %}
+                        <li>{{ restaurant.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-gray-600">No favorite restaurants.</p>
+            {% endif %}
+
+            <!-- Favorite Foods -->
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-xl font-medium font-poppins">Favorite Foods</h3>
+                <button id="edit-food-fav-btn" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">
+                    Edit
+                </button>
+            </div>
+            {% if favorite_foods %}
+                <ul class="list-disc list-inside text-gray-700">
+                    {% for food in favorite_foods %}
+                        <li>{{ food.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-gray-600">No favorite foods.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Popup Modal for Editing Info -->
+<div id="edit-info-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden font-poppins">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+        <h2 class="text-xl font-semibold mb-4" id="edit-info-title">Edit Info</h2>
+        <form id="edit-info-form">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label id="edit-info-label" class="block text-sm font-medium"></label>
+                <input type="text" id="edit-info-input" class="border rounded px-2 py-1 w-full">
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button type="button" id="close-info-modal" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+                    Cancel
+                </button>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Popup Modal for Editing Favorite Restaurants -->
+<div id="edit-resto-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-1/3 max-h-[80vh] overflow-y-auto">
+        <h2 class="text-xl font-semibold mb-4">Edit Favorite Restaurants</h2>
+        <input type="text" id="search-resto" placeholder="Search restaurants..." class="mb-4 p-2 border rounded w-full">
+        <div id="resto-list" class="mb-4">
+            <!-- List of restaurants will be rendered here -->
+        </div>
+        <div class="flex justify-end space-x-4">
+            <button type="button" id="close-resto-modal" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+            <button id="save-resto-btn" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Update Favorites</button>
+        </div>
+    </div>
+</div>
+
+<!-- Popup Modal for Editing Favorite Foods -->
+<div id="edit-food-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-1/3 max-h-[80vh] overflow-y-auto">
+        <h2 class="text-xl font-semibold mb-4">Edit Favorite Foods</h2>
+        <input type="text" id="search-food" placeholder="Search foods..." class="mb-4 p-2 border rounded w-full">
+        <div id="food-list" class="mb-4">
+            <!-- List of foods will be rendered here -->
+        </div>
+        <div class="flex justify-end space-x-4">
+            <button type="button" id="close-food-modal" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
+            <button id="save-food-btn" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Update Favorites</button>
+        </div>
+    </div>
+</div>
+
+<div id="change-password-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+        <h2 class="text-xl font-semibold mb-4">Change Password</h2>
+        <form id="change-password-form">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="block text-sm font-medium">Current Password</label>
+                <input type="password" id="current-password" class="border rounded px-2 py-1 w-full" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium">New Password</label>
+                <input type="password" id="new-password" class="border rounded px-2 py-1 w-full" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium">Confirm New Password</label>
+                <input type="password" id="confirm-new-password" class="border rounded px-2 py-1 w-full" required>
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button type="button" id="close-password-modal" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+                    Cancel
+                </button>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- Script AJAX and Popup Functionality -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#current-password').val('');
+        $('#new-password').val('');
+        $('#confirm-password').val('');
+
+        // Open modal for changing password
+        $('#change-password-btn').on('click', function() {
+            $('#change-password-modal').removeClass('hidden');
+        });
+
+        // Close the change password modal
+        $('#close-password-modal').on('click', function() {
+            $('#change-password-modal').addClass('hidden');
+        });
+
+        // Handle password change form submission
+        $('#change-password-form').on('submit', function(e) {
+            e.preventDefault();
+
+            const currentPassword = $('#current-password').val();
+            const newPassword = $('#new-password').val();
+            const confirmNewPassword = $('#confirm-new-password').val();
+
+            if (newPassword !== confirmNewPassword) {
+                alert('New passwords do not match!');
+                return;
+            }
+
+            $.ajax({
+                url: "{% url 'user:change_password' %}",
+                method: 'POST',
+                data: {
+                    'current_password': currentPassword,
+                    'new_password': newPassword,
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert('Password changed successfully!');
+                        $('#change-password-modal').addClass('hidden');
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function(xhr) {
+                    alert('Error changing password!');
+                }
+            });
+        });
+    });
+
+    $(document).ready(function() {
+        // Open restaurant modal
+        $('#edit-resto-fav-btn').on('click', function() {
+            $('#edit-resto-modal').removeClass('hidden');
+            loadItems(
+                JSON.parse('{{ all_restaurants_json|escapejs }}'),
+                JSON.parse('{{ favorite_restaurants_json|escapejs }}'),
+                '#resto-list'
+            );
+        });
+
+        // Open food modal
+        $('#edit-food-fav-btn').on('click', function() {
+            $('#edit-food-modal').removeClass('hidden');
+            loadItems(
+                JSON.parse('{{ all_foods_json|escapejs }}'),
+                JSON.parse('{{ favorite_foods_json|escapejs }}'),
+                '#food-list'
+            );
+        });
+
+        // Load items into modal with checkboxes
+        function loadItems(allItems, currentFavs, listId) {
+            let currentFavIds = new Set(currentFavs.map(item => item.pk));
+            let listHtml = '<ul class="list-disc list-inside text-gray-700">';
+
+            allItems.forEach(function(item) {
+                let isChecked = currentFavIds.has(item.pk) ? 'checked' : '';
+                listHtml += `
+                    <li class="mb-2">
+                        <input type="checkbox" class="fav-item mr-2" data-id="${item.pk}" ${isChecked}>
+                        <span>${item.fields.name}</span>
+                    </li>`;
+            });
+
+            listHtml += '</ul>';
+            $(listId).html(listHtml);
+        }
+
+        // Close modals
+        $('#close-resto-modal, #close-food-modal').on('click', function() {
+            $(this).closest('.fixed').addClass('hidden');
+        });
+
+        // Save events
+        $('#save-resto-btn').on('click', function() {
+            saveFavorites('restaurant', '#resto-list');
+        });
+
+        $('#save-food-btn').on('click', function() {
+            saveFavorites('food', '#food-list');
+        });
+
+        // Save favorite items
+        function saveFavorites(type, listId) {
+            let selectedItems = [];
+            $(listId + ' .fav-item:checked').each(function() {
+                selectedItems.push($(this).data('id'));
+            });
+
+            let url = type === 'restaurant' ? "{% url 'user:toggle_resto_fav' %}" : "{% url 'user:toggle_food_fav' %}";
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'selected_items': selectedItems
+                }),
+                success: function(response) {
+                    alert('Favorites updated!');
+                    $(listId).closest('.fixed').addClass('hidden');
+                    location.reload();
+                },
+                error: function(xhr) {
+                    alert('Error updating favorites!');
+                }
+            });
+        }
+    });
+
+
+
+    $(document).ready(function() {
+        let editType = '';
+
+        // Open modal for editing username
+        $('#edit-username-btn').on('click', function() {
+            editType = 'username';
+            $('#edit-info-title').text('Edit Username');
+            $('#edit-info-label').text('Username:');
+            $('#edit-info-input').val($('#display-name').text());
+            $('#edit-info-modal').removeClass('hidden');
+        });
+
+        // Open modal for editing description
+        $('#edit-description-btn').on('click', function() {
+            editType = 'description';
+            $('#edit-info-title').text('Edit Description');
+            $('#edit-info-label').text('Description:');
+            $('#edit-info-input').val($('#display-description').text());
+            $('#edit-info-modal').removeClass('hidden');
+        });
+
+        // Close the info modal
+        $('#close-info-modal').on('click', function() {
+            $('#edit-info-modal').addClass('hidden');
+        });
+
+        // Handle form submission for username/description
+        $('#edit-info-form').on('submit', function(e) {
+            e.preventDefault();
+            const newValue = $('#edit-info-input').val();
+
+            let url = editType === 'username' ? "{% url 'user:change_name' %}" : "{% url 'user:change_description' %}";
+
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    'new_value': newValue,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    if (editType === 'username') {
+                        $('#display-name').text(newValue);
+                    } else {
+                        $('#display-description').text(newValue);
+                    }
+                    $('#edit-info-modal').addClass('hidden');
+                    alert('Info updated successfully!');
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock content %}
