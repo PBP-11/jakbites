@@ -96,7 +96,6 @@ def search_on_full(request):
     }
     return render(request, 'results.html', context)
 
-
 def about_us(request):
     return render(request, 'about_us.html')
 
