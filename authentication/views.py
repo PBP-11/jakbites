@@ -17,14 +17,13 @@ def register(request):
         if form.is_valid():
             user = form.save()
             messages.success(request, 'Your account has been successfully created!')
-            login(request, user)
-            return redirect('main:show_att')
+            return redirect('authentication:user_login')
     else:
         form = ClientRegistrationForm()
     context = {'form': form}
     return render(request, 'register.html', context)
 
-def login_user(request):
+def user_login(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
 
@@ -121,7 +120,6 @@ def get_restaurant(request):
     restaurant = Restaurant.objects.get(id=restaurant_id)
     return JsonResponse({'success': True, 'restaurant': {'name': restaurant.name, 'location': restaurant.location}})
 
-@login_required(login_url='authentication/login')
 def get_food(request):
     food_id = request.GET.get('id')
     try:
@@ -157,3 +155,53 @@ def delete_food(request):
     food_id = data.get('id')
     Food.objects.get(id=food_id).delete()
     return JsonResponse({'success': True})
+
+@csrf_exempt
+@require_POST
+def edit_restaurant(request):
+    restaurant_id = request.GET.get('id')
+    try:
+        restaurant = Restaurant.objects.get(id=restaurant_id)
+    except Restaurant.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Restaurant not found'})
+
+    form = RestaurantForm(request.POST, instance=restaurant)
+    if form.is_valid():
+        form.save()
+        return JsonResponse({
+            'success': True,
+            'restaurant': {
+                'id': restaurant.id,
+                'name': restaurant.name,
+                'location': restaurant.location
+            }
+        })
+    return JsonResponse({'success': False, 'errors': form.errors})
+
+
+@csrf_exempt
+@require_POST
+def edit_food(request):
+    food_id = request.GET.get('id')
+    try:
+        food = Food.objects.get(id=food_id)
+    except Food.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Food not found'})
+
+    form = FoodForm(request.POST, instance=food)
+    if form.is_valid():
+        form.save()
+        return JsonResponse({
+            'success': True,
+            'food': {
+                'id': food.id,
+                'name': food.name,
+                'description': food.description,
+                'category': food.category,
+                'restaurant': {
+                    'name': food.restaurant.name
+                },
+                'price': food.price
+            }
+        })
+    return JsonResponse({'success': False, 'errors': form.errors})

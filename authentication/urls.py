@@ -5,7 +5,7 @@ app_name = 'authentication'
 
 urlpatterns = [
     path('register/', register, name='register'),
-    path('login/', login_user, name='login'),
+    path('login/', user_login, name='user_login'),
     path('admin/', show_admin_page, name='show_admin_page'),
     path('admin/add_restaurant/', add_restaurant, name='add_restaurant'),
     path('admin/add_food/', add_food, name='add_food'),
@@ -14,4 +14,6 @@ urlpatterns = [
     path('admin/delete_food/', delete_food, name='delete_food'),
     path('admin/get_restaurant/', get_restaurant, name='get_restaurant'),
     path('admin/get_food/', get_food, name='get_food'),
+    path('admin/edit_restaurant/', edit_restaurant, name='edit_restaurant'),
+    path('admin/edit_food/', edit_food, name='edit_food'),
 ]

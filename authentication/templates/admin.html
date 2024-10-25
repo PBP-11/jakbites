@@ -79,15 +79,14 @@
 <div class="container mx-auto p-6 bg-white text-black font-lora leading-normal text-base tracking-normal">
     <div class="top-bar">
         <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Search...">
+            <input type="text" id="search-input" placeholder="Search by name ...">
             <select id="search-type">
                 <option value="restaurant">Restaurant</option>
                 <option value="food">Food</option>
             </select>
         </div>
         <div>
-            <button type="button" id="open-restaurant-modal-btn" class="bg-white border border-black text-black font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 font-poppins">Add Restaurant</button>
-            <button type="button" id="open-food-modal-btn" class="bg-white border border-black text-black font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 font-poppins">Add Food</button>
+            <button type="button" id="open-modal-btn" class="bg-white border border-black text-black font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 font-poppins">Add</button>
         </div>
     </div>
 
@@ -98,6 +97,7 @@
             <li class="bg-white p-4 rounded-lg shadow-md border border-black font-poppins relative" data-id="{{ restaurant.id }}">
                 {{ restaurant.name }} - {{ restaurant.location }}
                 <div class="action-buttons">
+                    <button type="button" class="edit-restaurant-btn">Edit</button>
                     <button type="button" class="delete-restaurant-btn">Delete</button>
                 </div>
             </li>
@@ -109,13 +109,13 @@
     <div id="restaurant-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-50 flex">
         <div class="modal-content bg-white rounded-lg shadow-lg p-8 w-11/12 md:w-1/2 flex flex-col relative border border-black">
             <span class="close text-gray-500 hover:text-gray-700 cursor-pointer text-2xl font-bold absolute top-4 right-4" id="close-restaurant-modal">&times;</span>
-            <h2 class="text-3xl font-bold mb-6 text-center text-black font-poppins">Add Restaurant</h2>
+            <h2 class="text-3xl font-bold mb-6 text-center text-black font-poppins">Restaurant</h2>
             <form id="restaurant-form" method="post" class="space-y-4 flex-grow flex flex-col">
                 {% csrf_token %}
                 <table class="w-full">
                     {{ restaurant_form.as_table }}
                 </table>
-                <button type="submit" id="add-restaurant-btn" class="bg-white border border-black text-black font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 w-full mt-auto font-poppins">Add Restaurant</button>
+                <button type="submit" id="add-restaurant-btn" class="bg-white border border-black text-black font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 w-full mt-auto font-poppins">Submit</button>
             </form>
         </div>
     </div>
@@ -124,29 +124,34 @@
     <div id="food-modal" class="modal fixed inset-0 bg-gray-900 bg-opacity-50 flex">
         <div class="modal-content bg-white rounded-lg shadow-lg p-8 w-11/12 md:w-1/2 flex flex-col relative border border-black">
             <span class="close text-gray-500 hover:text-gray-700 cursor-pointer text-2xl font-bold absolute top-4 right-4" id="close-food-modal">&times;</span>
-            <h2 class="text-3xl font-bold mb-6 text-center text-black font-poppins">Add Food</h2>
+            <h2 class="text-3xl font-bold mb-6 text-center text-black font-poppins">Food</h2>
             <form id="food-form" method="post" class="space-y-4 flex-grow flex flex-col">
                 {% csrf_token %}
                 <table class="w-full">
                     {{ food_form.as_table }}
                 </table>
-                <button type="submit" id="add-food-btn" class="bg-white border border-black text-black font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 w-full mt-auto font-poppins">Add Food</button>
+                <button type="submit" id="add-food-btn" class="bg-white border border-black text-black font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 w-full mt-auto font-poppins">Submit</button>
             </form>
         </div>
     </div>
 </div>
 
 <script>
-    document.getElementById('open-restaurant-modal-btn').addEventListener('click', function() {
-        document.getElementById('restaurant-modal').style.display = 'flex';
+    document.getElementById('open-modal-btn').addEventListener('click', function() {
+        var searchType = document.getElementById('search-type').value;
+        if (searchType === 'restaurant') {
+            document.getElementById('restaurant-modal').style.display = 'flex';
+            document.getElementById('restaurant-form').reset();
+            document.getElementById('restaurant-form').action = "{% url 'authentication:add_restaurant' %}";
+        } else if (searchType === 'food') {
+            document.getElementById('food-modal').style.display = 'flex';
+            document.getElementById('food-form').reset();
+            document.getElementById('food-form').action = "{% url 'authentication:add_food' %}";
+        }
     });
 
     document.getElementById('close-restaurant-modal').addEventListener('click', function() {
         document.getElementById('restaurant-modal').style.display = 'none';
-    });
-
-    document.getElementById('open-food-modal-btn').addEventListener('click', function() {
-        document.getElementById('food-modal').style.display = 'flex';
     });
 
     document.getElementById('close-food-modal').addEventListener('click', function() {
@@ -157,35 +162,44 @@
         event.preventDefault();
         var form = document.getElementById('restaurant-form');
         var formData = new FormData(form);
-        fetch("{% url 'authentication:add_restaurant' %}", {
+        fetch(form.action, {
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRFToken': '{{ csrf_token }}',
+                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
             },
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 var restaurantList = document.getElementById('restaurant-list');
-                var newRestaurant = document.createElement('li');
-                newRestaurant.className = 'bg-white p-4 rounded-lg shadow-md border border-black font-poppins relative';
-                newRestaurant.textContent = data.restaurant.name + ' - ' + data.restaurant.location;
-                newRestaurant.dataset.id = data.restaurant.id;
-                var actionButtons = document.createElement('div');
-                actionButtons.className = 'action-buttons';
-                actionButtons.innerHTML = '<button type="button" class="delete-restaurant-btn">Delete</button>';
-                newRestaurant.appendChild(actionButtons);
-                restaurantList.appendChild(newRestaurant);
+                var existingRestaurant = restaurantList.querySelector(`li[data-id="${data.restaurant.id}"]`);
+                if (existingRestaurant) {
+                    existingRestaurant.innerHTML = `${data.restaurant.name} - ${data.restaurant.location}
+                        <div class="action-buttons">
+                            <button type="button" class="edit-restaurant-btn">Edit</button>
+                            <button type="button" class="delete-restaurant-btn">Delete</button>
+                        </div>`;
+                } else {
+                    var newRestaurant = document.createElement('li');
+                    newRestaurant.className = 'bg-white p-4 rounded-lg shadow-md border border-black font-poppins relative';
+                    newRestaurant.innerHTML = `${data.restaurant.name} - ${data.restaurant.location}
+                        <div class="action-buttons">
+                            <button type="button" class="edit-restaurant-btn">Edit</button>
+                            <button type="button" class="delete-restaurant-btn">Delete</button>
+                        </div>`;
+                    newRestaurant.dataset.id = data.restaurant.id;
+                    restaurantList.appendChild(newRestaurant);
+                }
                 form.reset();
                 document.getElementById('restaurant-modal').style.display = 'none';
                 attachEventListeners();
+                if (document.getElementById('search-type').value === 'restaurant') {
+                    document.getElementById('search-input').dispatchEvent(new KeyboardEvent('keypress', {'key': 'Enter'}));
+                }
             } else {
-                alert('Failed to add restaurant');
+                alert('Failed to add/edit restaurant');
             }
-        })
-        .catch(error => {
-            alert('An error occurred: ' + error.message);
         });
     });
 
@@ -193,46 +207,48 @@
         event.preventDefault();
         var form = document.getElementById('food-form');
         var formData = new FormData(form);
-        fetch("{% url 'authentication:add_food' %}", {
+        fetch(form.action, {
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRFToken': '{{ csrf_token }}',
+                'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
             },
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 var foodList = document.getElementById('food-list');
-                if (!foodList) {
-                    foodList = document.createElement('ul');
-                    foodList.id = 'food-list';
-                    foodList.className = 'list-disc pl-5 space-y-2';
-                    document.getElementById('list-container').appendChild(foodList);
+                var existingFood = foodList.querySelector(`li[data-id="${data.food.id}"]`);
+                if (existingFood) {
+                    existingFood.innerHTML = `${data.food.name} - ${data.food.description} - ${data.food.category} - ${data.food.restaurant.name} - ${data.food.price}
+                        <div class="action-buttons">
+                            <button type="button" class="edit-food-btn">Edit</button>
+                            <button type="button" class="delete-food-btn">Delete</button>
+                        </div>`;
+                } else {
+                    var newFood = document.createElement('li');
+                    newFood.className = 'bg-white p-4 rounded-lg shadow-md border border-black font-poppins relative';
+                    newFood.innerHTML = `${data.food.name} - ${data.food.description} - ${data.food.category} - ${data.food.restaurant.name} - ${data.food.price}
+                        <div class="action-buttons">
+                            <button type="button" class="edit-food-btn">Edit</button>
+                            <button type="button" class="delete-food-btn">Delete</button>
+                        </div>`;
+                    newFood.dataset.id = data.food.id;
+                    foodList.appendChild(newFood);
                 }
-                var newFood = document.createElement('li');
-                newFood.className = 'bg-white p-4 rounded-lg shadow-md border border-black font-poppins relative';
-                newFood.textContent = data.food.name + ' - ' + data.food.description + ' - ' + data.food.category + ' - ' + data.food.restaurant.name + ' - ' + data.food.price;
-                newFood.dataset.id = data.food.id;
-                var actionButtons = document.createElement('div');
-                actionButtons.className = 'action-buttons';
-                actionButtons.innerHTML = '<button type="button" class="delete-food-btn">Delete</button>';
-                newFood.appendChild(actionButtons);
-                foodList.appendChild(newFood);
                 form.reset();
                 document.getElementById('food-modal').style.display = 'none';
                 attachEventListeners();
-                updateSearchResults();
+                if (document.getElementById('search-type').value === 'food') {
+                    document.getElementById('search-input').dispatchEvent(new KeyboardEvent('keypress', {'key': 'Enter'}));
+                }
             } else {
-                alert('Failed to add food: ' + JSON.stringify(data.errors));
+                alert('Failed to add/edit food: ' + JSON.stringify(data.errors));
             }
-        })
-        .catch(error => {
-            alert('An error occurred: ' + error.message);
         });
     });
-    
-    function updateSearchResults() {
+
+    document.getElementById('search-input').addEventListener('input', function(event) {
         var searchInput = document.getElementById('search-input').value;
         var searchType = document.getElementById('search-type').value;
         var listContainer = document.getElementById('list-container');
@@ -250,7 +266,7 @@
                     newRestaurant.dataset.id = restaurant.id;
                     var actionButtons = document.createElement('div');
                     actionButtons.className = 'action-buttons';
-                    actionButtons.innerHTML = '<button type="button" class="delete-restaurant-btn">Delete</button>';
+                    actionButtons.innerHTML = '<button type="button" class="edit-restaurant-btn">Edit</button><button type="button" class="delete-restaurant-btn">Delete</button>';
                     newRestaurant.appendChild(actionButtons);
                     restaurantList.appendChild(newRestaurant);
                 });
@@ -264,60 +280,37 @@
                     newFood.dataset.id = food.id;
                     var actionButtons = document.createElement('div');
                     actionButtons.className = 'action-buttons';
-                    actionButtons.innerHTML = '<button type="button" class="delete-food-btn">Delete</button>';
+                    actionButtons.innerHTML = '<button type="button" class="edit-food-btn">Edit</button><button type="button" class="delete-food-btn">Delete</button>';
                     newFood.appendChild(actionButtons);
                     foodList.appendChild(newFood);
                 });
             }
             attachEventListeners();
         });
-    }
-
-    document.getElementById('search-input').addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            var searchInput = document.getElementById('search-input').value;
-            var searchType = document.getElementById('search-type').value;
-            var listContainer = document.getElementById('list-container');
-            
-            fetch("{% url 'authentication:search' %}?type=" + encodeURIComponent(searchType) + "&query=" + encodeURIComponent(searchInput))
-            .then(response => response.json())
-            .then(data => {
-                if (searchType === 'restaurant') {
-                    listContainer.innerHTML = '<h2 class="text-3xl font-bold mb-6 text-black font-poppins">Restaurants</h2><ul id="restaurant-list" class="list-disc pl-5 space-y-2"></ul>';
-                    var restaurantList = document.getElementById('restaurant-list');
-                    data.results.forEach(function(restaurant) {
-                        var newRestaurant = document.createElement('li');
-                        newRestaurant.className = 'bg-white p-4 rounded-lg shadow-md border border-black font-poppins relative';
-                        newRestaurant.textContent = restaurant.name + ' - ' + restaurant.location;
-                        newRestaurant.dataset.id = restaurant.id;
-                        var actionButtons = document.createElement('div');
-                        actionButtons.className = 'action-buttons';
-                        actionButtons.innerHTML = '<button type="button" class="delete-restaurant-btn">Delete</button>';
-                        newRestaurant.appendChild(actionButtons);
-                        restaurantList.appendChild(newRestaurant);
-                    });
-                } else {
-                    listContainer.innerHTML = '<h2 class="text-3xl font-bold mb-6 text-black font-poppins">Foods</h2><ul id="food-list" class="list-disc pl-5 space-y-2"></ul>';
-                    var foodList = document.getElementById('food-list');
-                    data.results.forEach(function(food) {
-                        var newFood = document.createElement('li');
-                        newFood.className = 'bg-white p-4 rounded-lg shadow-md border border-black font-poppins relative';
-                        newFood.textContent = food.name + ' - ' + food.description + ' - ' + food.category + ' - ' + food.restaurant.name + ' - ' + food.price;
-                        newFood.dataset.id = food.id;
-                        var actionButtons = document.createElement('div');
-                        actionButtons.className = 'action-buttons';
-                        actionButtons.innerHTML = '<button type="button" class="delete-food-btn">Delete</button>';
-                        newFood.appendChild(actionButtons);
-                        foodList.appendChild(newFood);
-                    });
-                }
-                attachEventListeners();
-            });
-        }
     });
 
     function attachEventListeners() {
+        document.querySelectorAll('.edit-restaurant-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                var li = this.parentElement.parentElement;
+                var restaurantId = li.dataset.id;
+                fetch("{% url 'authentication:get_restaurant' %}?id=" + restaurantId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        var form = document.getElementById('restaurant-form');
+                        form.reset(); // Reset the form before populating it
+                        form.querySelector('[name="name"]').value = data.restaurant.name;
+                        form.querySelector('[name="location"]').value = data.restaurant.location;
+                        form.action = "{% url 'authentication:edit_restaurant' %}?id=" + restaurantId;
+                        document.getElementById('restaurant-modal').style.display = 'flex';
+                    } else {
+                        alert('Failed to fetch restaurant data');
+                    }
+                });
+            });
+        });
+
         document.querySelectorAll('.delete-restaurant-btn').forEach(button => {
             button.addEventListener('click', function() {
                 var li = this.parentElement.parentElement;
@@ -335,6 +328,30 @@
                         li.remove();
                     } else {
                         alert('Failed to delete restaurant');
+                    }
+                });
+            });
+        });
+
+        document.querySelectorAll('.edit-food-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                var li = this.parentElement.parentElement;
+                var foodId = li.dataset.id;
+                fetch("{% url 'authentication:get_food' %}?id=" + foodId)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        var form = document.getElementById('food-form');
+                        form.reset(); // Reset the form before populating it
+                        form.querySelector('[name="name"]').value = data.food.name;
+                        form.querySelector('[name="description"]').value = data.food.description;
+                        form.querySelector('[name="category"]').value = data.food.category;
+                        form.querySelector('[name="restaurant_name"]').value = data.food.restaurant.name;
+                        form.querySelector('[name="price"]').value = data.food.price;
+                        form.action = "{% url 'authentication:edit_food' %}?id=" + foodId;
+                        document.getElementById('food-modal').style.display = 'flex';
+                    } else {
+                        alert('Failed to fetch food data');
                     }
                 });
             });
