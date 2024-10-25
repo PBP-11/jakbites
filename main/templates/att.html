@@ -15,7 +15,7 @@
                     <form method="GET" action="{% url 'main:search_on_full' %}" class = "flex w-full">
                         {% csrf_token %}
                         <div class = "relative w-[80%]">
-                            <input id = "inputanQuery" type="text" name="query" placeholder="Need something to bite?" class="rounded-full outline-none px-8 py-3 w-full block" required oninput="search()">
+                            <input id = "inputanQuery" type="text" name="query" placeholder="Nom..nom..nomm" class="rounded-full outline-none px-8 py-3 w-full block" required oninput="search()">
                             <button type="submit" class="required absolute rounded-full top-2 sm:top-3 md:top-2 xl:top-2 right-2">
                             <img src="{% static 'image/search.png' %}" class="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 transition-transform duration-200 ease-in-out transform hover:scale-110" alt="Search">
                             </button>
