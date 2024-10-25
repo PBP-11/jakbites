@@ -34,7 +34,7 @@ def search_instance(request):
     # Perform a case-insensitive search using 'icontains' for partial matches
     results = Food.objects.filter(
         Q(name__icontains=query) |  # Search in Food name
-        Q(category__icontains=query) |  # Search in related Restaurant name
+        # Q(category__icontains=query) |  # Search in related Restaurant name
         Q(restaurant__name__icontains=query)  # Search in related Restaurant name
     ).select_related('restaurant')  # Optimize the query by using select_related
 
@@ -54,10 +54,49 @@ def search_instance(request):
 
     return JsonResponse(serialized_results, safe=False)  # Return the serialized results as JSON
 
-def filter_type(request):
-    type = request.GET.get('filter_option', 'all')
+def search_on_full(request):
+    query = request.GET.get('query', '')  # Get the query from the GET request
+    filter_value = request.GET.get('filter', 'all')  # Get the filter value
+    sort_value = request.GET.get('sort', 'none')  # Get the sort value
+
+    if not query:  # If the query is empty, return an empty result
+        return JsonResponse([])  # Return an empty JSON array if no query
+
+    # Start with a basic query using the search term
+    results = Food.objects.all()
+
+    # Apply filtering based on the selected filter option
+    if filter_value == 'food':
+        results = results.filter(Q(name__icontains=query))
+    elif filter_value == 'restaurant':
+        results = results.filter(Q(restaurant__name__icontains=query))
+    else:  # 'all' option
+        results = results.filter(
+            Q(name__icontains=query) |  # Search in Food name
+            Q(restaurant__name__icontains=query)  # Search in related Restaurant name
+        ).select_related('restaurant')
+
+    # Apply sorting based on the selected option
+    if sort_value == 'price_asc':
+        results = results.order_by('price')  # Sort by price ascending
+    elif sort_value == 'price_desc':
+        results = results.order_by('-price')  # Sort by price descending
+    elif sort_value == 'alpha_asc':
+        results = results.order_by('name')  # Sort by name A-Z
+    elif sort_value == 'alpha_desc':
+        results = results.order_by('-name')  # Sort by name Z-A
+
+    # Prepare the context for rendering the template
+    context = {
+        'results': results,
+        'filtered': filter_value,
+        'sort': sort_value
+    }
+
+    return render(request, "results.html", context)
+#     type = request.GET.get('filter_option', 'all')
     
-    return JsonResponse({'filter_option': filter_option})
+#     return JsonResponse({'filter_option': filter_option})
 
 # def search_instance(request):
 #     query = request.GET.get('query')

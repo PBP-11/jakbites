@@ -5,18 +5,72 @@
 {% block content %}
 {% include 'navbar.html' %}
 
-    <h1>Search Results</h1>
+    <div class = "m-8">
+        <div class = "flex font-bold mb-8 text-center text-9xl justify-center items-center gap-x-3">
+            <img src="{% static 'image/makanre.png' %}">
+            <h1 class = "text-9xl text-center text-[#292929]">Nyari apa lee..</h1>
+        </div>
+        <div class = "">
+            <form method="GET" action="{% url 'main:search_on_full' %}">
+                <div class = "flex justify-between items-center gap-x-4 text-[#292929]">
+                    {% csrf_token %}
+                    <input required name="query" class="py-2 focus:ring-0 border-none rounded-full px-4 w-[90%]" type="text" placeholder="Search" value="{{ query }}">
+                    <div class = "flex gap-x-8">
+                            <div class = "flex items-center gap-1">
+                                <img class = "w-5 h-5" src = "{% static 'image/filter.png' %}">
+                                <select name="filter" id="filterSelect" class="appearance-none focus:ring-0 px-2 rounded-full py-2 font-[Poppins] bg-white border-none shadow-lg pr-8">
+                                    <option value="all" {% if filtered == 'all' %}selected{% endif %}>Search All</option>
+                                    <option value="restaurant" {% if filtered == 'restaurant' %}selected{% endif %}>Restaurant Only</option>
+                                    <option value="food" {% if filtered == 'food' %}selected{% endif %}>Food Only</option>
+                                </select>
+                            </div>
+                                
+                            <div class ="flex items-center gap-1">
+                                <svg class = "w-7 h-7" fill="#000000" width="800px" height="800px" viewBox="0 0 36 36" version="1.1"  preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                    <title>sort-by-line</title>
+                                    <path d="M28.54,13H7.46a1,1,0,0,1,0-2H28.54a1,1,0,0,1,0,2Z" class="clr-i-outline clr-i-outline-path-1"></path><path d="M21.17,19H7.46a1,1,0,0,1,0-2H21.17a1,1,0,0,1,0,2Z" class="clr-i-outline clr-i-outline-path-2"></path><path d="M13.74,25H7.46a1,1,0,0,1,0-2h6.28a1,1,0,0,1,0,2Z" class="clr-i-outline clr-i-outline-path-3"></path>
+                                    <rect x="0" y="0" width="36" height="36" fill-opacity="0"/>
+                                </svg>
+                                <select name="sort" class="appearance-none focus:ring-0 px-2 rounded-full py-2 font-[Poppins] bg-white border-none shadow-lg pr-8">
+                                    <option value="none" {% if sort == 'none' %}selected{% endif %}>Not Sorted</option>
+                                    <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                                    <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                                    <option value="alpha_asc" {% if sort == 'alpha_asc' %}selected{% endif %}>Alphabet A-Z</option>
+                                    <option value="alpha_desc" {% if sort == 'alpha_desc' %}selected{% endif %}>Alphabet Z-A</option>
+                                </select>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class = "mt-6 mx-8">
+            {% if results %}
+            <div class = "grid grid-cols-4 gap-x-8  gap-y-8 ">
+                {% for result in results %}
+                    <div class = "bg-opacity-50 p-4 rounded-xl bg-white w-auto h-auto hover:scale-105 duration-300">
+                        <div class = "">
+                            <img class = "rounded-xl w-full h-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS61ao6YP55xtV77AZl_cci0EKcDiquIfzuTw&s">
+                        </div>
+                        <div class = "mt-4 bottom-0">
+                            <div class = "font-bold font-[Poppins] text-2xl mb-2 line-clamp-2">
+                                {{ result.name }}
+                            </div>
+                            <div class = "bottom-0 font-[lora] text-sm">
+                                {{ result.restaurant.name }}
+                            </div>
+                            <div class = "bottom-0 font-[Poppins] text-bold">
+                                {{ result.price }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% else %}
+                <p>No results found.</p>
+            {% endif %}
+        </div>
+    </div>
     
-    {% if results %}
-        <ul>
-            {% for food in results %}
-                <li>
-                    <strong>Name:</strong> {{ food.name }} <br>
-                    <strong>Category:</strong> {{ food.category }} <br>
-                    <strong>Price:</strong> {{ food.price }} <br>
-                    <strong>Restaurant:</strong> {{ food.restaurant}}  <!-- Adjust if you need more details from the restaurant -->
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
 {% endblock %}
