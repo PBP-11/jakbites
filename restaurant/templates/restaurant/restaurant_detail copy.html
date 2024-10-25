@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ restaurant.name }}</title>
+</head>
+<body>
+    <h1>{{ restaurant.name }}</h1>
+    <p>Location: {{ restaurant.location }}</p>
+    <p>ID: {{ restaurant.id }}</p>
+
+    <h2>MENU</h2>
+    {% for i in food %} 
+        <li>name : {{ i.name }} <br>
+            price : {{ i.price }}
+        </li> 
+    {% endfor %} 
+    
+    {% for i in review %} 
+        <li>rating : {{ i.rating }} <br>
+            review : {{ i.review }}
+            <!-- Pass the restaurant ID to the delete_review URL -->
+            <form action="{% url 'restaurant:delete_review' restaurant.id %}" method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Delete Review">
+            </form>
+        </li>
+    {% endfor %} 
+
+    <form action="{% url 'restaurant:push_review' %}" method="POST">
+        {% csrf_token %}
+        <label for="rating">Rating:</label>
+        <input type="radio" id="rating0" name="rating" value="0"> 0
+        <input type="radio" id="rating1" name="rating" value="1"> 1
+        <input type="radio" id="rating2" name="rating" value="2"> 2
+        <input type="radio" id="rating3" name="rating" value="3"> 3
+        <input type="radio" id="rating4" name="rating" value="4"> 4
+        <input type="radio" id="rating5" name="rating" value="5"> 5 <br>
+        
+        <label for="review">Review:</label>
+        <textarea id="review" name="review" required></textarea><br>
+        
+        <input type="submit" value="Submit">
+    </form>
+
+</body>
+</html>
+
+{% endblock %}

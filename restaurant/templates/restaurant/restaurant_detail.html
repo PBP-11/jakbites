@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<head>
+    <style>
+        .description {
+            height: 4.5em; /* Sesuaikan tinggi sesuai kebutuhan */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* Jumlah baris maksimum */
+            -webkit-box-orient: vertical;
+        }
+    </style>
+
+    <script>
+        function showSection(section) {
+            const productSection = document.getElementById('product-section');
+            const reviewSection = document.getElementById('review-section');
+            const productTab = document.getElementById('product-tab');
+            const reviewTab = document.getElementById('review-tab');
+    
+            if (section === 'product') {
+                productSection.classList.remove('hidden');
+                reviewSection.classList.add('hidden');
+                productTab.classList.add('bg-blue-600', 'text-white', 'scale-105', 'shadow-lg');
+                reviewTab.classList.remove('bg-blue-600', 'text-white', 'scale-105', 'shadow-lg');
+                productTab.classList.remove('text-gray-300');
+                reviewTab.classList.add('text-gray-300');
+            } else {
+                productSection.classList.add('hidden');
+                reviewSection.classList.remove('hidden');
+                reviewTab.classList.add('bg-blue-600', 'text-white', 'scale-105', 'shadow-lg');
+                productTab.classList.remove('bg-blue-600', 'text-white', 'scale-105', 'shadow-lg');
+                reviewTab.classList.remove('text-gray-300');
+                productTab.classList.add('text-gray-300');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            showSection('product');
+        });
+    </script>
+</head>
+
+<!-- Background Color -->
+<div class="min-h-screen bg-[#191a1c] text-gray-200 p-8 font-sans">
+    <!-- Restoran Info -->
+    <div class="max-w-5xl mx-auto border-b-2 border-gray-600 pb-6 mb-8">
+        <div class="flex items-center justify-between space-x-4">
+            <div>
+                <h1 class="text-5xl font-extrabold tracking-tight">{{ restaurant.name }}</h1>
+                <p class="text-lg text-gray-400 mt-2 italic">{{ restaurant.location }}</p>
+            </div>
+            <div class="">
+                <img src="{% static 'images/testing_restaurant_logo.jpg' %}" alt="Restoran Logo" class="h-20 w-20 object-cover shadow-lg">
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="flex justify-center mt-6 space-x-4">
+        <button id="product-tab" class="px-6 py-3 text-lg font-semibold rounded-l-lg bg-gray-700 text-white focus:outline-none hover:bg-blue-800 transition-all duration-300 transform hover:scale-110 hover:shadow-xl" onclick="showSection('product')">
+            <i class="fas fa-utensils mr-2"></i> Semua Produk
+        </button>
+        <button id="review-tab" class="px-6 py-3 text-lg font-semibold rounded-r-lg bg-gray-700 text-gray-300 focus:outline-none hover:bg-blue-800 hover:text-white transition-all duration-300 transform hover:scale-110 hover:shadow-xl" onclick="showSection('review')">
+            <i class="fas fa-comments mr-2"></i> Lihat Ulasan
+        </button>
+    </div>
+
+    <!-- Section Produk -->
+    <div id="product-section" class="mt-10 transition-opacity duration-700">
+        <h2 class="text-4xl font-bold mb-8 border-b-4 border-gray-700 inline-block">Semua Produk</h2>
+        <div class="grid grid-cols-4 gap-8 mt-8">
+            {% for item in food %}
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg hover:bg-gray-700 transition-all duration-500 transform hover:scale-105 relative">
+                <div class="absolute top-4 right-4 bg-blue-600 text-white text-xs px-2 py-1 rounded-full">New</div>
+                <h3 class="text-2xl font-bold">{{ item.name }}</h3>
+                <p class="text-gray-400 mt-2">{{ item.category }}</p>
+                <p class="text-gray-400 mt-2 description">{{ item.description }}</p>
+                <p class="text-2xl font-semibold text-blue-400 mt-4">Rp{{ item.price }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Section Review -->
+    <div id="review-section" class="mt-10 max-w-2xl transition-opacity duration-700">
+        <h2 class="text-4xl font-bold mb-8 border-b-4 border-gray-700 inline-block">Kirim Ulasanmu Yuk!</h2>
+        <form action="{% url 'restaurant:push_review' %}" method="POST" class="mt-6 bg-gray-800 p-8 rounded-lg shadow-lg">
+            {% csrf_token %}
+            <input type="hidden" name="restaurant_id" value="{{ restaurant.id }}">
+            <div class="grid md:grid-cols-2">
+                <div>
+                    <label for="rating" class="block text-lg font-semibold">Rating</label>
+                    <select name="rating" id="rating" class="block mt-2 p-3 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 shadow-md hover:bg-gray-700 transition-all duration-300">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div class="col-span-2">
+                    <label for="review" class="block text-lg font-semibold">Ulasan</label>
+                    <textarea name="review" id="review" rows="5" class="w-full mt-2 p-4 bg-gray-900 border border-gray-700 rounded-lg focus:outline-none focus:border-blue-500 shadow-md hover:bg-gray-700 transition-all duration-300" required></textarea>
+                </div>
+            </div>
+            <div class="mt-8">
+                <input type="submit" value="Kirim Ulasan" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 hover:shadow-md cursor-pointer">
+            </div>
+        </form>
+
+        <!-- Daftar Ulasan -->
+        <div class="mt-10">
+            <h2 class="text-4xl font-bold mb-8 border-b-4 border-gray-700 inline-block">Ulasan Pengguna</h2>
+            <ul class="mt-8 space-y-6">
+                {% for i in review %}
+                <li class="bg-gray-800 p-6 rounded-lg shadow-lg hover:bg-gray-700 transition-all duration-300">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="font-semibold text-blue-400 text-xl">{{ i.user.username }} - {{ i.rating }} ★</p>
+                            <p class="mt-2 text-gray-300">{{ i.review }}</p>
+                        </div>
+                        {% if i.user == request.user %}
+                        <form action="{% url 'restaurant:delete_review' restaurant.id %}" method="POST" class="mt-2">
+                            {% csrf_token %}
+                            <input type="hidden" name="review_id" value="{{ review.id }}">
+                            <button class="text-red-500 hover:text-red-600 transition-all duration-300">Hapus Ulasan</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
