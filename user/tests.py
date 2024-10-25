@@ -5,21 +5,16 @@ from main.models import Food, Restaurant, Client as ClientProfile
 class ProfileViewTests(TestCase):
     
     def setUp(self):
-    # Create a user and log them in
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         self.client = Client()
         self.client.force_login(self.user)
         
-        # Create a client profile for the user
         self.client_profile = ClientProfile.objects.create(user=self.user)
 
-        # Create a restaurant object
         self.restaurant = Restaurant.objects.create(name='Resto A')
 
-        # Create a food object linked to the restaurant
         self.food = Food.objects.create(name='Nasi Goreng', price=10000, restaurant=self.restaurant)
 
-        # Add food and restaurant to the client's favorites
         self.client_profile.favorite_foods.add(self.food)
         self.client_profile.favorite_restaurants.add(self.restaurant)
 
