@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'restaurant',
     'user',
     'authentication',
+    'Food',  
 ]
 
 MIDDLEWARE = [
@@ -58,7 +59,7 @@ ROOT_URLCONF = 'jakbites.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'BACKEND': 'django.template.backends.django.DjangoTemplates', 
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),  # Add this line
             os.path.join(BASE_DIR, 'main', 'templates'), 

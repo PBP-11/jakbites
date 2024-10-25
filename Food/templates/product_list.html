@@ -1,0 +1,18 @@
+<!-- main/templates/product_list.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-4xl font-bold mb-4">Product List</h1>
+
+<div class="product-list">
+    {% for product in products %}
+        <div class="product-card p-4 bg-white shadow mb-4 rounded">
+            <h2 class="text-2xl font-bold">{{ product.name }}</h2>
+            <p><strong>Category:</strong> {{ product.category }}</p>
+            <p><strong>Price:</strong> {{ product.price }}</p>
+            <p><strong>Description:</strong> {{ product.description|default:"-"}}</p> 
+            <a href="{% url 'food:product_detail' product.id %}" class="text-blue-500">View Details</a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}
