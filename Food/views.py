@@ -26,7 +26,7 @@ def product_detail(request, product_id):
         if review_form.is_valid():
             review = review_form.save(commit=False)
             review.food = product
-            # review.user = request.user  
+            review.user = request.user  
 
             # # Tambahkan user placeholder untuk testing
             # user_placeholder, created = User.objects.get_or_create(username='test_user')
@@ -49,7 +49,7 @@ def product_detail(request, product_id):
                 'username': review.user.username,
                 'rating': review.rating,
                 'review': review.review,  
-                'id': review.id
+                'id': review.id,
             }
             return JsonResponse(response)
         else:
@@ -74,10 +74,16 @@ def calculate_avg_rating(product):
         return round(avg_rating, 1)
     return 0.0
 
+@login_required
 def delete_review(request, review_id):
     if request.method == 'POST':
         try:
             review = ReviewFood.objects.get(id=review_id)
+            
+            # Periksa apakah pengguna yang sedang login adalah pemilik review
+            if request.user != review.user:
+                return JsonResponse({'success': False, 'error': 'You are not authorized to delete this review.'}, status=403)
+
             product = review.food  # Gunakan field 'food' alih-alih 'product'
             review.delete()
 
