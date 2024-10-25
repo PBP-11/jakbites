@@ -55,7 +55,8 @@ def search_instance(request):
 
     # Serialize the results with restaurant details
     serialized_results = [
-        {
+        {   
+            'food_id': food.id,
             'food_name': food.name,
             'category': food.category,
             'price': food.price,
@@ -63,9 +64,12 @@ def search_instance(request):
             'restaurant': {
                 'restaurant_name': food.restaurant.name,
                 'location': food.restaurant.location,
+                'restaurant_id': food.restaurant.id,
             }
         } for food in results
     ]
+
+    return JsonResponse(serialized_results, safe=False)  # Return the serialized results as JSON
 
 def search_on_full(request):
     query = request.GET.get('query', '')  # Get the query from the GET request

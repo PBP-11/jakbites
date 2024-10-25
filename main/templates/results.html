@@ -55,22 +55,25 @@
             {% if results %}
             <div class="grid grid-cols-4 gap-x-8 gap-y-8">
                 {% for result in results %}
-                    <div class="bg-opacity-50 p-4 rounded-xl bg-white w-auto h-auto hover:scale-105 duration-300 flex flex-col justify-between">
-                        <div>
-                            <img class="rounded-xl w-full h-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS61ao6YP55xtV77AZl_cci0EKcDiquIfzuTw&s">
-                        </div>
-                        <div class="mt-4">
-                            <div class="font-bold font-[Poppins] text-2xl mb-2 line-clamp-2">
-                                {{ result.name }}
+                    <!-- cek lagi -->
+                    <a href = "{% url 'food:product' {{ result.id }}  %}">
+                        <div class="bg-opacity-50 p-4 rounded-xl bg-white w-auto h-auto hover:scale-105 duration-300 flex flex-col justify-between">
+                            <div>
+                                <img class="rounded-xl w-full h-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS61ao6YP55xtV77AZl_cci0EKcDiquIfzuTw&s">
                             </div>
-                            <div class="font-[lora] text-sm">
-                                {{ result.restaurant.name }}
+                            <div class="mt-4">
+                                <div class="font-bold font-[Poppins] text-2xl mb-2 line-clamp-2">
+                                    {{ result.name }}
+                                </div>
+                                <div class="font-[lora] text-sm">
+                                    {{ result.restaurant.name }}
+                                </div>
+                            </div>
+                            <div class="px-2 py-1 mt-2 bg-[#eec201] rounded-xl font-[Poppins] font-bold text-[#292929] text-lg text-right">
+                                Rp.{{ result.price }}
                             </div>
                         </div>
-                        <div class="px-2 py-1 mt-2 bg-[#eec201] rounded-xl font-[Poppins] font-bold text-[#292929] text-lg text-right">
-                            Rp.{{ result.price }}
-                        </div>
-                    </div>
+                    </a>
                 {% endfor %}
             </div>
             {% else %}
