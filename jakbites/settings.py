@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
+    'restaurant',
     'user',
     'authentication',
 ]
@@ -130,7 +131,6 @@ if DEBUG:
     ]
 else:
     STATIC_ROOT = BASE_DIR / 'static'
-
 
 
 # Default primary key field type
