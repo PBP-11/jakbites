@@ -2,7 +2,6 @@
 
 {% block content %}
 <div class="max-w-2xl mx-auto my-10 p-6 bg-white rounded shadow-lg">
-    <!-- Informasi Produk -->
     <h1 class="text-3xl font-bold mb-4">{{ product.name }}</h1>
     <p class="text-gray-800"><strong>Description:</strong> {{ product.description|default:"-" }}</p>
     <p class="text-gray-800"><strong>Category:</strong> {{ product.category }}</p>
@@ -10,23 +9,22 @@
 
     <hr class="my-6">
 
-    <!-- Tampilkan Rata-rata Rating -->
     <div class="mb-6">
         <h2 class="text-2xl font-semibold mb-2">Rating</h2>
         <p id="avg-rating" class="text-yellow-500 font-bold text-lg">{{ avg_rating|floatformat:1 }}/5</p>
     </div>
 
-    <!-- Bagian Review -->
     <div class="mb-6">
         <h2 class="text-2xl font-semibold mb-4">Reviews</h2>
         <div id="review-list-container" class="space-y-4">
             {% if reviews %}
                 <ul id="review-list" class="space-y-4">
                     {% for review in reviews %}
-                    <li class="p-4 bg-gray-100 rounded">
+                    <li class="p-4 bg-gray-100 rounded" data-review-id="{{ review.id }}">
                         <p><strong>{{ review.user.username }}</strong> rated: {{ review.rating }}/5</p>
                         <p>{{ review.review }}</p>
-                    </li>
+                        <button class="delete-review-btn mt-2 bg-red-500 text-white px-2 py-1 rounded" data-review-id="{{ review.id }}">Delete</button>
+                    </li>                                                        
                     {% endfor %}
                 </ul>
             {% else %}
@@ -37,7 +35,6 @@
 
     <hr class="my-6">
 
-    <!-- Bagian Tambah Review -->
     <div class="bg-gray-50 p-4 rounded shadow-md">
         <h2 class="text-2xl font-semibold mb-4">Add Your Rating & Review</h2>
         <form id="review-form" method="POST" class="space-y-4">
@@ -50,7 +47,6 @@
                 <label class="block font-semibold mb-1" for="review">Add Your Review:</label>
                 {{ review_form.review }}
             </div>
-
             <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">
                 Submit Rating & Review
             </button>
@@ -58,7 +54,6 @@
     </div>
 </div>
 
-<!-- Tambahkan kode JavaScript di sini -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     function getCookie(name) {
@@ -76,52 +71,78 @@
         return cookieValue;
     }
 
-    const csrftoken = getCookie('csrftoken');
+    const csrfToken = getCookie('csrftoken');
 
     $.ajaxSetup({
-        headers: { 'X-CSRFToken': csrftoken }
+        headers: { 'X-CSRFToken': csrfToken }
     });
 
     $('#review-form').on('submit', function(e) {
-    e.preventDefault();
+        e.preventDefault();
 
-    $.ajax({
-        type: 'POST',
-        url: "/product/{{ product.id }}/",
-        data: $(this).serialize(),
-        success: function(response) {
-            // Log data respons untuk debugging
-            console.log("Response Data:", response);
+        $.ajax({
+            type: 'POST',
+            url: "/product/{{ product.id }}/",
+            data: $(this).serialize(),
+            success: function(response) {
+                $('#avg-rating').text(response.avg_rating.toFixed(1) + "/5");
 
-            // Perbarui rata-rata rating
-            $('#avg-rating').text(response.avg_rating.toFixed(1) + "/5");
+                if ($('#no-reviews-message').length) {
+                    $('#no-reviews-message').remove();
+                }
 
-            // Hilangkan pesan "No reviews yet." jika ada
-            if ($('#no-reviews-message').length) {
-                $('#no-reviews-message').remove();
+                if ($('#review-list').length === 0) {
+                    $('#review-list-container').append('<ul id="review-list" class="space-y-4"></ul>');
+                }
+
+                $('#review-list').append(`
+                    <li class="p-4 bg-gray-100 rounded" data-review-id="${response.id}">
+                        <p><strong>${response.username}</strong> rated: ${response.rating}/5</p>
+                        <p>${response.review}</p>
+                        <button class="delete-review-btn mt-2 bg-red-500 text-white px-2 py-1 rounded" data-review-id="${response.id}">Delete</button>
+                    </li>
+                `);
+
+                $('#review-form')[0].reset();
+            },
+            error: function(xhr) {
+                alert('An error occurred: ' + xhr.responseText);
             }
+        });
+    });
 
-            // Cek apakah ul#review-list sudah ada, jika belum buat baru
-            if ($('#review-list').length === 0) {
-                $('#review-list-container').append('<ul id="review-list" class="space-y-4"></ul>');
-            }
+    $('#review-list-container').on('click', '.delete-review-btn', function(e) {
+        e.preventDefault();
 
-            // Tambahkan review baru ke daftar review
-            $('#review-list').append(`
-                <li class="p-4 bg-gray-100 rounded">
-                    <p><strong>${response.username}</strong> rated: ${response.rating}/5</p>
-                    <p>${response.review}</p>
-                </li>
-            `);
+        const reviewId = $(this).data('review-id');
+        console.log("Captured Review ID:", reviewId);  // Debugging log
 
-            // Reset form setelah submit
-            $('#review-form')[0].reset();
-        },
-        error: function(xhr, status, error) {
-            console.error("Error Details:", xhr.responseText);
-            alert('An error occurred: ' + xhr.responseText);
+        if (!reviewId || reviewId === "undefined") {
+            alert("Failed to retrieve review ID.");
+            return;
+        }
+
+        if (confirm("Are you sure you want to delete this review?")) {
+            $.ajax({
+                type: 'POST',
+                url: `/delete_review/${reviewId}/`,
+                success: function(response) {
+                    if (response.success) {
+                        $(`li[data-review-id='${reviewId}']`).remove();
+                        $('#avg-rating').text(response.avg_rating.toFixed(1) + "/5");
+
+                        if ($('#review-list li').length === 0) {
+                            $('#review-list-container').append('<p id="no-reviews-message">No reviews yet.</p>');
+                        }
+                    } else {
+                        alert('Error: ' + response.error);
+                    }
+                },
+                error: function(xhr) {
+                    alert('An error occurred while deleting the review.');
+                }
+            });
         }
     });
-});
 </script>
 {% endblock %}

@@ -25,8 +25,8 @@ def product_detail(request, product_id):
         review_form = ReviewForm(request.POST)
         if review_form.is_valid():
             review = review_form.save(commit=False)
-            # review.food = product
-            # # review.user = request.user  
+            review.food = product
+            # review.user = request.user  
 
             # # Tambahkan user placeholder untuk testing
             # user_placeholder, created = User.objects.get_or_create(username='test_user')
@@ -49,6 +49,7 @@ def product_detail(request, product_id):
                 'username': review.user.username,
                 'rating': review.rating,
                 'review': review.review,  
+                'id': review.id
             }
             return JsonResponse(response)
         else:
@@ -64,3 +65,26 @@ def product_detail(request, product_id):
         'review_form': review_form,
     }
     return render(request, 'product_detail.html', context)
+
+def calculate_avg_rating(product):
+    reviews = ReviewFood.objects.filter(food=product)
+    if reviews.exists():
+        total_rating = sum(review.rating for review in reviews)
+        avg_rating = total_rating / reviews.count()
+        return round(avg_rating, 1)
+    return 0.0
+
+def delete_review(request, review_id):
+    if request.method == 'POST':
+        try:
+            review = ReviewFood.objects.get(id=review_id)
+            product = review.food  # Gunakan field 'food' alih-alih 'product'
+            review.delete()
+
+            # Menghitung rata-rata rating setelah review dihapus
+            avg_rating = calculate_avg_rating(product)
+
+            return JsonResponse({'success': True, 'avg_rating': avg_rating})
+        except ReviewFood.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Review not found.'})
+    return JsonResponse({'success': False, 'error': 'Invalid request method.'})
