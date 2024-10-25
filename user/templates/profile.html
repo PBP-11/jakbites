@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-<!-- Include Font Awesome for Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
@@ -13,7 +12,6 @@
 </style>
 
 <div class="container mx-auto p-6">
-    <!-- Navbar -->
     <div class="flex justify-between items-center py-4">
         <div class="text-xl font-bold text-black">
             <a href="#">JakBites</a>
@@ -26,11 +24,8 @@
         </div>
     </div>
 
-    <!-- Profile Section -->
     <div class="flex space-x-8 mt-6">
-        <!-- Left Section: User Info -->
         <div class="w-1/2 bg-white p-6 rounded-lg shadow-lg">
-            <!-- Profile Picture -->
             <div class="text-center mb-4">
                 {% if user.client.profile_picture %}
                     <img src="{{ user.client.profile_picture.url }}" alt="Profile Picture" class="w-32 h-32 rounded-full mx-auto">
@@ -44,7 +39,6 @@
                 </form>
             </div>
 
-            <!-- Username -->
             <div class="flex items-center justify-between mb-4 font-poppins">
                 <p class="text-lg font-semibold">Username: <span id="display-name">{{ user.username }}</span></p>
                 <button id="edit-username-btn" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">
@@ -52,7 +46,6 @@
                 </button>
             </div>
 
-            <!-- Description -->
             <div class="flex items-center justify-between mb-4 font-poppins">
                 <p class="text-lg font-semibold">Description: <span id="display-description">{{ user.client.description|default:"No description available." }}</span></p>
                 <button id="edit-description-btn" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">
@@ -69,9 +62,7 @@
 
 
 
-        <!-- Right Section: Favorites -->
         <div class="w-1/2 bg-white p-6 rounded-lg shadow-lg">
-            <!-- Favorite Restaurants -->
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-medium font-poppins">Favorite Restaurants</h3>
                 <button id="edit-resto-fav-btn" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">
@@ -88,7 +79,6 @@
                 <p class="text-gray-600">No favorite restaurants.</p>
             {% endif %}
 
-            <!-- Favorite Foods -->
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-xl font-medium font-poppins">Favorite Foods</h3>
                 <button id="edit-food-fav-btn" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">
@@ -108,7 +98,6 @@
     </div>
 </div>
 
-<!-- Popup Modal for Editing Info -->
 <div id="edit-info-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden font-poppins">
     <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
         <h2 class="text-xl font-semibold mb-4" id="edit-info-title">Edit Info</h2>
@@ -130,13 +119,11 @@
     </div>
 </div>
 
-<!-- Popup Modal for Editing Favorite Restaurants -->
 <div id="edit-resto-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg w-1/3 max-h-[80vh] overflow-y-auto">
         <h2 class="text-xl font-semibold mb-4">Edit Favorite Restaurants</h2>
         <input type="text" id="search-resto" placeholder="Search restaurants..." class="mb-4 p-2 border rounded w-full">
         <div id="resto-list" class="mb-4">
-            <!-- List of restaurants will be rendered here -->
         </div>
         <div class="flex justify-end space-x-4">
             <button type="button" id="close-resto-modal" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
@@ -145,13 +132,11 @@
     </div>
 </div>
 
-<!-- Popup Modal for Editing Favorite Foods -->
 <div id="edit-food-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg w-1/3 max-h-[80vh] overflow-y-auto">
         <h2 class="text-xl font-semibold mb-4">Edit Favorite Foods</h2>
         <input type="text" id="search-food" placeholder="Search foods..." class="mb-4 p-2 border rounded w-full">
         <div id="food-list" class="mb-4">
-            <!-- List of foods will be rendered here -->
         </div>
         <div class="flex justify-end space-x-4">
             <button type="button" id="close-food-modal" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-700">Cancel</button>
@@ -190,7 +175,6 @@
 </div>
 
 
-<!-- Script AJAX and Popup Functionality -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -198,17 +182,14 @@
         $('#new-password').val('');
         $('#confirm-password').val('');
 
-        // Open modal for changing password
         $('#change-password-btn').on('click', function() {
             $('#change-password-modal').removeClass('hidden');
         });
 
-        // Close the change password modal
         $('#close-password-modal').on('click', function() {
             $('#change-password-modal').addClass('hidden');
         });
 
-        // Handle password change form submission
         $('#change-password-form').on('submit', function(e) {
             e.preventDefault();
 
@@ -244,7 +225,6 @@
     });
 
     $(document).ready(function() {
-        // Open restaurant modal
         $('#edit-resto-fav-btn').on('click', function() {
             $('#edit-resto-modal').removeClass('hidden');
             loadItems(
@@ -254,7 +234,6 @@
             );
         });
 
-        // Open food modal
         $('#edit-food-fav-btn').on('click', function() {
             $('#edit-food-modal').removeClass('hidden');
             loadItems(
@@ -264,7 +243,6 @@
             );
         });
 
-        // Load items into modal with checkboxes
         function loadItems(allItems, currentFavs, listId) {
             let currentFavIds = new Set(currentFavs.map(item => item.pk));
             let listHtml = '<ul class="list-disc list-inside text-gray-700">';
@@ -282,12 +260,10 @@
             $(listId).html(listHtml);
         }
 
-        // Close modals
         $('#close-resto-modal, #close-food-modal').on('click', function() {
             $(this).closest('.fixed').addClass('hidden');
         });
 
-        // Save events
         $('#save-resto-btn').on('click', function() {
             saveFavorites('restaurant', '#resto-list');
         });
@@ -296,7 +272,6 @@
             saveFavorites('food', '#food-list');
         });
 
-        // Save favorite items
         function saveFavorites(type, listId) {
             let selectedItems = [];
             $(listId + ' .fav-item:checked').each(function() {
@@ -329,7 +304,6 @@
     $(document).ready(function() {
         let editType = '';
 
-        // Open modal for editing username
         $('#edit-username-btn').on('click', function() {
             editType = 'username';
             $('#edit-info-title').text('Edit Username');
@@ -338,7 +312,6 @@
             $('#edit-info-modal').removeClass('hidden');
         });
 
-        // Open modal for editing description
         $('#edit-description-btn').on('click', function() {
             editType = 'description';
             $('#edit-info-title').text('Edit Description');
@@ -347,12 +320,10 @@
             $('#edit-info-modal').removeClass('hidden');
         });
 
-        // Close the info modal
         $('#close-info-modal').on('click', function() {
             $('#edit-info-modal').addClass('hidden');
         });
 
-        // Handle form submission for username/description
         $('#edit-info-form').on('submit', function(e) {
             e.preventDefault();
             const newValue = $('#edit-info-input').val();
@@ -378,6 +349,26 @@
             });
         });
     });
+
+    $('#search-resto').on('input', function() {
+        const searchTerm = $(this).val().toLowerCase();
+        filterItems(searchTerm, '#resto-list');
+    });
+
+    $('#search-food').on('input', function() {
+        const searchTerm = $(this).val().toLowerCase();
+        filterItems(searchTerm, '#food-list');
+    });
+
+    function filterItems(searchTerm, listId) {
+        $(listId).find('li').each(function() {
+            const itemText = $(this).text().toLowerCase();
+            $(this).toggle(itemText.includes(searchTerm));
+        });
+    }
+
+
+    
 </script>
 
 {% endblock content %}
