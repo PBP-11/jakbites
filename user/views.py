@@ -22,11 +22,13 @@ from django.contrib.auth.decorators import login_required
 
 
 def profile_view(request):
-    try:
-        user = User.objects.get(username='test1')
-        login(request, user) 
-    except User.DoesNotExist:
-        user = None
+    # try:
+    #     user = User.objects.get(username='test1')
+    #     login(request, user) 
+    # except User.DoesNotExist:
+    #     user = None
+
+    user = request.user
 
     client = Client.objects.filter(user=user).first()
 
@@ -104,15 +106,12 @@ def change_password(request):
         current_password = request.POST.get('current_password')
         new_password = request.POST.get('new_password')
 
-        # Check if the current password is correct
         if not request.user.check_password(current_password):
             return JsonResponse({'success': False, 'message': 'Current password is incorrect.'})
 
-        # Set the new password
         request.user.set_password(new_password)
         request.user.save()
 
-        # Keep the user logged in after the password change
         update_session_auth_hash(request, request.user)
 
         return JsonResponse({'success': True, 'message': 'Password changed successfully!'})
