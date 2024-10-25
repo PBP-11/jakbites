@@ -49,6 +49,10 @@ def user_login(request):
 
 @login_required(login_url='authentication/login')
 def show_admin_page(request):
+    if not Admin.objects.filter(user=request.user).exists():
+        messages.error(request, "You do not have permission to view this page.")
+        return redirect('authentication:user_login')
+    
     restaurant_form = RestaurantForm()
     food_form = FoodForm()
     
