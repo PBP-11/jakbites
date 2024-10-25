@@ -15,8 +15,61 @@
         }
     </style>
 
-    <script>
-        function showSection(section) {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Form review handler seperti yang sebelumnya
+        const reviewForm = document.querySelector("#review-form");
+    
+        reviewForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+    
+            const formData = new FormData(this);
+    
+            fetch("{% url 'restaurant:push_review' %}", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const reviewList = document.querySelector("#review-list");
+                    const newReview = document.createElement("li");
+                    newReview.classList.add("bg-gray-800", "p-6", "rounded-lg", "shadow-lg", "hover:bg-gray-700", "transition-all", "duration-300");
+                    
+                    newReview.innerHTML = `
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="font-semibold text-blue-400 text-xl">${data.username} - ${data.rating} ★</p>
+                                <p class="mt-2 text-gray-300">${data.review}</p>
+                            </div>
+                            ${data.can_delete ? `
+                            <form action="{% url 'restaurant:delete_review' restaurant.id %}" method="POST" class="mt-2">
+                                <input type="hidden" name="csrfmiddlewaretoken" value="${data.csrf_token}">
+                                <input type="hidden" name="review_id" value="${data.review_id}">
+                                <button class="text-red-500 hover:text-red-600 transition-all duration-300">Hapus Ulasan</button>
+                            </form>
+                            ` : ''}
+                        </div>
+                    `;
+                    
+                    reviewList.prepend(newReview);
+                    reviewForm.reset();
+                    alert("Ulasan berhasil ditambahkan!");
+                } else {
+                    alert("Gagal menambahkan ulasan. Silakan coba lagi.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Gagal menambahkan ulasan. Silakan coba lagi.");
+            });
+        });
+    });
+
+    function showSection(section) {
             const productSection = document.getElementById('product-section');
             const reviewSection = document.getElementById('review-section');
             const productTab = document.getElementById('product-tab');
@@ -43,6 +96,7 @@
         });
     </script>
 </head>
+
 
 <!-- Background Color -->
 <div class="min-h-screen bg-[#191a1c] text-gray-200 p-8 font-sans">

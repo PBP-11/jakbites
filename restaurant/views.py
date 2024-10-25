@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from .models import Restaurant, Food, ReviewRestaurant
 from django.http import HttpResponse, JsonResponse
 import os
@@ -21,7 +22,6 @@ def restaurant_detail(request, id):
 @login_required
 def push_review(request):
     if request.method == "POST":
-        # Dapatkan restaurant_id dari form
         restaurant_id = request.POST['restaurant_id']
         
         # Simpan review
@@ -29,12 +29,25 @@ def push_review(request):
         review.restaurant = Restaurant.objects.get(id=restaurant_id)
         review.user = request.user
         review.rating = request.POST['rating']
-        review.review = request.POST.get('review', '')  # Review bisa opsional
+        review.review = request.POST.get('review', '')
         review.save()
         
-        # Redirect ke halaman detail restoran setelah review berhasil disimpan
-        return redirect('restaurant:restaurant', id=restaurant_id)
+        # Cek jika request berasal dari Ajax
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Review successfully submitted!',
+                'review': {
+                    'user': request.user.username,
+                    'rating': review.rating,
+                    'review': review.review,
+                }
+            }, status=200)
+        else:
+            return redirect('restaurant:restaurant', id=restaurant_id)
     
+    return HttpResponse("⛔ Forbidden: Invalid request method.", status=405)
+
 @login_required  # Ensure that only logged-in users can delete reviews
 def delete_review(request, restaurant_id):
     # Get the restaurant object by ID
