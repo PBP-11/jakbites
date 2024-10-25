@@ -1,3 +1,4 @@
+from main.models import *
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from main.models import Restaurant, Food, ReviewRestaurant, ReviewFood, Admin, Client
@@ -18,12 +19,20 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 
 
-# @login_required(login_url='/login')
+@login_required(login_url='authentication/login')
 def show_att(request):
-    
-    context = {
-    }
-
+    try:
+        client = Client.objects.get(user=request.user)
+        context = {
+            'profpic': client.profile_picture,
+            'name': client.user.username,
+        }
+    except Client.DoesNotExist:
+        context = {
+            'profpic': None,
+            'name': request.user.username,
+        }
+        
     return render(request, "att.html", context)
 
 

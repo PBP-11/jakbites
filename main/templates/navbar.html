@@ -23,20 +23,24 @@
             <div id = "dropdownMenu" class="relative inline-block font-[Poppins]">
                 <!-- Dropdown Button -->
                 <button id ="dropdownBtn" class="flex h-12 w-12 items-center justify-center rounded-full bg-[#292929] text-slate-100 ring-slate-100 transition hover:shadow-md hover:ring-2 overflow-hidden" @click="isOpen=!isOpen">
-                    <!-- ganti user image -->
-                    <img class="w-full object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=top&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=100&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY2Mjk2MTgwNw&amp;ixlib=rb-1.2.1&amp;q=80&amp;utm_campaign=api-credit&amp;utm_medium=referral&amp;utm_source=unsplash_source&amp;w=100" alt="Profile">
+                    <!-- ganti user image FIX ASAP  -->
+                     <div class="w-full object-cover">
+                        {{profpic}}
+                     </div>
                 </button>
         
                 <div id = "dropdownBar" class="hidden absolute right-0 mt-3 flex w-60 flex-col gap-3 rounded-xl bg-[#969a9d] p-4 text-slate-100 shadow-lg">
                     <div class="flex gap-3 items-center">
                         <div class="flex items-center justify-center rounded-lg h-12 w-12 overflow-hidden border-2 border-[#606569]">
-                            <!-- ganti user image -->
-                            <img class="w-full object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?crop=top&amp;cs=tinysrgb&amp;fit=crop&amp;fm=jpg&amp;h=100&amp;ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY2Mjk2MTgwNw&amp;ixlib=rb-1.2.1&amp;q=80&amp;utm_campaign=api-credit&amp;utm_medium=referral&amp;utm_source=unsplash_source&amp;w=100" alt="Profile">
+                            <!-- ganti user image FIX ASAP -->
+                            <div class="w-full object-cover">
+                                {{profpic}}
+                            </div>
                         </div>
                         <div>
                             <div class="flex gap-1 text-sm font-semibold text-xl">
                                 <!-- ganti user name -->
-                                <span>Mickey Mouse</span>
+                                <span>{{name}}</span>
                             </div>
                         </div>
                     </div>
