@@ -26,7 +26,7 @@ def product_detail(request, product_id):
         if review_form.is_valid():
             review = review_form.save(commit=False)
             review.food = product
-            review.user = request.user  
+            # review.user = request.user  
 
             # # Tambahkan user placeholder untuk testing
             # user_placeholder, created = User.objects.get_or_create(username='test_user')
