@@ -88,7 +88,7 @@ async function search() {
                             <div class = "p-2 transition ease-in-out hover:scale-105 hover:text-white hover:bg-gray-500 rounded-xl">
                                 <a href = "{% url 'restaurant:${id}' %}">
                                     <p class="text-sm line-clamp-1 font-[Poppins] font-bold">${name}</p>
-                                    <p class="text-[10px] font-[Lora] ">${location.charAt(0).toUpperCase() + location.slice(1)}</p>
+                                    <p class="text-[10px] font-[Lora] ">${location}</p>
                                 </a>
                             </div>
                         </div>
