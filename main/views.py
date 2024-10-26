@@ -108,6 +108,23 @@ def search_on_full(request):
 def about_us(request):
     return render(request, 'about_us.html')
 
+def search_on_resto(request):
+    query = request.GET.get('query', '')  # Get the query from the GET request
+
+    # Start with a basic query using the search term
+    results = Restaurant.objects.all()
+
+    # Apply filtering
+    results = results.filter(
+        Q(name__icontains=query)
+    )
+
+    # For normal page loads, render the full page
+    context = {
+        'results': results,
+    }
+    return render(request, 'resto.html', context)
+
 #     type = request.GET.get('filter_option', 'all')
     
 #     return JsonResponse({'filter_option': filter_option})

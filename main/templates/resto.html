@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+{% include 'navbar.html' %}
+
+    <div class = "m-8">
+        <div class = "flex items-center justify-center">
+            <p class = "font-[Poppins] text-9xl font-bold">Lonte</p>
+        </div>
+        <div class = "flex flex-grow p-4 w-full">
+            <form method="GET" action="{% url 'main:search_on_resto' %}" class = "w-full">
+                <div class = "items-center gap-x-4 text-[#292929]">
+                    {% csrf_token %}
+                    <div class = "flex relative w-[100%]">
+                        <input required name="query" class="flex-grow shadow-lg py-2 focus:ring-0 border-none rounded-full px-4 w-full block" type="text" placeholder="Search" value="{{ query|default:'' }}">
+                        <button type="submit" class="absolute rounded-full top-1 sm:top-1 md:top-1 xl:top-1 right-2"></button>
+                        <img src="{% static 'image/search.png' %}" class="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8 transition-transform duration-200 ease-in-out transform hover:scale-110" alt="Search">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id = "hasildata" class="mt-6 mx-8 mb-40">
+            {% if results %}
+            <div class="grid grid-cols-4 gap-x-8 gap-y-8">
+                {% for result in results %}
+                    <!-- cek lagi -->
+                    <a href="{% url 'food:product_detail' result.id %}">
+                        <div class="bg-opacity-50 p-4 rounded-xl bg-white w-auto h-auto hover:scale-105 duration-300 flex flex-col justify-between">
+                            <div>
+                                <img class="rounded-xl w-full h-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS61ao6YP55xtV77AZl_cci0EKcDiquIfzuTw&s">
+                            </div>
+                            <div class="mt-4">
+                                <div class="font-bold font-[Poppins] text-lg mb-2 line-clamp-1">
+                                    {{ result.name }}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            {% else %}
+                <p>No results found.</p>
+            {% endif %}
+        </div>        
+    </div>
+    
+{% endblock %}
