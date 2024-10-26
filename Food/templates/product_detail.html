@@ -74,7 +74,10 @@
     const csrfToken = getCookie('csrftoken');
 
     $.ajaxSetup({
-        headers: { 'X-CSRFToken': csrfToken }
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest' // Tambahkan ini
+        }
     });
 
     $('#review-form').on('submit', function(e) {
@@ -82,7 +85,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "/product/{{ product.id }}/",
+            url: "/food/product/{{ product.id }}/",
             data: $(this).serialize(),
             success: function(response) {
                 $('#avg-rating').text(response.avg_rating.toFixed(1) + "/5");
@@ -106,6 +109,7 @@
                 $('#review-form')[0].reset();
             },
             error: function(xhr) {
+                console.log('Error:', xhr.responseText); 
                 alert('An error occurred: ' + xhr.responseText);
             }
         });
@@ -125,8 +129,9 @@
         if (confirm("Are you sure you want to delete this review?")) {
             $.ajax({
                 type: 'POST',
-                url: `/delete_review/${reviewId}/`,
+                url: `/food/delete_review/${reviewId}/`,
                 success: function(response) {
+                    console.log("Delete response:", response);  // Tambahkan log ini
                     if (response.success) {
                         $(`li[data-review-id='${reviewId}']`).remove();
                         $('#avg-rating').text(response.avg_rating.toFixed(1) + "/5");
@@ -139,6 +144,7 @@
                     }
                 },
                 error: function(xhr) {
+                    console.log('Delete error:', xhr.responseText);  // Tambahkan log ini
                     alert('An error occurred while deleting the review.');
                 }
             });
