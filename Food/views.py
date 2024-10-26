@@ -26,7 +26,7 @@ def product_detail(request, product_id):
         if review_form.is_valid():
             review = review_form.save(commit=False)
             review.food = product
-            # review.user = request.user  
+            review.user = request.user  
 
             # # Tambahkan user placeholder untuk testing
             # user_placeholder, created = User.objects.get_or_create(username='test_user')
@@ -84,7 +84,7 @@ def delete_review(request, review_id):
             if request.user != review.user:
                 return JsonResponse({'success': False, 'error': 'You are not authorized to delete this review.'}, status=403)
 
-            product = review.food  # Gunakan field 'food' alih-alih 'product'
+            product = review.food
             review.delete()
 
             # Menghitung rata-rata rating setelah review dihapus
@@ -92,5 +92,6 @@ def delete_review(request, review_id):
 
             return JsonResponse({'success': True, 'avg_rating': avg_rating})
         except ReviewFood.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Review not found.'})
-    return JsonResponse({'success': False, 'error': 'Invalid request method.'})
+            return JsonResponse({'success': False, 'error': 'Review not found.'}, status=404)
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=400)
