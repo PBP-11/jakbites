@@ -124,17 +124,14 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
+# Dokumentasi: https://docs.djangoproject.com/en/5.1/howto/static-files/
 STATIC_URL = '/static/'
-
-# Hanya untuk mode development
 if DEBUG:
     STATICFILES_DIRS = [
-        BASE_DIR / 'static',  # merujuk ke /static root project pada mode development
+        BASE_DIR / 'static' # merujuk ke /static root project pada mode development
     ]
 else:
-    STATIC_ROOT = BASE_DIR / 'staticfiles'  # ganti nama folder output untuk mode production
+    STATIC_ROOT = BASE_DIR / 'static' # merujuk ke /static root project pada mode production
 
 
 # Default primary key field type
