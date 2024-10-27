@@ -3,37 +3,50 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .models import Restaurant, Food, ReviewRestaurant
 from django.http import HttpResponse, JsonResponse
-import os
-from django.urls import reverse
+import logging
+
+logger = logging.getLogger(__name__)
+
+# Helper function to calculate average rating for a restaurant
+def calculate_avg_rating(restaurant):
+    reviews = ReviewRestaurant.objects.filter(restaurant=restaurant)
+    if reviews.exists():
+        total_rating = sum(review.rating for review in reviews)
+        avg_rating = total_rating / reviews.count()
+        return round(avg_rating, 1)
+    return 0.0
 
 @login_required
 def restaurant_detail(request, id):
-    # Ambil restoran berdasarkan ID atau tampilkan 404 jika tidak ditemukan
     restaurant = get_object_or_404(Restaurant, id=id)
     food = Food.objects.filter(restaurant=restaurant)
-    review = ReviewRestaurant.objects.filter(restaurant=restaurant)
-    
-    context = {'restaurant': restaurant,
-               'food':food,
-               'review': review,}
-    
-    # Kirimkan objek restoran ke template
+    reviews = ReviewRestaurant.objects.filter(restaurant=restaurant)
+    avg_rating = calculate_avg_rating(restaurant)
+
+    context = {
+        'restaurant': restaurant,
+        'food': food,
+        'review': reviews,
+        'avg_rating': avg_rating,
+    }
+
     return render(request, 'restaurant/restaurant_detail.html', context)
 
 @login_required
 def push_review(request):
     if request.method == "POST":
-        restaurant_id = request.POST['restaurant_id']
-        
-        # Simpan review
+        restaurant_id = request.POST.get('restaurant_id')
+        restaurant = get_object_or_404(Restaurant, id=restaurant_id)
+
         review = ReviewRestaurant()
-        review.restaurant = Restaurant.objects.get(id=restaurant_id)
+        review.restaurant = restaurant
         review.user = request.user
-        review.rating = request.POST['rating']
+        review.rating = int(request.POST.get('rating', 0))
         review.review = request.POST.get('review', '')
         review.save()
-        
-        # Cek jika request berasal dari Ajax
+
+        avg_rating = calculate_avg_rating(restaurant)
+
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({
                 'status': 'success',
@@ -42,31 +55,34 @@ def push_review(request):
                     'user': request.user.username,
                     'rating': review.rating,
                     'review': review.review,
-                }
+                },
+                'avg_rating': avg_rating,
             }, status=200)
         else:
             return redirect('restaurant:restaurant', id=restaurant_id)
     
     return HttpResponse("⛔ Forbidden: Invalid request method.", status=405)
 
-@login_required  # Ensure that only logged-in users can delete reviews
+@login_required
 def delete_review(request, restaurant_id):
-    # Get the restaurant object by ID
     restaurant = get_object_or_404(Restaurant, id=restaurant_id)
 
-    # Ensure the request is a POST (since it's triggered by the form)
     if request.method == 'POST':
-        # Find the review by the logged-in user for the current restaurant
         review = ReviewRestaurant.objects.filter(restaurant=restaurant, user=request.user).first()
 
-        # If the review exists, delete it
         if review:
             review.delete()
-            # Optionally, redirect back to the same restaurant page after deletion
-            return redirect('restaurant:restaurant', id=restaurant_id)
+            avg_rating = calculate_avg_rating(restaurant)
+
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'status': 'success',
+                    'avg_rating': avg_rating,
+                    'message': 'Review successfully deleted!',
+                }, status=200)
+            else:
+                return redirect('restaurant:restaurant', id=restaurant_id)
         else:
-            # If the user does not have a review, return a forbidden response
             return HttpResponse("⛔ Forbidden: You do not have permission to delete this review.", status=403)
 
-    # If it's not a POST request, return forbidden (this should not happen in normal cases)
     return HttpResponse("⛔ Forbidden: Invalid request method.", status=405)

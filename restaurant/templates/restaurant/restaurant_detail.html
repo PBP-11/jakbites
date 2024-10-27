@@ -108,7 +108,10 @@
         <div class="flex items-center justify-between space-x-4">
             <div>
                 <h1 class="text-5xl text-black font-extrabold tracking-tight">{{ restaurant.name }}</h1>
-                <p class="text-lg text-black mt-2 italic">{{ restaurant.location }}</p>
+                <p class="text-lg text-black mt-2 italic">{{ restaurant.location }}
+                    <span class="text-yellow-500 ml-2">{{ avg_rating }} ★</span>
+                </p>
+
             </div>
             <div class="">
                 <img src="{% static 'images/testing_restaurant_logo.png' %}" alt="Restoran Logo" class="h-20 w-23">
