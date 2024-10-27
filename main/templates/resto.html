@@ -6,8 +6,9 @@
 {% include 'navbar.html' %}
 
     <div class = "m-8">
-        <div class = "flex items-center justify-center">
-            <p class = "font-[Poppins] text-9xl font-bold">Maem dimana hari ini?</p>
+        <div class = "flex items-center justify-center mb-10">
+            <p class = "font-[Poppins] text-9xl font-bold text-[#292929]">Maem dimana</p>
+            <p class = "font-[Poppins] text-9xl font-bold text-[#eec201]">hari ini?</p>
         </div>
         <div class = "flex flex-grow p-4 w-full">
             <form method="GET" action="{% url 'main:search_on_resto' %}" class = "w-full">
@@ -26,7 +27,7 @@
             <div class="grid grid-cols-4 gap-x-8 gap-y-8">
                 {% for result in results %}
                     <!-- cek lagi -->
-                    <a href="{% url 'food:product_detail' result.id %}">
+                    <a href="{% url 'restaurant:restaurant' result.id %}">
                         <div class="bg-opacity-50 p-4 rounded-xl bg-white w-auto h-auto hover:scale-105 duration-300 flex flex-col justify-between">
                             <div>
                                 <img class="rounded-xl w-full h-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS61ao6YP55xtV77AZl_cci0EKcDiquIfzuTw&s">
