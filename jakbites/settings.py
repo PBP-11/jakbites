@@ -24,7 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0q3yuczfbs0#x038w&%(w+zbu3)zgvd9_n*8o!51knlesea141'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+PRODUCTION = os.getenv("PRODUCTION", False)
+DEBUG = not PRODUCTION
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "william-matthew31-jakbites.pbp.cs.ui.ac.id"]
 
@@ -134,7 +135,10 @@ if DEBUG:
         BASE_DIR / 'static',  # merujuk ke /static root project pada mode development
     ]
 else:
-    STATIC_ROOT = BASE_DIR / 'staticfiles'  # ganti nama folder output untuk mode production
+    STATIC_ROOT = BASE_DIR / 'static'  # ganti nama folder output untuk mode production
+
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 
 # Default primary key field type
