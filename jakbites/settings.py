@@ -126,12 +126,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Hanya untuk mode development
 if DEBUG:
     STATICFILES_DIRS = [
-        BASE_DIR / 'static' # merujuk ke /static root project pada mode development
+        BASE_DIR / 'static',  # merujuk ke /static root project pada mode development
     ]
 else:
-    STATIC_ROOT = BASE_DIR / 'static'
+    STATIC_ROOT = BASE_DIR / 'staticfiles'  # ganti nama folder output untuk mode production
 
 
 # Default primary key field type
