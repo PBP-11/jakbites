@@ -86,3 +86,13 @@ def delete_review(request, restaurant_id):
             return HttpResponse("⛔ Forbidden: You do not have permission to delete this review.", status=403)
 
     return HttpResponse("⛔ Forbidden: Invalid request method.", status=405)
+
+def fetch_reviews(request, restaurant_id):
+    restaurant = get_object_or_404(Restaurant, id=restaurant_id)
+    reviews = ReviewRestaurant.objects.filter(restaurant=restaurant).values('user__username', 'rating', 'review')
+    reviews_list = list(reviews)  # Convert queryset to list
+
+    return JsonResponse({
+        'status': 'success',
+        'reviews': reviews_list
+    })
