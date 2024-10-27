@@ -38,15 +38,15 @@ class RestaurantReviewTests(TestCase):
             'message': 'Review successfully submitted!',
             'review': {
                 'user': self.user.username,
-                'rating': '5',
+                'rating': 5,
                 'review': 'Amazing food!'
-            }
+            },
+            'avg_rating': 5.0
         })
         self.assertEqual(ReviewRestaurant.objects.count(), 1)  # Pastikan satu ulasan ditambahkan
 
     def test_delete_review(self):
-        # Buat ulasan untuk pengujian penghapusan
-        review = ReviewRestaurant.objects.create(
+        ReviewRestaurant.objects.create(
             restaurant=self.restaurant,
             user=self.user,
             rating=5,
@@ -80,8 +80,7 @@ class RestaurantReviewTests(TestCase):
         self.assertEqual(response.status_code, 302)  # Seharusnya redirect ke login
 
     def test_delete_review_unauthorized(self):
-        # Buat user lain untuk pengujian
-        other_user = User.objects.create_user(username='otheruser', password='otherpass')
+        User.objects.create_user(username='otheruser', password='otherpass')
         
         # Simulasikan login user lain
         self.client.login(username='otheruser', password='otherpass')

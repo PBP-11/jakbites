@@ -1,65 +1,57 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.urls import reverse
-from main.models import Food, Restaurant
-from django.http import JsonResponse
+from django.contrib.auth.models import User
+from django.test import Client as TestClient
+from authentication.forms import ClientRegistrationForm
+from main.models import Client
 
-class MainAppTests(TestCase):
-    
+# Create your tests here.
+class AuthenticationTests(TestCase):
+
     def setUp(self):
-        # Create a client to simulate requests
-        self.client = Client()
+        self.client = TestClient()
+        self.register_url = reverse('authentication:register')
+        self.login_url = reverse('authentication:user_login')
 
-        # Set up any initial data required for testing
-        self.restaurant = Restaurant.objects.create(name="Test Restaurant", location="Test Location")
-        self.food = Food.objects.create(name="Test Food", category="Test Category", price=10, description="Test Description", restaurant=self.restaurant)
-
-    def test_show_att_view(self):
-        # Test the 'show_att' view loads correctly
-        response = self.client.get(reverse('main:show_att'))
+    def test_register_view(self):
+        response = self.client.get(self.register_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'att.html')
+        self.assertTemplateUsed(response, 'register.html')
 
-    def test_about_us_view(self):
-        # Test the 'about_us' view loads correctly
-        response = self.client.get(reverse('main:about_us'))
+    def test_register_form(self):
+        form_data = {
+            'username': 'testuser',
+            'email': 'testuser@example.com',
+            'password1': 'testpassword123',
+            'password2': 'testpassword123',
+        }
+        form = ClientRegistrationForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_user_registration(self):
+        form_data = {
+            'username': 'testuser',
+            'email': 'testuser@example.com',
+            'password1': 'testpassword123',
+            'password2': 'testpassword123',
+        }
+        response = self.client.post(self.register_url, data=form_data)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(User.objects.filter(username='testuser').exists())
+        self.assertTrue(Client.objects.filter(user__username='testuser').exists())
+
+    def test_login_view(self):
+        response = self.client.get(self.login_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'about_us.html')
+        self.assertTemplateUsed(response, 'login.html')
 
-    def test_search_instance_view(self):
-        # Test the 'search_instance' view with a query
-        response = self.client.get(reverse('main:search_instance'), {'query': 'Test'})
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(isinstance(response, JsonResponse))
-        
-        # Check that the JSON response contains the expected data
-        data = response.json()
-        self.assertTrue(any(food['food_name'] == "Test Food" for food in data))
-
-    def test_search_on_full_view(self):
-        # Test the 'search_on_full' view with query, filter, and sort parameters
-        response = self.client.get(reverse('main:search_on_full'), {
-            'query': 'Test', 
-            'filter': 'food', 
-            'sort': 'price_asc'
-        })
-        self.assertEqual(response.status_code, 200)
-        
-        # Check if the request is AJAX (using X-Requested-With header)
-        ajax_response = self.client.get(reverse('main:search_on_full'), {
-            'query': 'Test', 
-            'filter': 'food', 
-            'sort': 'price_asc'
-        }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        
-        # Ensure that AJAX response returns JSON data
-        self.assertEqual(ajax_response.status_code, 200)
-        self.assertTrue(isinstance(ajax_response, JsonResponse))
-        
-        # Check the structure of the response
-        ajax_data = ajax_response.json()
-        self.assertIn('html', ajax_data)
-
-    def tearDown(self):
-        # Clean up any test data
-        self.restaurant.delete()
-        self.food.delete()
+    def test_user_login(self):
+        user = User.objects.create_user(username='testuser', password='testpassword123')
+        Client.objects.create(user=user)
+        login_data = {
+            'username': 'testuser',
+            'password': 'testpassword123',
+        }
+        response = self.client.post(self.login_url, data=login_data)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('main:show_att'))
