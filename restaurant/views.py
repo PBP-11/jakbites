@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Restaurant, Food, ReviewRestaurant
 from django.http import HttpResponse, JsonResponse
 import os
+from django.urls import reverse
 
 @login_required
 def restaurant_detail(request, id):
