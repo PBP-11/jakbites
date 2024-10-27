@@ -30,8 +30,6 @@ urlpatterns = [
     path('', include("main.urls")),
     path('authentication/', include('authentication.urls')),
     path('user/', include('user.urls')),
-
-    
     path('food/', include('Food.urls')),  # Mengarahkan ke aplikasi Food
     path('accounts/', include('django.contrib.auth.urls')),
 ]
