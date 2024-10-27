@@ -19,6 +19,7 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 
 
+@login_required(login_url='/authentication/login/')
 def show_att(request):
     try:
         client = Client.objects.get(user=request.user)
@@ -124,6 +125,12 @@ def search_on_resto(request):
         'results': results,
     }
     return render(request, 'resto.html', context)
+
+def logout_user(request):
+    logout(request)
+    response = HttpResponseRedirect(reverse('authentication:user_login'))
+    response.delete_cookie('last_login')
+    return response
 
 #     type = request.GET.get('filter_option', 'all')
     
