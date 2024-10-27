@@ -37,16 +37,13 @@ def show_att(request):
 
 
 def search_instance(request):
-    query = request.GET.get('query', '')  # Get the query from the GET request
+    query = request.GET.get('query', '')  
 
-    # Perform a case-insensitive search using 'icontains' for partial matches
     results = Food.objects.filter(
-        Q(name__icontains=query) |  # Search in Food name
-        # Q(category__icontains=query) |  # Search in related Restaurant name
-        Q(restaurant__name__icontains=query)  # Search in related Restaurant name
-    ).select_related('restaurant')  # Optimize the query by using select_related
+        Q(name__icontains=query) |  
+        Q(restaurant__name__icontains=query) 
+    ).select_related('restaurant')  
 
-    # Serialize the results with restaurant details
     serialized_results = [
         {   
             'food_id': food.id,
@@ -62,17 +59,15 @@ def search_instance(request):
         } for food in results
     ]
 
-    return JsonResponse(serialized_results, safe=False)  # Return the serialized results as JSON
+    return JsonResponse(serialized_results, safe=False) 
 
 def search_on_full(request):
-    query = request.GET.get('query', '')  # Get the query from the GET request
-    filter_value = request.GET.get('filter', 'all')  # Get the filter value
-    sort_value = request.GET.get('sort', 'none')  # Get the sort value
+    query = request.GET.get('query', '')  
+    filter_value = request.GET.get('filter', 'all')
+    sort_value = request.GET.get('sort', 'none') 
 
-    # Start with a basic query using the search term
     results = Food.objects.all()
 
-    # Apply filtering
     if filter_value == 'food':
         results = results.filter(Q(name__icontains=query))
     elif filter_value == 'restaurant':
@@ -82,7 +77,6 @@ def search_on_full(request):
             Q(name__icontains=query) | Q(restaurant__name__icontains=query)
         ).select_related('restaurant')
 
-    # Apply sorting
     if sort_value == 'price_asc':
         results = results.order_by('price')
     elif sort_value == 'price_desc':
@@ -92,12 +86,10 @@ def search_on_full(request):
     elif sort_value == 'alpha_desc':
         results = results.order_by('-name')
 
-    # Check if the request is an AJAX request
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         html = render_to_string('result_kepotong.html', {'results': results})
         return JsonResponse({'html': html})
 
-    # For normal page loads, render the full page
     context = {
         'results': results,
         'filtered': filter_value,
@@ -110,17 +102,14 @@ def about_us(request):
     return render(request, 'about_us.html')
 
 def search_on_resto(request):
-    query = request.GET.get('query', '')  # Get the query from the GET request
+    query = request.GET.get('query', '')  
 
-    # Start with a basic query using the search term
     results = Restaurant.objects.all()
 
-    # Apply filtering
     results = results.filter(
         Q(name__icontains=query)
     )
 
-    # For normal page loads, render the full page
     context = {
         'results': results,
     }
@@ -131,73 +120,3 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('authentication:user_login'))
     response.delete_cookie('last_login')
     return response
-
-#     type = request.GET.get('filter_option', 'all')
-    
-#     return JsonResponse({'filter_option': filter_option})
-
-# def search_instance(request):
-#     query = request.GET.get('query')
-#     if query:
-#         # Perform a case-insensitive search using 'icontains' for partial matches
-#         results = Food.objects.filter(
-#             Q(name__icontains=query) |  # Search in Food name
-#             Q(category__icontains=query) |  # Search in Food category
-#             Q(restaurant__name__icontains=query)  # Search in related Restaurant name
-#         )
-        
-#         if results.exists():
-#             # Serialize the results with restaurant names
-#             serialized_results = [
-#                 {
-#                     'name': food.name,
-#                     'category': food.category,
-#                     'price': food.price,
-#                     'restaurant': food.restaurant.name  # Get the restaurant name directly
-#                 } for food in results
-#             ]
-#             request.session['search_results'] = serialized_results  # Store the serialized results
-#             return redirect('main:search_results')
-        
-#         else:
-#             return render(request, 'att.html', {
-#                 'query': query,
-#                 'error_message': f'No results found for "{query}". Please try a different search term.'
-#             })
-
-#     return redirect('main:show_att')
-
-# def search_results(request):
-#     results = request.session.get('search_results', [])
-
-#     # Clear the results from session after using them
-#     if 'search_results' in request.session:
-#         del request.session['search_results']
-        
-#     if results == []:
-#         return redirect('main:show_att')
-    
-#     return render(request, 'results.html', {
-#         'results': results  # Pass results to the template
-#     })
-
-# def user_login(request):
-#     form = AuthenticationForm()
-    
-#     if request.method == 'POST':
-#         form = AuthenticationForm(data=request.POST)
-#         if form.is_valid():
-#             user = form.get_user()
-#             login(request, user)
-#             response = HttpResponseRedirect(reverse("main:show_att"))
-#             response.set_cookie('last_login', str(datetime.datetime.now()))
-#             return response
-#         else:
-#             messages.error(request, "Invalid username or password. Please try again.") 
-
-#     context = {'form': form}
-#     return render(request, 'login.html', context)
-
-
-# def search_instance(request):
-#     return render(request, "search_instance.html", )
