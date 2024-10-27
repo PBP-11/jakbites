@@ -1,26 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="max-w-2xl mx-auto my-10 p-6 bg-white rounded shadow-lg">
-    <h1 class="text-3xl font-bold mb-4">{{ product.name }}</h1>
-    <p class="text-gray-800"><strong>Description:</strong> {{ product.description|default:"-" }}</p>
-    <p class="text-gray-800"><strong>Category:</strong> {{ product.category }}</p>
-    <p class="text-gray-800"><strong>Price:</strong> {{ product.price }}</p>
+<div class="max-w-2xl mx-auto my-10 p-6 bg-[#f5f5f5] rounded shadow-lg">
+    <h1 class="text-3xl font-bold mb-4 text-[#292929]">{{ product.name }}</h1>
+    {% if product.img %}
+        <img src="{{ product.img }}" alt="{{ product.name }}" class="w-full h-auto mb-4">
+    {% endif %}
+    <p class="text-[#606569]"><strong>Description:</strong> {{ product.description|default:"-" }}</p>
+    <p class="text-[#606569]"><strong>Category:</strong> {{ product.category }}</p>
+    <p class="text-[#606569]"><strong>Price:</strong> {{ product.price }}</p>
 
-    <hr class="my-6">
+    <hr class="my-6 border-[#969a9d]">
 
     <div class="mb-6">
-        <h2 class="text-2xl font-semibold mb-2">Rating</h2>
-        <p id="avg-rating" class="text-yellow-500 font-bold text-lg">{{ avg_rating|floatformat:1 }}/5</p>
+        <h2 class="text-2xl font-semibold mb-2 text-[#292929]">Rating</h2>
+        <p id="avg-rating" class="font-bold text-lg text-[#eec201]">{{ avg_rating|floatformat:1 }}/5</p>
     </div>
 
     <div class="mb-6">
-        <h2 class="text-2xl font-semibold mb-4">Reviews</h2>
+        <h2 class="text-2xl font-semibold mb-4 text-[#292929]">Reviews</h2>
         <div id="review-list-container" class="space-y-4">
             {% if reviews %}
                 <ul id="review-list" class="space-y-4">
                     {% for review in reviews %}
-                    <li class="p-4 bg-gray-100 rounded" data-review-id="{{ review.id }}">
+                    <li class="p-4 bg-[#f0f0f0] rounded text-[#292929]" data-review-id="{{ review.id }}">
                         <p><strong>{{ review.user.username }}</strong> rated: {{ review.rating }}/5</p>
                         <p>{{ review.review }}</p>
                         <button class="delete-review-btn mt-2 bg-red-500 text-white px-2 py-1 rounded" data-review-id="{{ review.id }}">Delete</button>
@@ -28,26 +31,26 @@
                     {% endfor %}
                 </ul>
             {% else %}
-                <p id="no-reviews-message">No reviews yet.</p>
+                <p id="no-reviews-message" class="text-[#969a9d]">No reviews yet.</p>
             {% endif %}
         </div>
     </div>
 
-    <hr class="my-6">
+    <hr class="my-6 border-[#969a9d]">
 
-    <div class="bg-gray-50 p-4 rounded shadow-md">
-        <h2 class="text-2xl font-semibold mb-4">Add Your Rating & Review</h2>
+    <div class="bg-[#e6e6e6] p-4 rounded shadow-md">
+        <h2 class="text-2xl font-semibold mb-4 text-[#292929]">Add Your Rating & Review</h2>
         <form id="review-form" method="POST" class="space-y-4">
             {% csrf_token %}
             <div>
-                <label class="block font-semibold mb-1" for="rating">Add Your Rating:</label>
+                <label class="block font-semibold mb-1 text-[#292929]" for="rating">Add Your Rating:</label>
                 {{ review_form.rating }}
             </div>
             <div>
-                <label class="block font-semibold mb-1" for="review">Add Your Review:</label>
+                <label class="block font-semibold mb-1 text-[#292929]" for="review">Add Your Review:</label>
                 {{ review_form.review }}
             </div>
-            <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">
+            <button type="submit" class="mt-4 bg-[#eec201] text-[#292929] px-4 py-2 rounded">
                 Submit Rating & Review
             </button>
         </form>
@@ -76,7 +79,7 @@
     $.ajaxSetup({
         headers: {
             'X-CSRFToken': csrfToken,
-            'X-Requested-With': 'XMLHttpRequest' // Tambahkan ini
+            'X-Requested-With': 'XMLHttpRequest'
         }
     });
 
@@ -99,7 +102,7 @@
                 }
 
                 $('#review-list').append(`
-                    <li class="p-4 bg-gray-100 rounded" data-review-id="${response.id}">
+                    <li class="p-4 bg-[#f0f0f0] rounded text-[#292929]" data-review-id="${response.id}">
                         <p><strong>${response.username}</strong> rated: ${response.rating}/5</p>
                         <p>${response.review}</p>
                         <button class="delete-review-btn mt-2 bg-red-500 text-white px-2 py-1 rounded" data-review-id="${response.id}">Delete</button>
@@ -119,7 +122,7 @@
         e.preventDefault();
 
         const reviewId = $(this).data('review-id');
-        console.log("Captured Review ID:", reviewId);  // Debugging log
+        console.log("Captured Review ID:", reviewId);
 
         if (!reviewId || reviewId === "undefined") {
             alert("Failed to retrieve review ID.");
@@ -131,7 +134,7 @@
                 type: 'POST',
                 url: `/food/delete_review/${reviewId}/`,
                 success: function(response) {
-                    console.log("Delete response:", response);  // Tambahkan log ini
+                    console.log("Delete response:", response);
                     if (response.success) {
                         $(`li[data-review-id='${reviewId}']`).remove();
                         $('#avg-rating').text(response.avg_rating.toFixed(1) + "/5");
@@ -144,7 +147,7 @@
                     }
                 },
                 error: function(xhr) {
-                    console.log('Delete error:', xhr.responseText);  // Tambahkan log ini
+                    console.log('Delete error:', xhr.responseText);
                     alert('An error occurred while deleting the review.');
                 }
             });
