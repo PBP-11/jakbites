@@ -6,103 +6,36 @@
 {% endblock meta %}
 
 {% block content %}
-<style>
-  body {
-    font-family: 'Lora', serif;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-  h1, h2, button, li {
-    font-family: 'Poppins', sans-serif;
-  }
-  input, select, textarea {
-    border: none;
-    padding: 0.5rem;
-    width: 100%;
-    background-color: #f0f0f0;
-  }
-  label {
-    text-align: left;
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-  .form-container {
-    max-width: 500px;
-    padding: 2rem;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  .form-title {
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  .form-button {
-    background-color: black;
-    color: white;
-    padding: 0.5rem;
-    border: none;
-    width: 100%;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  .form-button:hover {
-    background-color: gray;
-  }
-  .error-message {
-    color: red;
-    font-size: 0.875rem;
-  }
-  .alert {
-    background-color: #f8d7da;
-    border: none;
-    color: #721c24;
-    padding: 0.75rem;
-    margin-top: 1rem;
-    border-radius: 0.25rem;
-  }
-  .link {
-    color: black;
-    text-decoration: underline;
-  }
-  .link:hover {
-    color: gray;
-  }
-</style>
+<div class="flex items-center justify-center min-h-screen bg-gray-300 font-serif mx-auto">
+  <div class="max-w-md p-8 bg-white shadow-lg">
+    <img src="{% static 'image/logo1.png' %}" alt="logo" class="mx-auto w-full max-w-full">
+    <br>
+    <h2 class="text-2xl font-bold text-center mb-4 font-sans">Login to your account</h2>
+    <form method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="remember" value="true">
+      <div>
+        <label for="username" class="block mb-2">Username</label>
+        <input id="username" name="username" type="text" required placeholder="Username" class="w-full p-2 bg-gray-200 border-none">
+      </div>
+      <div class="mt-4">
+        <label for="password" class="block mb-2">Password</label>
+        <input id="password" name="password" type="password" required placeholder="Password" class="w-full p-2 bg-gray-200 border-none">
+      </div>
+      <button type="submit" class="w-full p-2 mt-4 text-white bg-black transition duration-300 hover:bg-gray-700 font-sans">Sign in</button>
+    </form>
 
-<div class="form-container">
-  <img src="{% static 'image/logo1.png' %}" alt="logo" class="mx-auto d-block" style="width: 100%; max-width: 100%;">
-  <br>
-  <h2 class="form-title">Login to your account</h2>
-  <form method="POST">
-    {% csrf_token %}
-    <input type="hidden" name="remember" value="true">
-    <div>
-      <label for="username">Username</label>
-      <input id="username" name="username" type="text" required placeholder="Username">
-    </div>
-    <div class="mt-4">
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password" required placeholder="Password">
-    </div>
-    <button type="submit" class="form-button mt-4">Sign in</button>
-  </form>
+    {% if messages %}
+      <div class="mt-4 p-3 border rounded text-yellow-600 border-yellow-600">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
 
-  {% if messages %}
-    <div class="alert">
-      {% for message in messages %}
-        <p>{{ message }}</p>
-      {% endfor %}
+    <div class="mt-4 text-center">
+      <p>Don't have an account yet? <a href="{% url 'authentication:register' %}" class="underline text-black hover:text-gray-700">Register Now</a></p>
     </div>
-  {% endif %}
-
-  <div class="text-center mt-4">
-    <p>Don't have an account yet? <a href="{% url 'authentication:register' %}" class="link">Register Now</a></p>
   </div>
 </div>
 {% endblock content %}

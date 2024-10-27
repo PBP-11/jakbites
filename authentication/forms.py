@@ -5,20 +5,20 @@ from main.models import *
 
 class ClientRegistrationForm(UserCreationForm):
     email = EmailField(required=True)
-    profile_picture = ImageField(required=False)
-    description = CharField(widget=Textarea, required=False)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2', 'profile_picture', 'description']
+        fields = ['username', 'email', 'password1', 'password2']
+
+    def __init__(self, *args, **kwargs):
+        super(ClientRegistrationForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'w-full p-2 bg-gray-200 border-none'
 
     def save(self, commit=True):
-        user = super().save(commit=False)
-        user.email = self.cleaned_data['email']
+        user = super().save(commit)
         if commit:
-            user.save()
-            client = Client(user=user, profile_picture=self.cleaned_data['profile_picture'], description=self.cleaned_data['description'])
-            client.save()
+            Client.objects.create(user=user)
         return user
 
 class RestaurantForm(ModelForm):

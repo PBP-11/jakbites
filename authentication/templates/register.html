@@ -1,112 +1,51 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block meta %}
 <title>Register</title>
 {% endblock meta %}
 
 {% block content %}
-<style>
-  body {
-    font-family: 'Lora', serif;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-  }
-  h1, h2, button, li {
-    font-family: 'Poppins', sans-serif;
-  }
-  input, select, textarea {
-    border: none;
-    padding: 0.5rem;
-    width: 100%;
-    background-color: #f0f0f0;
-  }
-  label {
-    text-align: left;
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-  .form-container {
-    max-width: 500px;
-    padding: 2rem;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  .form-title {
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  .form-button {
-    background-color: black;
-    color: white;
-    padding: 0.5rem;
-    border: none;
-    width: 100%;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  .form-button:hover {
-    background-color: gray;
-  }
-  .error-message {
-    color: red;
-    font-size: 0.875rem;
-  }
-  .alert {
-    background-color: #f8d7da;
-    border: none;
-    color: #721c24;
-    padding: 0.75rem;
-    margin-top: 1rem;
-    border-radius: 0.25rem;
-  }
-  .link {
-    color: black;
-    text-decoration: underline;
-  }
-  .link:hover {
-    color: gray;
-  }
-</style>
-
-<div class="form-container">
-  <h2 class="form-title">Create your account</h2>
-  <form method="POST">
-    {% csrf_token %}
-    <input type="hidden" name="remember" value="true">
-    {% for field in form %}
-      <div class="{% if not forloop.first %}mt-4{% endif %}">
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        <div class="relative">
-          {{ field }}
-          {% if field.errors %}
-            <div class="error-message">
-              {% for error in field.errors %}
-                <p>{{ error }}</p>
-              {% endfor %}
+<div class="flex items-center justify-center min-h-screen bg-gray-300 font-serif mx-auto">
+  <div class="flex flex-col md:flex-row bg-white p-8 shadow-lg">
+    <div class="max-w-md w-full md:w-2/5 m-0">
+      <h2 class="text-2xl font-bold text-center mb-4 font-sans">Create your account</h2>
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="remember" value="true">
+        {% for field in form %}
+          <div class="{% if not forloop.first %}mt-4{% endif %}">
+            <label for="{{ field.id_for_label }}" class="block mb-2">{{ field.label }}</label>
+            <div class="relative">
+              {{ field }}
+              {% if field.errors %}
+                <div class="text-red-500 text-sm mt-1">
+                  {% for error in field.errors %}
+                    <p>{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
             </div>
-          {% endif %}
+          </div>
+        {% endfor %}
+        <button type="submit" class="w-full p-2 mt-4 text-white bg-black transition duration-300 hover:bg-gray-700 font-sans">Register</button>
+      </form>
+
+      {% if messages %}
+        <div class="mt-4 p-3 border rounded text-yellow-600 border-yellow-600">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
         </div>
+      {% endif %}
+
+      <div class="mt-4 text-center">
+        <p>Already have an account? <a href="{% url 'authentication:user_login' %}" class="underline text-black hover:text-gray-700">Login here</a></p>
       </div>
-    {% endfor %}
-    <button type="submit" class="form-button">Register</button>
-  </form>
-
-  {% if messages %}
-    <div class="alert">
-      {% for message in messages %}
-        <p>{{ message }}</p>
-      {% endfor %}
     </div>
-  {% endif %}
-
-  <div class="text-center mt-4">
-    <p>Already have an account? <a href="{% url 'authentication:user_login' %}" class="link">Login here</a></p>
+    <div class="flex flex-col items-center justify-center w-full md:w-3/5">
+      <img src="{% static 'image/logostyle-removed-background.png' %}" alt="Logo" class="mb-4" style="max-width: 100%; max-height: 570px; background-color: white; object-fit: contain;">
+    </div>
   </div>
 </div>
 {% endblock content %}
