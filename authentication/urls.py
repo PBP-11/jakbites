@@ -16,4 +16,7 @@ urlpatterns = [
     path('admin/get_food/', get_food, name='get_food'),
     path('admin/edit_restaurant/', edit_restaurant, name='edit_restaurant'),
     path('admin/edit_food/', edit_food, name='edit_food'),
+    path('login_flutter/', login_flutter, name='login_flutter'),
+    path('register_flutter/', register_flutter, name='register_flutter'),
+    path('logout_flutter/', logout_flutter, name='logout_flutter'),
 ]
