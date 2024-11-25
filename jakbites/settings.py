@@ -129,10 +129,18 @@ USE_TZ = True
 STATIC_URL = '/static/'
 if DEBUG:
     STATICFILES_DIRS = [
-        BASE_DIR / 'static' # merujuk ke /static root project pada mode development
+        BASE_DIR / 'static'  # Merujuk ke /static root project pada mode development
     ]
+    # Path ke folder media untuk mode development
+    MEDIA_URL = '/static/media/'  # Ubah menjadi '/static/media/' 
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')  # Mengarahkan ke folder media di dalam static
 else:
-    STATIC_ROOT = BASE_DIR / 'static' # merujuk ke /static root project pada mode production
+    STATIC_ROOT = BASE_DIR / 'static'  # Merujuk ke /static root project pada mode production
+    MEDIA_URL = '/static/media/'  # Pastikan juga diatur untuk akses di produksi
+    MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media')  # Folder media tetap di dalam static
+
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 
 # Default primary key field type
