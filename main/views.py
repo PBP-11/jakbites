@@ -18,6 +18,8 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 
+import json
+
 
 @login_required(login_url='/authentication/login/')
 def show_att(request):
@@ -120,3 +122,11 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('authentication:user_login'))
     response.delete_cookie('last_login')
     return response
+
+def show_json_restaurant(request):
+    data = Restaurant.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_json_review_restaurant(request):
+    data = ReviewRestaurant.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
