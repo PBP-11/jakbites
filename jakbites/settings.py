@@ -29,6 +29,8 @@ DEBUG = not PRODUCTION
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "william-matthew31-jakbites.pbp.cs.ui.ac.id", "http://https://william-matthew31-jakbites.pbp.cs.ui.ac.id", "https://william-matthew31-jakbites.pbp.cs.ui.ac.id" "10.0.2.2"]
 
+CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://127.0.0.1", "http://https://william-matthew31-jakbites.pbp.cs.ui.ac.id", "https://william-matthew31-jakbites.pbp.cs.ui.ac.id"]
+
 # Tutorial 8
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
