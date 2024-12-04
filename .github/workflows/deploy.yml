@@ -46,27 +46,3 @@ jobs:
             exit 1
           fi
           echo "Push successful with output: $push_output"
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: Make migrations
-      run: python manage.py makemigrations
-
-    - name: Run migrations
-      run: python manage.py migrate
-
-    - name: Push changes to PWS
-      run: git push $PWS_URL main:master    - name: Run manage.py loaddata      run: python manage.py loaddata fixtures/sample.json    - name: Create admin user      run: python manage.py create_admin_user admin admin123 admin@gmail.com    - name: Execute remote management commands      uses: appleboy/ssh-action@v0.1.0      with:        host: ${{ secrets.PWS_HOST }}
-        username: ${{ secrets.PWS_USER }}
-        key: ${{ secrets.PWS_SSH_KEY }}
-        script: |
-          python manage.py loaddata fixtures/sample.json
-          python manage.py create_admin_user admin admin123 admin@gmail.com
