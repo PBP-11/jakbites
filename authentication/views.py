@@ -292,3 +292,32 @@ def logout_flutter(request):
         "status": False,
         "message": "Logout gagal."
         }, status=401)
+
+@csrf_exempt
+def create_restaurant_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        new_restaurant = RestaurantForm.objects.create(
+            name=data['name'],
+            location=data['location']
+        )
+        new_restaurant.save()
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+
+@csrf_exempt
+def create_food_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        new_food = FoodForm.objects.create(
+            name=data['name'],
+            description=data['description'],
+            category=data['category'],
+            restaurant_name=data['restaurant_name'],
+            price=int(data['price'])
+        )
+        new_food.save()
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
