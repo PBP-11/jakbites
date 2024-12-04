@@ -70,4 +70,4 @@ jobs:
 
     - name: Create Admin User
       run: |
-        python manage.py create_admin_user admin admin123
+        python manage.py create_admin_user admin admin123 admin@gmail.com
