@@ -63,8 +63,10 @@ jobs:
     - name: Run migrations
       run: python manage.py migrate
 
-    - name: Run manage.py loaddata
-      run: python manage.py loaddata fixtures/sample.json
-
-    - name: Create admin user
-      run: python manage.py create_admin_user admin admin123 admin@gmail.com
+    - name: Push changes to PWS
+      run: git push $PWS_URL main:master    - name: Run manage.py loaddata      run: python manage.py loaddata fixtures/sample.json    - name: Create admin user      run: python manage.py create_admin_user admin admin123 admin@gmail.com    - name: Execute remote management commands      uses: appleboy/ssh-action@v0.1.0      with:        host: ${{ secrets.PWS_HOST }}
+        username: ${{ secrets.PWS_USER }}
+        key: ${{ secrets.PWS_SSH_KEY }}
+        script: |
+          python manage.py loaddata fixtures/sample.json
+          python manage.py create_admin_user admin admin123 admin@gmail.com
