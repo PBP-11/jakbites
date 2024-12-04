@@ -27,9 +27,18 @@ SECRET_KEY = 'django-insecure-0q3yuczfbs0#x038w&%(w+zbu3)zgvd9_n*8o!51knlesea141
 PRODUCTION = os.getenv("PRODUCTION", False)
 DEBUG = not PRODUCTION
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "william-matthew31-jakbites.pbp.cs.ui.ac.id", "http://https://william-matthew31-jakbites.pbp.cs.ui.ac.id", "https://william-matthew31-jakbites.pbp.cs.ui.ac.id" "10.0.2.2"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "william-matthew31-jakbites.pbp.cs.ui.ac.id",
+    "10.0.2.2",
+]
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://127.0.0.1", "http://https://william-matthew31-jakbites.pbp.cs.ui.ac.id", "https://william-matthew31-jakbites.pbp.cs.ui.ac.id"]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost",
+    "http://127.0.0.1",
+    "https://william-matthew31-jakbites.pbp.cs.ui.ac.id"
+]
 
 # Tutorial 8
 CORS_ALLOW_ALL_ORIGINS = True
@@ -58,15 +67,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Whitenoise must be under SecurityMiddleware
+    'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware' # Tutorial 8
-
 ]
 
 ROOT_URLCONF = 'jakbites.urls'

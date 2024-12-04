@@ -46,3 +46,9 @@ jobs:
             exit 1
           fi
           echo "Push successful with output: $push_output"
+
+    - name: Run manage.py loaddata
+      run: python manage.py loaddata fixtures/sample.json
+
+    - name: Create admin user
+      run: python manage.py create_admin_user admin admin123 admin@gmail.com
