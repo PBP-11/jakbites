@@ -297,7 +297,7 @@ def logout_flutter(request):
 def create_restaurant_flutter(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        new_restaurant = RestaurantForm.objects.create(
+        new_restaurant = Restaurant.objects.create(
             name=data['name'],
             location=data['location']
         )
@@ -321,3 +321,68 @@ def create_food_flutter(request):
         return JsonResponse({"status": "success"}, status=200)
     else:
         return JsonResponse({"status": "error"}, status=401)
+
+@csrf_exempt
+def get_restaurants_flutter(request):
+    restaurants = Restaurant.objects.all()
+    data = [{'id': r.id, 'name': r.name, 'location': r.location} for r in restaurants]
+    return JsonResponse({'restaurants': data}, safe=False)
+
+@csrf_exempt
+def get_foods_flutter(request):
+    foods = Food.objects.all()
+    data = serializers.serialize('json', foods)
+    return JsonResponse(data, safe=False)
+
+@csrf_exempt
+def edit_restaurant_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        try:
+            restaurant = Restaurant.objects.get(id=data['id'])
+            restaurant.name = data['name']
+            restaurant.location = data['location']
+            restaurant.save()
+            return JsonResponse({"status": "success"}, status=200)
+        except Restaurant.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Restaurant not found"}, status=404)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+
+@csrf_exempt
+def edit_food_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        food = Food.objects.get(id=data['id'])
+        food.name = data['name']
+        food.description = data['description']
+        food.category = data['category']
+        food.restaurant_name = data['restaurant_name']
+        food.price = int(data['price'])
+        food.save()
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+
+@csrf_exempt
+def delete_restaurant_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        try:
+            restaurant = Restaurant.objects.get(id=data['id'])
+            restaurant.delete()
+            return JsonResponse({"status": "success"}, status=200)
+        except Restaurant.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Restaurant not found"}, status=404)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+
+@csrf_exempt
+def delete_food_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        food = Food.objects.get(id=data['id'])
+        food.delete()
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401) 

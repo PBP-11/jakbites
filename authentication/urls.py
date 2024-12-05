@@ -20,5 +20,11 @@ urlpatterns = [
     path('register_flutter/', register_flutter, name='register_flutter'),
     path('logout_flutter/', logout_flutter, name='logout_flutter'),
     path('create_restaurant_flutter/', create_restaurant_flutter, name='create_restaurant_flutter'),
+    path('edit_restaurant_flutter/', edit_restaurant_flutter, name='edit_restaurant_flutter'),
+    path('delete_restaurant_flutter/', delete_restaurant_flutter, name='delete_restaurant_flutter'),
+    path('get_restaurants_flutter/', get_restaurants_flutter, name='get_restaurants_flutter'),
     path('create_food_flutter/', create_food_flutter, name='create_food_flutter'),
+    path('get_foods_flutter/', get_foods_flutter, name='get_foods_flutter'),
+    path('edit_food_flutter/', edit_food_flutter, name='edit_food_flutter'),
+    path('delete_food_flutter/', delete_food_flutter, name='delete_food_flutter'),
 ]
