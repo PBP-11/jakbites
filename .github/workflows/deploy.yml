@@ -64,10 +64,10 @@ jobs:
       run: |
         python manage.py migrate
 
-    - name: Load Sample Data
-      run: |
-        python manage.py loaddata sample.json
-
     - name: Create Admin User
       run: |
-        python manage.py create_admin_user admin admin123 admin@gmail.com
+        python manage.py create_admin_user
+
+    - name: Create Client User
+      run: |
+        python manage.py create_client_user

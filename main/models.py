@@ -4,13 +4,13 @@ from django.contrib.auth.models import User
 # semua class secara default sudah memiliki attribute 'id' sebagai primary key
 
 class Restaurant(models.Model):
-    name = models.CharField(max_length=150)
-    location = models.CharField(max_length=150)
+    name = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
     
 class Food(models.Model):
-    name = models.CharField(max_length=150)
-    description = models.TextField()
-    category = models.CharField(max_length=150)
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    category = models.CharField(max_length=255)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     price = models.IntegerField()
 
