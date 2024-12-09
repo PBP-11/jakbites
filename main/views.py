@@ -130,3 +130,11 @@ def show_json_restaurant(request):
 def show_json_review_restaurant(request):
     data = ReviewRestaurant.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_json_food(request):
+    data = Food.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_json_review_food(request):
+    data = ReviewFood.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
