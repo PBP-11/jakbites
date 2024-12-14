@@ -117,20 +117,6 @@ def search_on_resto(request):
     }
     return render(request, 'resto.html', context)
 
-def search_on_resto(request):
-    query = request.GET.get('query', '')  
-
-    results = Restaurant.objects.all()
-
-    results = results.filter(
-        Q(name__icontains=query)
-    )
-
-    context = {
-        'results': results,
-    }
-    return render(request, 'resto.html', context)
-
 def logout_user(request):
     logout(request)
     response = HttpResponseRedirect(reverse('authentication:user_login'))
@@ -146,28 +132,40 @@ def show_json_review_restaurant(request):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 
-def search_on_resto(request):
+from django.http import JsonResponse
+from django.db.models import Q
+from .models import Restaurant, Food
+
+def search_on_resto_json(request):
     query = request.GET.get('query', '')
     results = Restaurant.objects.filter(name__icontains=query)
+
     data = []
     for r in results:
         data.append({
             'id': r.id,
-            'foodName': r.name,
-            'description': gegtattr(r, 'description', ''),  # Adjust based on model fields
-            'category': 'resto'
+            'foodName': r.name,         # Mapping restaurant name to 'foodName' for consistency
+            'description': r.location,  # Using location as description
+            'category': 'resto'         # Setting category to 'resto' since these are restaurants
         })
+
     return JsonResponse(data, safe=False)
 
-def search_on_food(request):
+def search_on_food_json(request):
     query = request.GET.get('query', '')
     results = Food.objects.filter(name__icontains=query)
+
     data = []
     for f in results:
         data.append({
             'id': f.id,
             'foodName': f.name,
-            'description': getattr(f, 'description', ''), # Adjust as needed
-            'category': 'food'
+            'description': f.description,
+            'category': f.category,
+            # If needed, you can add other fields like:
+            # 'price': f.price,
+            # 'restaurant': f.restaurant.name,
         })
+
     return JsonResponse(data, safe=False)
+
