@@ -331,20 +331,38 @@ def create_restaurant_flutter(request):
         return JsonResponse({"status": "error"}, status=401)
 
 @csrf_exempt
+@require_POST
 def create_food_flutter(request):
-    if request.method == 'POST':
+    try:
         data = json.loads(request.body)
-        new_food = FoodForm.objects.create(
-            name=data['name'],
-            description=data['description'],
-            category=data['category'],
-            restaurant_name=data['restaurant_name'],
-            price=int(data['price'])
+        name = data.get('name')
+        description = data.get('description')
+        category = data.get('category')
+        restaurant_id = data.get('restaurant_id')  # Ensure key is 'restaurant_id'
+        price = data.get('price')
+
+        if not all([name, description, category, restaurant_id, price]):
+            return JsonResponse({'status': False, 'message': 'All fields are required.'}, status=400)
+
+        try:
+            restaurant = Restaurant.objects.get(id=restaurant_id)
+        except Restaurant.DoesNotExist:
+            return JsonResponse({'status': False, 'message': 'Selected restaurant does not exist.'}, status=404)
+
+        food = Food.objects.create(
+            name=name,
+            description=description,
+            category=category,
+            restaurant=restaurant,
+            price=price
         )
-        new_food.save()
-        return JsonResponse({"status": "success"}, status=200)
-    else:
-        return JsonResponse({"status": "error"}, status=401)
+
+        return JsonResponse({'status': 'success', 'message': 'Food created successfully.'}, status=201)
+
+    except json.JSONDecodeError:
+        return JsonResponse({'status': False, 'message': 'Invalid JSON.'}, status=400)
+    except Exception as e:
+        return JsonResponse({'status': False, 'message': str(e)}, status=500)
 
 @csrf_exempt
 def get_restaurants_flutter(request):
@@ -460,9 +478,24 @@ def delete_food_flutter(request):
         data = json.loads(request.body)
         food = Food.objects.get(id=data['id'])
         food.delete()
+        food.delete()
         return JsonResponse({"status": "success"}, status=200)
     else:
         return JsonResponse({"status": "error"}, status=401)
+
+@csrf_exempt
+@require_GET
+def get_restaurants(request):
+    restaurants = Restaurant.objects.all()
+    data = [
+        {
+            'id': restaurant.id,
+            'name': restaurant.name,
+            'location': restaurant.location
+        }
+        for restaurant in restaurants
+    ]
+    return JsonResponse({'restaurants': data})
 
 @csrf_exempt
 @require_GET
