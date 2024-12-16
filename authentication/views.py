@@ -115,7 +115,7 @@ def search(request):
         results = Restaurant.objects.filter(name__icontains=query)
         data = [{'id': r.id, 'name': r.name, 'location': r.location} for r in results]
     else:
-        results = Food.objects.filter(name__icontains=query)
+        results = Food.objects.filter(name__icontains(query))
         data = [{'id': f.id, 'name': f.name, 'description': f.description, 'category': f.category, 'restaurant': {'name': f.restaurant.name}, 'price': f.price} for f in results]
     return JsonResponse({'results': data})
 
@@ -325,13 +325,30 @@ def create_food_flutter(request):
 @csrf_exempt
 def get_restaurants_flutter(request):
     restaurants = Restaurant.objects.all()
-    data = [{'id': r.id, 'name': r.name, 'location': r.location} for r in restaurants]
-    return JsonResponse({'restaurants': data}, safe=False)
+    data = [{
+        'model': 'main.restaurant',
+        'pk': r.id,
+        'fields': {
+            'name': r.name,
+            'location': r.location
+        }
+    } for r in restaurants]
+    return JsonResponse(data, safe=False)
 
 @csrf_exempt
 def get_foods_flutter(request):
     foods = Food.objects.all()
-    data = serializers.serialize('json', foods)
+    data = [{
+        'model': 'main.food',
+        'pk': f.id,
+        'fields': {
+            'name': f.name,
+            'description': f.description,
+            'category': f.category,
+            'restaurant': f.restaurant.id,
+            'price': f.price
+        }
+    } for f in foods]
     return JsonResponse(data, safe=False)
 
 @csrf_exempt
@@ -385,4 +402,4 @@ def delete_food_flutter(request):
         food.delete()
         return JsonResponse({"status": "success"}, status=200)
     else:
-        return JsonResponse({"status": "error"}, status=401) 
+        return JsonResponse({"status": "error"}, status=401)
