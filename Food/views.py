@@ -1,9 +1,11 @@
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from .models import Food, ReviewFood
 from .forms import ReviewForm
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 import logging
 
 logger = logging.getLogger(__name__)
@@ -95,3 +97,95 @@ def delete_review(request, review_id):
             return JsonResponse({'success': False, 'error': 'Review not found.'}, status=404)
     else:
         return JsonResponse({'success': False, 'error': 'Invalid request method.'}, status=400)
+
+@csrf_exempt  # Only for development. Remove in production.
+@login_required  # Ensures that only authenticated users can post reviews.
+def add_food_review_flutter(request, food_id):
+    if request.method == 'POST':
+        try:
+            # Parse JSON data from the request body
+            data = json.loads(request.body)
+            rating = data.get('rating')
+            review_text = data.get('review')
+
+            # Validate the received data
+            if rating is None or review_text is None:
+                return JsonResponse(
+                    {"status": "error", "message": "Rating and review are required."},
+                    status=400
+                )
+            if not isinstance(rating, int) or not (1 <= rating <= 5):
+                return JsonResponse(
+                    {"status": "error", "message": "Rating must be an integer between 1 and 5."},
+                    status=400
+                )
+            if not isinstance(review_text, str) or not review_text.strip():
+                return JsonResponse(
+                    {"status": "error", "message": "Review text cannot be empty."},
+                    status=400
+                )
+
+            # Retrieve the Food object
+            food = get_object_or_404(Food, pk=food_id)
+
+            # Create and save the new review
+            new_review = ReviewFood.objects.create(
+                food=food,
+                user=request.user,  # Correct field name
+                rating=rating,
+                review=review_text.strip(),
+            )
+            new_review.save()
+
+            return JsonResponse({"status": "success"}, status=201)
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"status": "error", "message": "Invalid JSON data."},
+                status=400
+            )
+        except Exception as e:
+            return JsonResponse(
+                {"status": "error", "message": str(e)},
+                status=500
+            )
+    else:
+        return JsonResponse(
+            {"status": "error", "message": "Only POST method is allowed."},
+            status=405
+        )
+
+@csrf_exempt
+def delete_food_review_flutter(request, review_id):
+    if request.method == 'POST':
+        try:
+            # Retrieve the article by ID
+            review = ReviewFood.objects.get(id=review_id)
+            # Perform the delete operation
+            review.delete()
+            # Return success response
+            return JsonResponse({'success': True, 'message': 'Article deleted successfully'})
+        except ReviewFood.DoesNotExist:
+            # If the article does not exist
+            return JsonResponse({'success': False, 'message': 'Article not found'}, status=404)
+        except Exception as e:
+            # Handle unexpected errors
+            return JsonResponse({'success': False, 'message': str(e)}, status=500)
+    else:
+        # If the request is not POST
+        return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
+
+def get_food_review(request):
+    reviews = ReviewFood.objects.all()
+    review_data = []
+    for review in reviews:
+        is_author = review.user == request.user
+        review_data.append({
+            'food': review.food.name,
+            'reviewid': review.pk,
+            'rating': review.rating,
+            'review': review.review,
+            'is_author': is_author,
+            'author': review.user.username,
+        })
+
+    return JsonResponse({'review': review_data})

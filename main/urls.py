@@ -13,4 +13,6 @@ urlpatterns = [
     path('json_restaurant/', show_json_restaurant, name = 'json_restaurant'),
     path('json_review_restaurant/', show_json_review_restaurant, name = 'json_review_restaurant'),
     # path('login/', user_login, name = "user_login")
+    path('json_food/', show_json_food, name = 'json_food'),
+    path('json_review_food/', show_json_review_food, name = 'json_review_food'),
 ]
