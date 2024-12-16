@@ -32,8 +32,6 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('food/', include('Food.urls')),  # Mengarahkan ke aplikasi Food
     path('accounts/', include('django.contrib.auth.urls')),
-    path('json-restaurant/', include('authentication.urls')),
-    path('json-food/', include('authentication.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
