@@ -473,15 +473,28 @@ def delete_restaurant_flutter(request):
         return JsonResponse({"status": "error"}, status=401)
 
 @csrf_exempt
+@require_POST
 def delete_food_flutter(request):
-    if request.method == 'POST':
+    try:
         data = json.loads(request.body)
-        food = Food.objects.get(id=data['id'])
+        food_id = data.get('id')
+
+        if not food_id:
+            return JsonResponse({'status': False, 'message': 'ID is required.'}, status=400)
+
+        try:
+            food = Food.objects.get(id=food_id)
+        except Food.DoesNotExist:
+            return JsonResponse({'status': False, 'message': 'Food not found.'}, status=404)
+
         food.delete()
-        food.delete()
-        return JsonResponse({"status": "success"}, status=200)
-    else:
-        return JsonResponse({"status": "error"}, status=401)
+        return JsonResponse({'status': 'success', 'message': 'Food deleted successfully.'}, status=200)
+
+    except json.JSONDecodeError:
+        return JsonResponse({'status': False, 'message': 'Invalid JSON.'}, status=400)
+
+    except Exception as e:
+        return JsonResponse({'status': False, 'message': str(e)}, status=500)
 
 @csrf_exempt
 @require_GET
