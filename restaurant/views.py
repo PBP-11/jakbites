@@ -4,6 +4,8 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Restaurant, Food, ReviewRestaurant
 from django.http import HttpResponse, JsonResponse
 import logging
+from django.contrib.auth.models import User
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -89,10 +91,39 @@ def delete_review(request, restaurant_id):
 
 def fetch_reviews(request, restaurant_id):
     restaurant = get_object_or_404(Restaurant, id=restaurant_id)
-    reviews = ReviewRestaurant.objects.filter(restaurant=restaurant).values('user__username', 'rating', 'review')
+    reviews = ReviewRestaurant.objects.filter(restaurant=restaurant).values('user', 'rating', 'review')
     reviews_list = list(reviews)  # Convert queryset to list
+    for i in reviews_list:
+        userID = i['user']
+        a_user = User.objects.get(id=userID)
+        i['user'] = str(a_user)
 
     return JsonResponse({
         'status': 'success',
         'reviews': reviews_list
     })
+
+@csrf_exempt
+@login_required
+def create_review_flutter(request):
+    # print(request.session.items )
+    print("DWPODAWJDPOAJ")
+    print(request.user)
+    # for key, value in request.session.items():
+    #     print('{} => {}'.format(key, value))
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        print(data)
+        new_review = ReviewRestaurant.objects.create(
+            user=request.user,
+            restaurant = get_object_or_404(Restaurant, id=data['restaurant']),
+            rating = data["rating"],
+            review = data["review"],
+        )
+
+        new_review.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)

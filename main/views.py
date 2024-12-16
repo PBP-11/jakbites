@@ -128,8 +128,27 @@ def show_json_restaurant(request):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def show_json_review_restaurant(request):
-    data = ReviewRestaurant.objects.all()
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    data = ReviewRestaurant.objects.all().select_related('user')
+    # print(data[0].user)
+
+    serealized_data = []
+    for i in data:
+        i_data = {
+            "restaurant" : i.restaurant.id,
+            "user" : i.user.username,
+            "rating" : i.rating,
+            "review" : i.review,
+        }
+        serealized_data.append(i_data)
+
+    # return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    return JsonResponse(
+        {
+            "status" : 200,
+            "message" : "success",
+            "data": serealized_data
+        }
+    )
 
 
 from django.http import JsonResponse
