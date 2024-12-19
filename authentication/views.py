@@ -243,11 +243,12 @@ def login_flutter(request):
         if user.is_active:
             login(request, user)
             # Status login sukses.
+            # print("SUKKSES")
             return JsonResponse({
                 "username": user.username,
                 "status": True,
                 "message": "Login sukses!",
-                "user": user,
+                # "user": user,.
                 # Tambahkan data lainnya jika ingin mengirim data ke Flutter.
             }, status=200)
         else:

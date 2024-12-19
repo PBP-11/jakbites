@@ -135,9 +135,11 @@ def show_json_review_restaurant(request):
     for i in data:
         i_data = {
             "restaurant" : i.restaurant.id,
-            "user" : i.user.username,
+            "userID" : i.pk,
             "rating" : i.rating,
             "review" : i.review,
+            "userName" : i.user.username,
+            'ID' : i.pk,
         }
         serealized_data.append(i_data)
 

@@ -97,6 +97,7 @@ def fetch_reviews(request, restaurant_id):
         userID = i['user']
         a_user = User.objects.get(id=userID)
         i['user'] = str(a_user)
+        print(a_user)
 
     return JsonResponse({
         'status': 'success',
@@ -106,24 +107,31 @@ def fetch_reviews(request, restaurant_id):
 @csrf_exempt
 @login_required
 def create_review_flutter(request):
-    # print(request.session.items )
-    print("DWPODAWJDPOAJ")
-    print(request.user)
-    # for key, value in request.session.items():
-    #     print('{} => {}'.format(key, value))
+    # print(request.user)
     if request.method == 'POST':
-
         data = json.loads(request.body)
-        print(data)
         new_review = ReviewRestaurant.objects.create(
             user=request.user,
             restaurant = get_object_or_404(Restaurant, id=data['restaurant']),
             rating = data["rating"],
             review = data["review"],
         )
-
+        # print(ReviewRestaurant.objects.all())
         new_review.save()
 
         return JsonResponse({"status": "success"}, status=200)
     else:
         return JsonResponse({"status": "error"}, status=401)
+
+@csrf_exempt
+def delete_review_flutter(request):
+    if request.method == 'DELETE':
+        ID = json.loads(request.body)['deleteID']
+        print(ID)
+        # print(ReviewRestaurant.objects.all())
+
+        print(ReviewRestaurant.objects.filter(id=ID).delete())
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "wrong method"}, status=401)
