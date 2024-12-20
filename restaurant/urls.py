@@ -10,5 +10,6 @@ urlpatterns = [
     path('<int:restaurant_id>/delete_review/', delete_review, name='delete_review'),
     path('<int:restaurant_id>/fetch_reviews/', fetch_reviews, name='fetch_reviews'),
     path('crf/', create_review_flutter, name='create_review_flutter'),
+    path('urf/', update_review_flutter, name='update_review_flutter'),
     path('drf/', delete_review_flutter, name='delete_review_flutter'),
 ]

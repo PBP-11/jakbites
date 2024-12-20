@@ -107,7 +107,6 @@ def fetch_reviews(request, restaurant_id):
 @csrf_exempt
 @login_required
 def create_review_flutter(request):
-    # print(request.user)
     if request.method == 'POST':
         data = json.loads(request.body)
         new_review = ReviewRestaurant.objects.create(
@@ -116,12 +115,24 @@ def create_review_flutter(request):
             rating = data["rating"],
             review = data["review"],
         )
-        # print(ReviewRestaurant.objects.all())
         new_review.save()
 
         return JsonResponse({"status": "success"}, status=200)
     else:
         return JsonResponse({"status": "error"}, status=401)
+
+@csrf_exempt
+def update_review_flutter(request):
+    if request.method == 'PUT':
+        data = json.loads(request.body)
+        review = ReviewRestaurant.objects.get(id=data['reviewID'])
+        review.rating = data['rating']
+        review.review = data['review']
+        review.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "udu metod put"}, status=401)
 
 @csrf_exempt
 def delete_review_flutter(request):
