@@ -8,5 +8,8 @@ urlpatterns = [
     path('<int:id>/', restaurant_detail, name='restaurant'),
     path('push_review/', push_review, name='push_review'),
     path('<int:restaurant_id>/delete_review/', delete_review, name='delete_review'),
-    path('<int:restaurant_id>/fetch_reviews/', fetch_reviews, name='fetch_reviews')
+    path('<int:restaurant_id>/fetch_reviews/', fetch_reviews, name='fetch_reviews'),
+    path('crf/', create_review_flutter, name='create_review_flutter'),
+    path('urf/', update_review_flutter, name='update_review_flutter'),
+    path('drf/', delete_review_flutter, name='delete_review_flutter'),
 ]
