@@ -236,32 +236,35 @@ def edit_food(request):
 
 @csrf_exempt
 def login_flutter(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-    if user is not None:
-        if user.is_active:
-            login(request, user)
-            # Status login sukses.
-            # print("SUKKSES")
-            return JsonResponse({
-                "username": user.username,
-                "status": True,
-                "message": "Login sukses!",
-                # "user": user,.
-                # Tambahkan data lainnya jika ingin mengirim data ke Flutter.
-            }, status=200)
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                user_type = 'admin' if Admin.objects.filter(user=user).exists() else 'client'
+                return JsonResponse({
+                    "username": user.username,
+                    "status": True,
+                    "user_type": user_type,
+                    "message": "Login sukses!",
+                }, status=200)
+            else:
+                return JsonResponse({
+                    "status": False,
+                    "message": "Login gagal, akun dinonaktifkan."
+                }, status=401)
         else:
             return JsonResponse({
                 "status": False,
-                "message": "Login gagal, akun dinonaktifkan."
+                "message": "Login gagal, periksa kembali email atau kata sandi."
             }, status=401)
-
     else:
         return JsonResponse({
             "status": False,
-            "message": "Login gagal, periksa kembali email atau kata sandi."
-        }, status=401)
+            "message": "Invalid request method."
+        }, status=400)
 
 @csrf_exempt
 def register_flutter(request):
@@ -320,21 +323,25 @@ def logout_flutter(request):
         }, status=401)
 
 @csrf_exempt
+@login_required(login_url='authentication/login')
+@require_POST
 def create_restaurant_flutter(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        new_restaurant = Restaurant.objects.create(
-            name=data['name'],
-            location=data['location']
-        )
-        new_restaurant.save()
-        return JsonResponse({"status": "success"}, status=200)
-    else:
-        return JsonResponse({"status": "error"}, status=401)
+    if not Admin.objects.filter(user=request.user).exists():
+        return JsonResponse({"status": False, "message": "Unauthorized access."}, status=403)
+    data = json.loads(request.body)
+    new_restaurant = Restaurant.objects.create(
+        name=data['name'],
+        location=data['location']
+    )
+    new_restaurant.save()
+    return JsonResponse({"status": "success"}, status=200)
 
 @csrf_exempt
+@login_required(login_url='authentication/login')
 @require_POST
 def create_food_flutter(request):
+    if not Admin.objects.filter(user=request.user).exists():
+        return JsonResponse({"status": False, "message": "Unauthorized access."}, status=403)
     try:
         data = json.loads(request.body)
         name = data.get('name')
@@ -396,7 +403,11 @@ def get_foods_flutter(request):
     return JsonResponse(data, safe=False)
 
 @csrf_exempt
+@login_required(login_url='authentication/login')
+@require_POST
 def edit_restaurant_flutter(request):
+    if not Admin.objects.filter(user=request.user).exists():
+        return JsonResponse({"status": False, "message": "Unauthorized access."}, status=403)
     if request.method == 'POST':
         data = json.loads(request.body)
         try:
@@ -411,7 +422,10 @@ def edit_restaurant_flutter(request):
         return JsonResponse({"status": "error"}, status=401)
 
 @csrf_exempt
+@login_required(login_url='authentication/login')
 def edit_food_flutter(request):
+    if not Admin.objects.filter(user=request.user).exists():
+        return JsonResponse({"status": False, "message": "Unauthorized access."}, status=403)
     if request.method == 'POST':
         data = json.loads(request.body)
         try:
@@ -462,7 +476,10 @@ def edit_food_flutter(request):
         }, status=400)
 
 @csrf_exempt
+@login_required(login_url='authentication/login')
 def delete_restaurant_flutter(request):
+    if not Admin.objects.filter(user=request.user).exists():
+        return JsonResponse({"status": False, "message": "Unauthorized access."}, status=403)
     if request.method == 'POST':
         data = json.loads(request.body)
         try:
@@ -475,8 +492,11 @@ def delete_restaurant_flutter(request):
         return JsonResponse({"status": "error"}, status=401)
 
 @csrf_exempt
+@login_required(login_url='authentication/login')
 @require_POST
 def delete_food_flutter(request):
+    if not Admin.objects.filter(user=request.user).exists():
+        return JsonResponse({"status": False, "message": "Unauthorized access."}, status=403)
     try:
         data = json.loads(request.body)
         food_id = data.get('id')
@@ -525,3 +545,17 @@ def get_restaurants(request):
         for restaurant in restaurants
     ]
     return JsonResponse({'restaurants': data})
+
+@csrf_exempt
+def get_user_type_flutter(request):
+    if request.user.is_authenticated:
+        user_type = 'admin' if Admin.objects.filter(user=request.user).exists() else 'client'
+        return JsonResponse({
+            "status": True,
+            "user_type": user_type
+        }, status=200)
+    else:
+        return JsonResponse({
+            "status": False,
+            "message": "User is not authenticated."
+        }, status=401)

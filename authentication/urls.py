@@ -27,4 +27,5 @@ urlpatterns = [
     path('get_foods_flutter/', get_foods_flutter, name='get_foods_flutter'),
     path('edit_food_flutter/', edit_food_flutter, name='edit_food_flutter'),
     path('delete_food_flutter/', delete_food_flutter, name='delete_food_flutter'),
+    path('get_user_type_flutter/', get_user_type_flutter, name='get_user_type_flutter'),
 ]
