@@ -132,13 +132,9 @@ def show_json_review_restaurant(request):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 
-from django.http import JsonResponse
-from django.db.models import Q
-from .models import Restaurant, Food
-
 def search_on_resto_json(request):
     query = request.GET.get('query', '')
-    results = Restaurant.objects.filter(name__icontains=query)
+    results = Restaurant.objects.all()
 
     data = []
     for r in results:
@@ -153,7 +149,8 @@ def search_on_resto_json(request):
 
 def search_on_food_json(request):
     query = request.GET.get('query', '')
-    results = Food.objects.filter(name__icontains=query)
+    results = Food.objects.all()
+    
 
     data = []
     for f in results:
