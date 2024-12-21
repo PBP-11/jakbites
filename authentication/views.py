@@ -16,6 +16,7 @@ def register(request):
         form = ClientRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save()
+            Client.objects.create(user=user)
             messages.success(request, 'Your account has been successfully created!')
             return redirect('authentication:user_login')
     else:
@@ -292,6 +293,9 @@ def register_flutter(request):
         # Create the new user
         user = User.objects.create_user(username=username, email=email, password=password1)
         user.save()
+        
+        # Create associated Client object
+        Client.objects.create(user=user)
         
         return JsonResponse({
             "username": user.username,
