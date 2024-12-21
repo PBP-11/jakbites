@@ -17,4 +17,6 @@ urlpatterns = [
     # path('login/', user_login, name = "user_login")
     path('json_food/', show_json_food, name = 'json_food'),
     path('json_review_food/', show_json_review_food, name = 'json_review_food'),
+    path('get_user_name/', get_user_name, name='get_user_name'),
+    path('search_flut/', search_instance_flut, name = 'search_instance_flut'),
 ]

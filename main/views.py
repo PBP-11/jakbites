@@ -20,6 +20,21 @@ from django.template.loader import render_to_string
 
 import json
 
+@login_required(login_url='/authentication/login/')
+def get_user_name(request):
+
+    try:
+        client = Client.objects.get(user=request.user)
+        data = {
+            'name': client.user.username,
+        }
+    except Client.DoesNotExist:
+        data = {
+            'name': request.user.username,
+        }
+    print(data)
+    return JsonResponse(data)
+
 
 @login_required(login_url='/authentication/login/')
 def show_att(request):
@@ -62,6 +77,54 @@ def search_instance(request):
     ]
 
     return JsonResponse(serialized_results, safe=False) 
+
+def search_instance_flut(request):
+    query = request.GET.get('query', '')
+
+    # 1) Foods that match the query (either in food name or restaurant name)
+    food_results = Food.objects.filter(
+        Q(name__icontains=query) | 
+        Q(restaurant__name__icontains=query)
+    ).select_related('restaurant')  # So we can access .restaurant without extra queries
+
+    # 2) Restaurants that match the query by restaurant name or possibly location
+    #    If you also want location-based search, add Q(location__icontains=query).
+    restaurant_results = Restaurant.objects.filter(
+        Q(name__icontains=query)
+        # Q(location__icontains=query) if needed
+    )
+
+    # 3) Serialize the foods
+    serialized_foods = []
+    for food in food_results:
+        serialized_foods.append({
+            'food_id': food.id,
+            'food_name': food.name,
+            'category': food.category,
+            'price': food.price,
+            'description': food.description,
+            'restaurant': {
+                'restaurant_id': food.restaurant.id,
+                'restaurant_name': food.restaurant.name,
+                'location': food.restaurant.location,
+            }
+        })
+
+    # 4) Serialize the restaurants
+    serialized_restaurants = []
+    for resto in restaurant_results:
+        serialized_restaurants.append({
+            'restaurant_id': resto.id,
+            'restaurant_name': resto.name,
+            'location': resto.location,
+        })
+
+    # 5) Return them in a single JSON response 
+    #    (two separate lists inside one object)
+    return JsonResponse({
+        'foods': serialized_foods,
+        'restaurants': serialized_restaurants,
+    }, safe=False)
 
 def search_on_full(request):
     query = request.GET.get('query', '')  
